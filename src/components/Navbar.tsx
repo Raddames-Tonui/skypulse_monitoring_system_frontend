@@ -1,24 +1,29 @@
 import { useState } from "react";
 import Icon from "@/utils/Icon";
 import { useAuth } from "@/hooks/hooks";
+import { useNavigate } from "@tanstack/react-router";
 
 interface NavbarProps {
   isSidebarOpen: boolean;
   toggleSidebar?: () => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ isSidebarOpen, toggleSidebar }) => {
+const Navbar: React.FC<NavbarProps> = ({ isSidebarOpen}) => {
   const [selectedValue, setSelectedValue] = useState("default");
   const [showDropdown, setShowDropdown] = useState(false);
 
   const { user, logout } = useAuth();
-  const role = user?.role_name?.toLowerCase() || ""; 
+  const navigate = useNavigate();
 
-  const handleLogout = () => logout();
+  const role = user?.roleName?.toLowerCase() || "";
+
+  const handleLogout = async () => {
+    await logout();                    
+    navigate({ to: "/auth/login" });   
+  };
 
   const iconClass = `navbar-icon ${isSidebarOpen ? "open" : "collapsed"}`;
 
-  // Determine color based on role
   const roleColor = (() => {
     switch (role) {
       case "operator":
@@ -46,19 +51,13 @@ const Navbar: React.FC<NavbarProps> = ({ isSidebarOpen, toggleSidebar }) => {
 
       <div className="header-wrapper">
         <div className="logo">
-          <h1 className="responsive-hide">{user?.company_name || "Company Name"}</h1>
+          <h1 className="responsive-hide">{user?.companyName|| "Company Name"}</h1>
           <h2 style={{ color: roleColor }} className="responsive-hide">
-            {role.toUpperCase()}
+            {user?.roleName.toLowerCase() || ""}
           </h2>
         </div>
 
         <div className="icon-search">
-          <div className={iconClass}>
-            <Icon iconName="add" />
-          </div>
-          <div className={iconClass}>
-            <Icon iconName="search" />
-          </div>
 
           <select
             name="search"
@@ -88,11 +87,14 @@ const Navbar: React.FC<NavbarProps> = ({ isSidebarOpen, toggleSidebar }) => {
 
             {user && showDropdown && (
               <div className="dropdown-menu show">
-                <p className="dropdown-user">{user.full_name}</p>
+                <p className="dropdown-user">{user?.fullName}</p>
                 <div className="dropdown-info">
-                  <p><strong>Email:</strong> {user.email}</p>
-                  <p><strong>Role:</strong> {user.role_name}</p>
-                  {/* Optional: you can add status if backend sends it */}
+                  <p>
+                    <strong>Email:</strong> {user?.email}
+                  </p>
+                  <p>
+                    <strong>Role:</strong> {user?.roleName || "N/A"}
+                  </p>
                 </div>
                 <button className="dropdown-item" onClick={handleLogout}>
                   Logout

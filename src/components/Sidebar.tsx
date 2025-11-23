@@ -9,7 +9,6 @@ interface SidebarProps {
   toggleSidebar: () => void;
 }
 
-// Define role-based menu
 const menuConfig: Record<string, { icon: IconName; label: string; path: string }[]> = {
   admin: [
     { icon: "pie", label: "Odata Dashboard", path: "/dashboard" },
@@ -27,11 +26,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
   const { user, isLoading } = useAuth();
   const navigate = useNavigate();
 
-  // Determine role
   const userRole = user?.roleName.toLowerCase() || "";
   const menuItems = menuConfig[userRole] || [];
 
-  // Redirect unauthorized roles
   useEffect(() => {
     if (!isLoading && !menuItems.length) {
       navigate({ to: "/auth/unauthorized" });
@@ -39,7 +36,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
   }, [isLoading, menuItems.length, navigate]);
 
   if (isLoading || !user) {
-    return null; // Or a spinner
+    return null; 
   }
 
   return (

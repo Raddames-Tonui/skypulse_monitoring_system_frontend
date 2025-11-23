@@ -1,39 +1,34 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-hot-toast";
-import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
+import * as z from "zod";
 
 import styles from "@/css/login.module.css";
 import { useAuth } from "@/hooks/hooks";
 
-// Form validation schema
-const schema = yup.object({
-  email: yup.string().email("Invalid email").required("Email is required"),
-  password: yup.string().required("Password is required").min(6, "Password must be at least 6 characters"),
+// ----- Zod schema -----
+const loginSchema = z.object({
+  email: z.string().email("Invalid email").nonempty("Email is required"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-type FormData = yup.InferType<typeof schema>;
-
-// Optional search params type
-type LoginSearchSchema = {
-  redirect?: string;
-};
+type FormData = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
-
-  // Safe useSearch with default empty object
-//   const search = useSearch<LoginSearchSchema>() ?? {};
-//   const redirectTo = search.redirect || "/";
-const redirectTo = "/dashboard";
+  const redirectTo = "/dashboard"; // Replace with useSearch if needed
 
   const [authError, setAuthError] = useState(false);
 
-  const { register, handleSubmit, formState: { errors, isSubmitted, touchedFields } } = useForm<FormData>({
-    resolver: yupResolver(schema),
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitted, touchedFields },
+  } = useForm<FormData>({
+    resolver: zodResolver(loginSchema),
   });
 
   const getInputClass = (field: keyof FormData) => {
@@ -47,7 +42,6 @@ const redirectTo = "/dashboard";
     setAuthError(false);
     try {
       await login(data.email, data.password);
-      toast.success("Logged in successfully!");
       navigate({ to: redirectTo });
     } catch (error: any) {
       setAuthError(true);
@@ -69,7 +63,7 @@ const redirectTo = "/dashboard";
           placeholder="Enter email"
         />
         <p className={`${styles.errorMessage} ${errors.email ? styles.active : ""}`}>
-          {errors.email?.message ? `${errors.email.message} ❌` : ""}
+          {errors.email?.message && `${errors.email.message} ❌`}
         </p>
 
         <label className={styles.formLabel} htmlFor="password">Password:</label>
@@ -81,7 +75,7 @@ const redirectTo = "/dashboard";
           placeholder="Enter password"
         />
         <p className={`${styles.errorMessage} ${errors.password ? styles.active : ""}`}>
-          {errors.password?.message ? `${errors.password.message} ❌` : ""}
+          {errors.password?.message && `${errors.password.message} ❌`}
         </p>
 
         <a href="/auth/resetpassword" className={styles.formLink}>

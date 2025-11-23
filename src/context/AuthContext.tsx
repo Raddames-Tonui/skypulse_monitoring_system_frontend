@@ -1,5 +1,5 @@
-// src/context/AuthContext.tsx
-import React, { createContext, useState, useEffect, ReactNode } from "react";
+import React, { createContext, useState, useEffect } from "react";
+import type { ReactNode } from "react";
 import type { AuthContextType, UserProfile } from "./types";
 import axiosClient from "@/utils/constants/axiosClient";
 
@@ -13,7 +13,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Fetch profile on mount
   useEffect(() => {
     fetchProfile().finally(() => setIsLoading(false));
   }, []);
@@ -26,14 +25,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       if (!userData) throw new Error("Login failed: No user returned");
 
-      // Map login response to UserProfile shape (basic)
       setUser({
         uuid: userData.uuid,
         fullName: userData.fullName,
         email: userData.email,
         roleName: userData.role,
-        roleId: 0, // will fetch from profile
-        companyName: "", // will fetch from profile
+        roleId: 0, 
+        companyName: "",
         userContacts: [],
         userPreferences: {
           alertChannel: "email",
@@ -44,7 +42,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         },
       });
 
-      // Optionally fetch full profile after login
       await fetchProfile();
     } catch (error) {
       setUser(null);
@@ -61,7 +58,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const profile = response.data?.data;
       if (!profile) throw new Error("Profile not found");
 
-      // Map API profile to UserProfile
       const mappedProfile: UserProfile = {
         uuid: profile.uuid,
         fullName: profile.full_name,

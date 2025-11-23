@@ -1,6 +1,7 @@
 import React from "react";
 import Icon from "@/utils/Icon";
-import { useAuth } from "@/context/hooks";
+import { useAuth } from "@/hooks/hooks";
+
 
 const Footer: React.FC = () => {
   const { user } = useAuth();
@@ -12,12 +13,11 @@ const Footer: React.FC = () => {
       <div className="footer-wrapper">
         <div>
           <Icon iconName="building" />
-          <p>{user?.company || "Company Name"}</p>
+          <p>{user?.companyName|| "Company Name"}</p>
         </div>
         <div>
           <Icon iconName="user" />
           <p>
-            {user?.name || (user?.firstname && user?.lastname ? `${user.firstname} ${user.lastname}` : "Guest User")}
           </p>
         </div>
       </div>
