@@ -1,7 +1,7 @@
 @import url(./variables.css);
 
 :root {
-    --sidebar-width: 48p;
+    --sidebar-width: 48px;
 }
 
 .body-wrapper {
@@ -189,6 +189,24 @@ header {
   border-radius: 0 0 8px 8px ;
 }
 
+/* Hide hamburger on desktop */
+.navbar-hamburger {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  display: none;
+}
+
+/* Mobile only */
+@media (max-width: 768px) {
+  .mobile-only {
+    display: flex !important;
+    align-items: center;
+  }
+}
+
+
 
 aside {
     display: flex;
@@ -261,6 +279,20 @@ aside {
     padding: 8px 13px;
 }
 
+/* Hide sidebar in small screens */
+@media (max-width: 768px) {
+    .body-wrapper {
+        grid-template-columns: 0px 1fr !important;
+    }
+
+    aside {
+        display: none !important;
+    }
+}
+
+
+
+
 
 
 main {
@@ -286,6 +318,9 @@ main {
 .page-header h1 {
     font-size: 18px;
 }
+
+
+/* FOOTER */
 
 footer {
     grid-area:footer;
@@ -317,6 +352,15 @@ footer {
     opacity: 1;
 }
 
+/* Hide footer on small screens */
+@media (max-width: 768px) {
+    .body-wrapper {
+        grid-template-rows: 48px 1fr 0px !important;
+    }
+}
+
+
+
 .responsive-hide {
   display: none;
 }
@@ -326,3 +370,170 @@ footer {
     display: flex; 
   }
 }
+
+
+
+
+
+
+
+
+
+
+/* ==========================================================
+   NAVBAR RESPONSIVE + ANIMATIONS
+   ========================================================== */
+
+/* ---------------------------------------------
+   1. Base transitions for collapsing layout
+   --------------------------------------------- */
+header,
+.mic-icon,
+.header-wrapper,
+.icon-search,
+.logo h1,
+.logo h2,
+.icon-search select {
+    transition: all 0.3s ease;
+}
+
+/* ---------------------------------------------
+   2. Hide long text on tablets
+   --------------------------------------------- */
+@media (max-width: 1024px) {
+    .responsive-hide {
+        display: none !important;
+    }
+
+    header {
+        padding: 0 0.5rem;
+    }
+
+    .icon-search {
+        gap: 16px;
+    }
+
+    .icon-search select {
+        padding: 4px 26px 4px 8px;
+        font-size: 12px;
+    }
+}
+
+/* ---------------------------------------------
+   3. Transform into mobile navbar (≤ 768px)
+   --------------------------------------------- */
+@media (max-width: 768px) {
+    header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        height: 50px;
+        animation: navbar-slide-down 0.3s ease forwards;
+    }
+
+    @keyframes navbar-slide-down {
+        from { transform: translateY(-100%); }
+        to   { transform: translateY(0); }
+    }
+
+    .mic-icon {
+        width: 48px !important;
+        border-right: none;
+    }
+
+    /* center items */
+    .header-wrapper {
+        margin: 0 0.5rem;
+        gap: 10px;
+    }
+
+    .icon-search select {
+        display: none;
+    }
+
+    /* shrink icons */
+    .navbar-icon {
+        font-size: 18px;
+        width: 28px;
+        height: 28px;
+    }
+
+    .avatar-icon {
+        padding: 3px;
+    }
+
+    /* dropdown expands full width on mobile */
+    .dropdown-menu {
+        right: -40px;
+        min-width: 240px;
+        transform: translateY(10px);
+    }
+}
+
+/* ---------------------------------------------
+   4. Ultra-small screens (≤ 480px)
+   --------------------------------------------- */
+@media (max-width: 480px) {
+    .header-wrapper {
+        justify-content: space-between;
+    }
+
+    .icon-search {
+        gap: 14px;
+    }
+
+    .avatar-icon {
+        padding: 2px;
+    }
+
+    .dropdown-menu {
+        min-width: 200px;
+    }
+}
+
+/* 
+ Add Animation Class for Notification + Avatar Icons
+
+To match the first navbar’s smooth feel:
+*/
+
+
+.navbar-icon {
+    cursor: pointer;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.navbar-icon:hover {
+    transform: scale(1.12);
+    opacity: 0.85;
+}
+
+/* 
+This makes the left mic-icon behave like a sliding block: */
+.mic-icon {
+    transition: width 0.3s ease, border-color 0.3s ease;
+}
+
+
+/* 
+  Smooth Dropdown Animation
+*/
+
+.dropdown-menu {
+    animation: dropdown-fade 0.25s ease forwards;
+}
+
+@keyframes dropdown-fade {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+

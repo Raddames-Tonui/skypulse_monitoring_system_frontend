@@ -121,6 +121,36 @@ export const Menu: React.FC<IconBaseProps> = ({ className }) => (
     </svg>
 )
 
+
+export const Hamburger: React.FC<IconBaseProps> = ({ className }) => (
+    <svg
+        className={className}width="24"height="24"viewBox="0 0 24 24"fill="none"xmlns="http://www.w3.org/2000/svg"
+    >
+        <path
+            d="M4 6H20"
+            stroke="white"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M4 12H20"
+            stroke="white"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M4 18H20"
+            stroke="white"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+    </svg>
+);
+
+
 export const Building: React.FC<IconBaseProps> = ({ className }) => (
     <svg className={className} width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M17.5 13.8333H19.1667V15.5H0.833333V13.8333H2.5V1.33333C2.5 1.11232 2.5878 0.900358 2.74408 0.744078C2.90036 0.587797 3.11232 0.5 3.33333 0.5H11.6667C11.8877 0.5 12.0996 0.587797 12.2559 0.744078C12.4122 0.900358 12.5 1.11232 12.5 1.33333V13.8333H15.8333V7.16667H14.1667V5.5H16.6667C16.8877 5.5 17.0996 5.5878 17.2559 5.74408C17.4122 5.90036 17.5 6.11232 17.5 6.33333V13.8333ZM4.16667 2.16667V13.8333H10.8333V2.16667H4.16667ZM5.83333 7.16667H9.16667V8.83333H5.83333V7.16667ZM5.83333 3.83333H9.16667V5.5H5.83333V3.83333Z" fill="#144D5A" />
@@ -384,7 +414,8 @@ export const Icons = {
     alignRight: AlignRight,
     superScript: SuperScript,
     subscript: Subscript,
-    menu: Menu
+    menu: Menu,
+    hamburger: Hamburger,
 
 } as const;
 

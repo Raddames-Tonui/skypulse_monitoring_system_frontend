@@ -5,10 +5,10 @@ import { useNavigate } from "@tanstack/react-router";
 
 interface NavbarProps {
   isSidebarOpen: boolean;
-  toggleSidebar?: () => void;
+  toggleSidebar: () => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ isSidebarOpen}) => {
+const Navbar: React.FC<NavbarProps> = ({ isSidebarOpen, toggleSidebar }) => {
   const [selectedValue, setSelectedValue] = useState("default");
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -18,8 +18,8 @@ const Navbar: React.FC<NavbarProps> = ({ isSidebarOpen}) => {
   const role = user?.roleName?.toLowerCase() || "";
 
   const handleLogout = async () => {
-    await logout();                    
-    navigate({ to: "/auth/login" });   
+    await logout();
+    navigate({ to: "/auth/login" });
   };
 
   const iconClass = `navbar-icon ${isSidebarOpen ? "open" : "collapsed"}`;
@@ -51,14 +51,13 @@ const Navbar: React.FC<NavbarProps> = ({ isSidebarOpen}) => {
 
       <div className="header-wrapper">
         <div className="logo">
-          <h1 className="responsive-hide">{user?.companyName|| "Company Name"}</h1>
+          <h1 className="responsive-hide">{user?.companyName || "Company Name"}</h1>
           <h2 style={{ color: roleColor }} className="responsive-hide">
             {user?.roleName.toLowerCase() || ""}
           </h2>
         </div>
 
         <div className="icon-search">
-
           <select
             name="search"
             id="select-institution"
@@ -77,6 +76,7 @@ const Navbar: React.FC<NavbarProps> = ({ isSidebarOpen}) => {
             <Icon iconName="notification" />
           </div>
 
+          {/* Avatar */}
           <div className="avatar-dropdown">
             <div
               className={`${iconClass} avatar-icon`}
@@ -102,6 +102,14 @@ const Navbar: React.FC<NavbarProps> = ({ isSidebarOpen}) => {
               </div>
             )}
           </div>
+
+          {/* Hamburger for mobile screens */}
+          <button
+            className="navbar-hamburger mobile-only"
+            onClick={toggleSidebar} // toggles Sidebar visibility
+          >
+            <Icon iconName="hamburger" />
+          </button>
         </div>
       </div>
     </header>

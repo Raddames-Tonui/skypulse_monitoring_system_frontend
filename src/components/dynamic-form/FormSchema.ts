@@ -12,7 +12,6 @@ export const systemSettingsFormSchema: any = {
       label: "Setting Key",
       renderer: "text",
       placeholder: "Enter unique setting key",
-      defaultValue: "default_service_settings",
       rules: { required: "Key is required" }
     },
     value: {
@@ -20,7 +19,6 @@ export const systemSettingsFormSchema: any = {
       label: "Value",
       renderer: "text",
       placeholder: "Default value",
-      defaultValue: "default",
       rules: { required: "Value is required" }
     },
     description: {
@@ -28,7 +26,6 @@ export const systemSettingsFormSchema: any = {
       label: "Description",
       renderer: "textarea",
       placeholder: "Description of the setting",
-      defaultValue: "Default configuration for monitored services",
       props: { minRows: 3, maxRows: 6 },
       rules: { required: "Description is required" }
     },
@@ -36,7 +33,6 @@ export const systemSettingsFormSchema: any = {
       id: "uptime_check_interval",
       label: "Uptime Check Interval (minutes)",
       renderer: "number",
-      defaultValue: 5,
       props: { min: 1 },
       rules: { required: "Interval is required", min: { value: 1, message: "Must be >= 1" } }
     },
@@ -44,7 +40,6 @@ export const systemSettingsFormSchema: any = {
       id: "uptime_retry_count",
       label: "Uptime Retry Count",
       renderer: "number",
-      defaultValue: 3,
       props: { min: 0 },
       rules: { required: "Retry count is required" }
     },
@@ -52,7 +47,6 @@ export const systemSettingsFormSchema: any = {
       id: "uptime_retry_delay",
       label: "Uptime Retry Delay (minutes)",
       renderer: "number",
-      defaultValue: 5,
       props: { min: 1 },
       rules: { required: "Retry delay is required" }
     },
@@ -60,7 +54,6 @@ export const systemSettingsFormSchema: any = {
       id: "ssl_check_interval",
       label: "SSL Check Interval (days)",
       renderer: "number",
-      defaultValue: 7,
       props: { min: 1 },
       rules: { required: "SSL check interval is required" }
     },
@@ -69,14 +62,12 @@ export const systemSettingsFormSchema: any = {
       label: "SSL Alert Thresholds (days)",
       renderer: "text",
       placeholder: "e.g. 30,15,7",
-      defaultValue: "30,15,7",
       rules: { required: "SSL alert thresholds are required" }
     },
     notification_retry_count: {
       id: "notification_retry_count",
       label: "Notification Retry Count",
       renderer: "number",
-      defaultValue: 2,
       props: { min: 0 },
       rules: { required: "Notification retry count is required" }
     }
