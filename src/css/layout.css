@@ -405,10 +405,6 @@ header,
         display: none !important;
     }
 
-    header {
-        padding: 0 0.5rem;
-    }
-
     .icon-search {
         gap: 16px;
     }
