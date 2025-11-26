@@ -1,3 +1,42 @@
+// ------ LOGIN FORM SCHEMA -----------
+export const loginFormSchema: FormSchema = {
+  id: "login-form",
+  meta: {
+    title: "Login",
+    subtitle: "Enter your credentials",
+  },
+  fields: {
+    email: {
+      id: "email",
+      label: "Email",
+      renderer: "text",
+      inputType: "email",
+      placeholder: "Enter your email",
+      rules: {
+        required: "Email is required",
+        pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Invalid email" },
+      },
+    },
+    password: {
+      id: "password",
+      label: "Password",
+      renderer: "text",
+      inputType: "password",
+      placeholder: "Enter your password",
+      rules: {
+        required: "Password is required",
+        minLength: { value: 6, message: "Password must be at least 6 characters" },
+      },
+    },
+  },
+  layout: [
+    { kind: "field", fieldId: "email" },
+    { kind: "field", fieldId: "password" },
+  ],
+};
+
+
+
 // ------SYSTEM SETTINGS FORM SCHEMA------
 export const systemSettingsFormSchema: any = {
   id: "system-settings-form",
@@ -12,7 +51,7 @@ export const systemSettingsFormSchema: any = {
       label: "Uptime Check Interval (seconds)",
       renderer: "number",
       props: { min: 1 },
-      placeholder: 60,
+      defaultValue: 60,
       rules: {
         required: "Interval is required",
         min: { value: 1, message: "Must be >= 1" }
@@ -23,7 +62,7 @@ export const systemSettingsFormSchema: any = {
       label: "Uptime Retry Count",
       renderer: "number",
       props: { min: 0 },
-      placeholder: 3,
+      defaultValue: 3,
       rules: { required: "Retry count is required" }
     },
     uptime_retry_delay: {
@@ -31,7 +70,7 @@ export const systemSettingsFormSchema: any = {
       label: "Uptime Retry Delay (seconds)",
       renderer: "number",
       props: { min: 1 },
-      placeholder: 10,
+      defaultValue: 10,
       rules: { required: "Retry delay is required" }
     },
     sse_push_interval: {
@@ -39,7 +78,7 @@ export const systemSettingsFormSchema: any = {
       label: "SSE Push Interval (seconds)",
       renderer: "number",
       props: { min: 1 },
-      placeholder: 5,
+      defaultValue: 5,
       rules: { required: "SSE push interval is required" }
     },
 
@@ -49,14 +88,14 @@ export const systemSettingsFormSchema: any = {
       label: "SSL Check Interval (seconds)",
       renderer: "number",
       props: { min: 1 },
-      placeholder: 3600,
+      defaultValue: 3600,
       rules: { required: "SSL check interval is required" }
     },
     ssl_alert_thresholds: {
       id: "ssl_alert_thresholds",
       label: "SSL Alert Thresholds (days)",
       renderer: "text",
-      placeholder: "30,14,7",
+      defaultValue: "30,14,7",
       rules: { required: "SSL alert thresholds are required" }
     },
     ssl_retry_count: {
@@ -64,7 +103,7 @@ export const systemSettingsFormSchema: any = {
       label: "SSL Retry Count",
       renderer: "number",
       props: { min: 0 },
-      placeholder: 3,
+      defaultValue: 3,
       rules: { required: "SSL retry count is required" }
     },
     ssl_retry_delay: {
@@ -72,7 +111,7 @@ export const systemSettingsFormSchema: any = {
       label: "SSL Retry Delay (seconds)",
       renderer: "number",
       props: { min: 1 },
-      placeholder: 300,
+      defaultValue: 300,
       rules: { required: "SSL retry delay is required" }
     },
 
@@ -82,7 +121,7 @@ export const systemSettingsFormSchema: any = {
       label: "Notification Check Interval (seconds)",
       renderer: "number",
       props: { min: 1 },
-      placeholder: 120,
+      defaultValue: 120,
       rules: { required: "Notification check interval is required" }
     },
     notification_retry_count: {
@@ -90,7 +129,7 @@ export const systemSettingsFormSchema: any = {
       label: "Notification Retry Count",
       renderer: "number",
       props: { min: 0 },
-      placeholder: 5,
+      defaultValue: 5,
       rules: { required: "Notification retry count is required" }
     },
     notification_cooldown_minutes: {
@@ -98,7 +137,7 @@ export const systemSettingsFormSchema: any = {
       label: "Notification Cooldown (minutes)",
       renderer: "number",
       props: { min: 0 },
-      placeholder: 15,
+      defaultValue: 15,
       rules: { required: "Notification cooldown is required" }
     }
   },

@@ -1,95 +1,103 @@
-import { useState, useEffect } from 'react';
-import toast from 'react-hot-toast';
-import axiosClient from '@/utils/constants/axiosClient';
-import { systemSettingsFormSchema } from '@/components/dynamic-form/FormSchema';
-import DynamicForm from '@/components/dynamic-form/DynamicForm';
-import Loader from '@/components/Loader';
+import DynamicForm from "@/components/dynamic-form/DynamicForm";
+import { systemSettingsFormSchema } from "@/components/dynamic-form/FormSchema";
+import Loader from "@/components/Loader";
+import axiosClient from "@/utils/constants/axiosClient";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import toast from "react-hot-toast";
+
+
 
 function SystemSettings() {
-  const [initialValues, setInitialValues] = useState<Record<string, any>>({});
-  const [loading, setLoading] = useState(true);
-  const [isRollingBack, setIsRollingBack] = useState(false);
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const fetchSettings = async () => {
-      try {
-        const response = await axiosClient.get('/settings');
-        // Axios interceptor already returns response.data
-        if (response?.data) {
-          const defaults = {
-            ...response.data,
-            ssl_alert_thresholds: response.data.ssl_alert_thresholds
-              ? response.data.ssl_alert_thresholds.split(',').map((v: string) => v.trim())
-              : [],
-          };
-          setInitialValues(defaults);
-        }
-      } catch (err: any) {
-        toast.error(err?.message || "Failed to load system settings");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSettings();
-  }, []);
+  const { data, isLoading } = useQuery({
+    queryKey: ["system-settings"],
+    queryFn: async () => {
+      const response = await axiosClient.get("/settings");
+      const s = response.data;
+      return {
+        ssl_alert_thresholds: s.ssl_alert_thresholds
+          ? s.ssl_alert_thresholds.split(",").map((v: string) => v.trim())
+          : [],
+      };
+    }
+  });
 
 
-  const handleFormSubmit = async (values: Record<string, any>) => {
-    try {
-      await axiosClient.post('/settings', values);
+  const saveMutation = useMutation({
+    mutationFn: async (values: Record<string, any>) => {
+      const payload = {
+        ...values,
+        ssl_alert_thresholds: Array.isArray(values.ssl_alert_thresholds)
+          ? values.ssl_alert_thresholds.join(",")
+          : values.ssl_alert_thresholds,
+      };
+      return axiosClient.post("/settings", payload);
+    },
+    onSuccess: () => {
       toast.success("Settings saved successfully!");
-    } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to save settings");
-    }
-  };
+      queryClient.invalidateQueries({ queryKey: ["system-settings"] });
+    },
+    onError: (err: any) => {
+      toast.error(err.response?.message)
+    },
+  })
 
-  const handleRollback = async () => {
-    setIsRollingBack(true);
-    try {
-      await axiosClient.post('/settings/rollback', { rollback: true });
+
+  const rollbackMutation = useMutation({
+    mutationFn: async () =>
+      axiosClient.post("/settings/rollback", { rollback: true }),
+    onSuccess: async () => {
       toast.success("Settings reverted to previous version!");
-      const response = await axiosClient.get('/settings');
-      if (response.data?.data) {
-        const defaults = {
-          ...response.data.data,
-          ssl_alert_thresholds: response.data.data.ssl_alert_thresholds
-            ? response.data.data.ssl_alert_thresholds.split(',').map((v: string) => v.trim())
-            : [],
-        };
-        setInitialValues(defaults);
-      }
-    } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to revert settings");
-    } finally {
-      setIsRollingBack(false);
+      await queryClient.invalidateQueries({ queryKey: ["system-settings"] });
+    },
+    onError: (err: any) => {
+      toast.error(err.message || "Failed to revert settings");
     }
-  };
+  });
 
-  if (loading) return <p>
-    <Loader />
-  </p>;
+  const restartApplication = useMutation({
+    mutationFn: async () => axiosClient.get("/system/tasks/reload"),
+    onSuccess: async (data: any) => {
+      toast.success(data.message || "Application restart initiated!");
+    },
+    onError: (err: any) => {
+      toast.error(err.message || "Failed to restart application");
+    }
+  })
+
+
+  if (isLoading) return <Loader />;
 
   return (
     <div className="page-wrapper space-y-4">
-      <DynamicForm
-        schema={systemSettingsFormSchema}
-        onSubmit={handleFormSubmit}
-        initialData={initialValues}
-      />
 
       <div className="mt-4">
         <button
           type="button"
-          disabled={isRollingBack}
-          onClick={handleRollback}
+          disabled={rollbackMutation.isPending}
+          onClick={() => rollbackMutation.mutate()}
           className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded"
         >
-          {isRollingBack ? "Reverting..." : "Revert to Previous Version"}
+          {rollbackMutation.isPending ? "Reverting..." : "Revert to Previous Version"}
+        </button>
+        <button
+          type="button"
+          disabled={restartApplication.isPending}
+          onClick={() => restartApplication.mutate()}
+          className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded"
+        >
+          {restartApplication.isPending ? "Restarting..." : "Restart Application"}
         </button>
       </div>
+
+      <DynamicForm
+        schema={systemSettingsFormSchema}
+        initialData={data}
+        onSubmit={(values) => saveMutation.mutate(values)}
+      />
     </div>
-  );
+  )
 }
 
-export default SystemSettings;
+export default SystemSettings

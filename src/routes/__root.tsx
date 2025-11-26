@@ -1,8 +1,7 @@
 import { createRootRoute, Outlet } from '@tanstack/react-router'
-// import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
-// import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import "@/css/authPages.css";
 
 import { ThemeProvider } from '@/context/ThemeProvider';
@@ -18,16 +17,18 @@ const queryClient = new QueryClient({
 });
 
 const RootLayout = () => (
-  <AuthProvider>
-    <ThemeProvider>
-      <QueryClientProvider client={queryClient}>
-            <Outlet />
-        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
-      </QueryClientProvider>
-    </ThemeProvider>
+  <QueryClientProvider client={queryClient}>
+    <AuthProvider>
+      <ThemeProvider>
+        <Outlet />
+        <ReactQueryDevtools initialIsOpen={false} />
+      </ThemeProvider>
     </AuthProvider>
+  </QueryClientProvider>
+);
 
-)
+export default RootLayout;
+
 
 export const Route = createRootRoute({
   component: RootLayout,

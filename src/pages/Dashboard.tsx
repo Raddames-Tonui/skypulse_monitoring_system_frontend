@@ -1,9 +1,9 @@
-import React from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useSSE } from "@/utils/constants/useSSE";
-import { DataTable,  } from "@/components/table/DataTable";
+import { DataTable, } from "@/components/table/DataTable";
 import type { ColumnProps } from "@/components/table/DataTable";
 import StatusSidebar from "./StatusSidebar";
+import "@/css/dashboard.css"
 
 interface Service {
   uuid: string;
@@ -35,33 +35,28 @@ export default function Dashboard() {
       id: "ssl_warning",
       caption: "SSL",
       size: 80,
-      renderCell: (val) => (val ? "Warn" : "✔️ OK"),
+      renderCell: (val) => (val ? "Warn" : "OK"),
     },
   ];
 
-  // Make row clickable
-  const rowRender = (row: Service, defaultCells: React.ReactNode) => {
-    return (
-      <tr
-        // onClick={() => navigate(`/services/${row.uuid}`)}
-        style={{ cursor: "pointer" }}
-      >
-        {defaultCells}
-      </tr>
-    );
-  };
 
   return (
     <div>
       <h2>Service Monitoring Dashboard</h2>
 
-      <DataTable<Service>
-        columns={columns}
-        data={sseData?.services || []}
-        rowRender={rowRender}
-        isLoading={!sseData}
-      />
-     <StatusSidebar data={sseData} />
-</div>
+      <div className="dashboard-wrapper">
+        <div className="data-table-wrapper">
+          <DataTable<Service>
+            columns={columns}
+            data={sseData?.services || []}
+            isLoading={!sseData}
+          />
+        </div>
+
+        <div className="status-sidebar-wrapper">
+          <StatusSidebar data={sseData} />
+        </div>
+      </div>
+    </div>
   );
 }

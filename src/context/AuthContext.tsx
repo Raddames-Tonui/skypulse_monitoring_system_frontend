@@ -132,7 +132,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   if (error && !isLoading) {
     return (
-      <div style={{ textAlign: "center", padding: 40 }}>
+      <div className="server-error">
         <h1>Server Error</h1>
         <p>{error}</p>
         <button

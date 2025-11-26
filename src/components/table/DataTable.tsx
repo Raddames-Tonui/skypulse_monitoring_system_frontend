@@ -5,7 +5,7 @@ import { TableHeader } from "./TableHeader";
 import { TableBody } from "./TableBody";
 import TableFooter from "./TableFooter";
 import { Pagination } from "./Pagination";
-import Loader from "./modals/Loader";
+import Loader from "@/components/Loader";
 
 
 // Column config for Datatable

@@ -29,3 +29,17 @@ body {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;     /* Firefox */
 }
+
+
+
+.server-error, .loader {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+.loader > p {
+  font-weight: 600;
+}

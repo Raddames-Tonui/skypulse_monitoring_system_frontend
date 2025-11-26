@@ -34,7 +34,7 @@ function ProtectedRouteComponent() {
       if (!user) {
         throw redirect({
           to: '/auth/login',
-          search: { returnTo: '/_protected/pages'}
+          search: { returnTo: '/_protected/pages' }
         });
       }
 
@@ -47,19 +47,20 @@ function ProtectedRouteComponent() {
     }
   }, [user, isLoading, error]);
 
-  //   if (error && !isLoading) {
-  //   return (
-  //     <div style={{ textAlign: "center", padding: 40 }}>
-  //       <h1>Server Error</h1>
-  //       <p>{error}</p>
-  //       <button onClick={() => fetchProfile()}>Retry</button>
-  //     </div>
-  //   );
-  // }
+  if (error && !isLoading) {
+    return (
+      <div className='server-error' >
+        <h1>Server Error</h1>
+        <p>{error}</p>
+        <button onClick={() => fetchProfile()}>Retry</button>
+      </div>
+    );
+  }
 
   if (isLoading || !user) {
-    return <div>
-      <Loader />
+    return <div className='loader'>
+      <Loader size={80} speed={1.8} className="mx-auto" ariaLabel="Loading..." />
+      <p>Loading...</p>
     </div>;
   }
 
