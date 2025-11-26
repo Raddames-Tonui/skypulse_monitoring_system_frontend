@@ -166,7 +166,7 @@ export function DataTable<T>({
           <div className="table-error">{error.toString()}</div>
         ) : isLoading ? (
           <div className="table-loader">
-            <Loader />
+            <Loader size={80} speed={1.8} className="mx-auto" ariaLabel="Loading..." />
           </div>
         ) : (
           <>

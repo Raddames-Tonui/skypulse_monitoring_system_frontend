@@ -23,9 +23,10 @@ import { Route as PublicAuthUnauthorizedRouteImport } from './routes/_public/aut
 import { Route as PublicAuthResetpasswordRouteImport } from './routes/_public/auth/resetpassword'
 import { Route as PublicAuthRegisterRouteImport } from './routes/_public/auth/register'
 import { Route as PublicAuthLoginRouteImport } from './routes/_public/auth/login'
-import { Route as ProtectedServicesLogsRouteImport } from './routes/_protected/services/logs'
 import { Route as ProtectedServicesCreateRouteImport } from './routes/_protected/services/create'
 import { Route as ProtectedServicesUuidRouteImport } from './routes/_protected/services/$uuid'
+import { Route as ProtectedServicesLogsIndexRouteImport } from './routes/_protected/services/logs/index'
+import { Route as ProtectedServicesLogsSsllogsRouteImport } from './routes/_protected/services/logs/ssllogs'
 
 const ProtectedRoute = ProtectedRouteImport.update({
   id: '/_protected',
@@ -98,11 +99,6 @@ const PublicAuthLoginRoute = PublicAuthLoginRouteImport.update({
   path: '/auth/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProtectedServicesLogsRoute = ProtectedServicesLogsRouteImport.update({
-  id: '/services/logs',
-  path: '/services/logs',
-  getParentRoute: () => ProtectedRoute,
-} as any)
 const ProtectedServicesCreateRoute = ProtectedServicesCreateRouteImport.update({
   id: '/services/create',
   path: '/services/create',
@@ -113,12 +109,23 @@ const ProtectedServicesUuidRoute = ProtectedServicesUuidRouteImport.update({
   path: '/services/$uuid',
   getParentRoute: () => ProtectedRoute,
 } as any)
+const ProtectedServicesLogsIndexRoute =
+  ProtectedServicesLogsIndexRouteImport.update({
+    id: '/services/logs/',
+    path: '/services/logs/',
+    getParentRoute: () => ProtectedRoute,
+  } as any)
+const ProtectedServicesLogsSsllogsRoute =
+  ProtectedServicesLogsSsllogsRouteImport.update({
+    id: '/services/logs/ssllogs',
+    path: '/services/logs/ssllogs',
+    getParentRoute: () => ProtectedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/services/$uuid': typeof ProtectedServicesUuidRoute
   '/services/create': typeof ProtectedServicesCreateRoute
-  '/services/logs': typeof ProtectedServicesLogsRoute
   '/auth/login': typeof PublicAuthLoginRoute
   '/auth/register': typeof PublicAuthRegisterRoute
   '/auth/resetpassword': typeof PublicAuthResetpasswordRoute
@@ -131,12 +138,13 @@ export interface FileRoutesByFullPath {
   '/services': typeof ProtectedServicesIndexRoute
   '/settings': typeof ProtectedSettingsIndexRoute
   '/users': typeof ProtectedUsersIndexRoute
+  '/services/logs/ssllogs': typeof ProtectedServicesLogsSsllogsRoute
+  '/services/logs': typeof ProtectedServicesLogsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/services/$uuid': typeof ProtectedServicesUuidRoute
   '/services/create': typeof ProtectedServicesCreateRoute
-  '/services/logs': typeof ProtectedServicesLogsRoute
   '/auth/login': typeof PublicAuthLoginRoute
   '/auth/register': typeof PublicAuthRegisterRoute
   '/auth/resetpassword': typeof PublicAuthResetpasswordRoute
@@ -149,6 +157,8 @@ export interface FileRoutesByTo {
   '/services': typeof ProtectedServicesIndexRoute
   '/settings': typeof ProtectedSettingsIndexRoute
   '/users': typeof ProtectedUsersIndexRoute
+  '/services/logs/ssllogs': typeof ProtectedServicesLogsSsllogsRoute
+  '/services/logs': typeof ProtectedServicesLogsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -156,7 +166,6 @@ export interface FileRoutesById {
   '/_protected': typeof ProtectedRouteWithChildren
   '/_protected/services/$uuid': typeof ProtectedServicesUuidRoute
   '/_protected/services/create': typeof ProtectedServicesCreateRoute
-  '/_protected/services/logs': typeof ProtectedServicesLogsRoute
   '/_public/auth/login': typeof PublicAuthLoginRoute
   '/_public/auth/register': typeof PublicAuthRegisterRoute
   '/_public/auth/resetpassword': typeof PublicAuthResetpasswordRoute
@@ -169,6 +178,8 @@ export interface FileRoutesById {
   '/_protected/services/': typeof ProtectedServicesIndexRoute
   '/_protected/settings/': typeof ProtectedSettingsIndexRoute
   '/_protected/users/': typeof ProtectedUsersIndexRoute
+  '/_protected/services/logs/ssllogs': typeof ProtectedServicesLogsSsllogsRoute
+  '/_protected/services/logs/': typeof ProtectedServicesLogsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -176,7 +187,6 @@ export interface FileRouteTypes {
     | '/'
     | '/services/$uuid'
     | '/services/create'
-    | '/services/logs'
     | '/auth/login'
     | '/auth/register'
     | '/auth/resetpassword'
@@ -189,12 +199,13 @@ export interface FileRouteTypes {
     | '/services'
     | '/settings'
     | '/users'
+    | '/services/logs/ssllogs'
+    | '/services/logs'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/services/$uuid'
     | '/services/create'
-    | '/services/logs'
     | '/auth/login'
     | '/auth/register'
     | '/auth/resetpassword'
@@ -207,13 +218,14 @@ export interface FileRouteTypes {
     | '/services'
     | '/settings'
     | '/users'
+    | '/services/logs/ssllogs'
+    | '/services/logs'
   id:
     | '__root__'
     | '/'
     | '/_protected'
     | '/_protected/services/$uuid'
     | '/_protected/services/create'
-    | '/_protected/services/logs'
     | '/_public/auth/login'
     | '/_public/auth/register'
     | '/_public/auth/resetpassword'
@@ -226,6 +238,8 @@ export interface FileRouteTypes {
     | '/_protected/services/'
     | '/_protected/settings/'
     | '/_protected/users/'
+    | '/_protected/services/logs/ssllogs'
+    | '/_protected/services/logs/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -338,13 +352,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicAuthLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_protected/services/logs': {
-      id: '/_protected/services/logs'
-      path: '/services/logs'
-      fullPath: '/services/logs'
-      preLoaderRoute: typeof ProtectedServicesLogsRouteImport
-      parentRoute: typeof ProtectedRoute
-    }
     '/_protected/services/create': {
       id: '/_protected/services/create'
       path: '/services/create'
@@ -359,13 +366,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedServicesUuidRouteImport
       parentRoute: typeof ProtectedRoute
     }
+    '/_protected/services/logs/': {
+      id: '/_protected/services/logs/'
+      path: '/services/logs'
+      fullPath: '/services/logs'
+      preLoaderRoute: typeof ProtectedServicesLogsIndexRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
+    '/_protected/services/logs/ssllogs': {
+      id: '/_protected/services/logs/ssllogs'
+      path: '/services/logs/ssllogs'
+      fullPath: '/services/logs/ssllogs'
+      preLoaderRoute: typeof ProtectedServicesLogsSsllogsRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
   }
 }
 
 interface ProtectedRouteChildren {
   ProtectedServicesUuidRoute: typeof ProtectedServicesUuidRoute
   ProtectedServicesCreateRoute: typeof ProtectedServicesCreateRoute
-  ProtectedServicesLogsRoute: typeof ProtectedServicesLogsRoute
   ProtectedDashboardIndexRoute: typeof ProtectedDashboardIndexRoute
   ProtectedGroupsIndexRoute: typeof ProtectedGroupsIndexRoute
   ProtectedNotificationsIndexRoute: typeof ProtectedNotificationsIndexRoute
@@ -373,12 +393,13 @@ interface ProtectedRouteChildren {
   ProtectedServicesIndexRoute: typeof ProtectedServicesIndexRoute
   ProtectedSettingsIndexRoute: typeof ProtectedSettingsIndexRoute
   ProtectedUsersIndexRoute: typeof ProtectedUsersIndexRoute
+  ProtectedServicesLogsSsllogsRoute: typeof ProtectedServicesLogsSsllogsRoute
+  ProtectedServicesLogsIndexRoute: typeof ProtectedServicesLogsIndexRoute
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
   ProtectedServicesUuidRoute: ProtectedServicesUuidRoute,
   ProtectedServicesCreateRoute: ProtectedServicesCreateRoute,
-  ProtectedServicesLogsRoute: ProtectedServicesLogsRoute,
   ProtectedDashboardIndexRoute: ProtectedDashboardIndexRoute,
   ProtectedGroupsIndexRoute: ProtectedGroupsIndexRoute,
   ProtectedNotificationsIndexRoute: ProtectedNotificationsIndexRoute,
@@ -386,6 +407,8 @@ const ProtectedRouteChildren: ProtectedRouteChildren = {
   ProtectedServicesIndexRoute: ProtectedServicesIndexRoute,
   ProtectedSettingsIndexRoute: ProtectedSettingsIndexRoute,
   ProtectedUsersIndexRoute: ProtectedUsersIndexRoute,
+  ProtectedServicesLogsSsllogsRoute: ProtectedServicesLogsSsllogsRoute,
+  ProtectedServicesLogsIndexRoute: ProtectedServicesLogsIndexRoute,
 }
 
 const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
