@@ -1,22 +1,19 @@
 import axios from "axios";
+import type { AxiosInstance } from "axios";
 import { CONFIG } from "@/utils/constants/Constants";
 
-const axiosClient = axios.create({
+const axiosClient: AxiosInstance = axios.create({
   baseURL: CONFIG.BASE_API_URL,
   withCredentials: true,
-})
+});
 
-// --- Response interceptor ---
 axiosClient.interceptors.response.use(
-  (response) => response.data,
+  (response) => response,
   (error) => {
     if (!error.response) {
-      console.error("Network error:", error.message);
       return Promise.reject({ code: "ERR_NETWORK", message: error.message });
     }
-
-
-    return Promise.reject(error.response.data || error);
+    return Promise.reject(error.response);
   }
 );
 

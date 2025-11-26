@@ -72,7 +72,6 @@ export default function ResetPasswordPage() {
             <form onSubmit={handleSubmit(onSubmit)} className={styles.loginForm}>
                 <h2 className={styles.formTitle}>Reset Password</h2>
 
-                {/* Email field */}
                 <label className={styles.formLabel} htmlFor="email">Email:</label>
                 <input
                     id="email"

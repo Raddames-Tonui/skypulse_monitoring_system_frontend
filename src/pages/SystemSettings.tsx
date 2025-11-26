@@ -2,27 +2,24 @@ import DynamicForm from "@/components/dynamic-form/DynamicForm";
 import { systemSettingsFormSchema } from "@/components/dynamic-form/FormSchema";
 import Loader from "@/components/Loader";
 import axiosClient from "@/utils/constants/axiosClient";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-
-
 
 function SystemSettings() {
   const queryClient = useQueryClient();
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isFetching } = useQuery({
     queryKey: ["system-settings"],
     queryFn: async () => {
-      const response = await axiosClient.get("/settings");
-      const s = response.data;
+      const s = await axiosClient.get("/settings");
       return {
-        ssl_alert_thresholds: s.ssl_alert_thresholds
-          ? s.ssl_alert_thresholds.split(",").map((v: string) => v.trim())
+        ...s.data,
+        ssl_alert_thresholds: s.data.ssl_alert_thresholds
+          ? s.data.ssl_alert_thresholds.split(",").map((v: string) => v.trim())
           : [],
       };
-    }
+    },
   });
-
 
   const saveMutation = useMutation({
     mutationFn: async (values: Record<string, any>) => {
@@ -39,40 +36,37 @@ function SystemSettings() {
       queryClient.invalidateQueries({ queryKey: ["system-settings"] });
     },
     onError: (err: any) => {
-      toast.error(err.response?.message)
+      toast.error(err?.data?.message || err.message || "Failed to save settings");
     },
-  })
-
+  });
 
   const rollbackMutation = useMutation({
-    mutationFn: async () =>
-      axiosClient.post("/settings/rollback", { rollback: true }),
+    mutationFn: async () => axiosClient.post("/settings/rollback", { rollback: true }),
     onSuccess: async () => {
       toast.success("Settings reverted to previous version!");
+      // Invalidate and refetch to reload data
       await queryClient.invalidateQueries({ queryKey: ["system-settings"] });
     },
     onError: (err: any) => {
-      toast.error(err.message || "Failed to revert settings");
-    }
+      toast.error(err?.data?.message || err.message || "Failed to revert settings");
+    },
   });
 
   const restartApplication = useMutation({
     mutationFn: async () => axiosClient.get("/system/tasks/reload"),
     onSuccess: async (data: any) => {
-      toast.success(data.message || "Application restart initiated!");
+      toast.success(data?.message || "Application restart initiated!");
     },
     onError: (err: any) => {
-      toast.error(err.message || "Failed to restart application");
-    }
-  })
+      toast.error(err?.data?.message || err.message || "Failed to restart application");
+    },
+  });
 
-
-  if (isLoading) return <Loader />;
+  if (isLoading || isFetching) return <Loader />;
 
   return (
     <div className="page-wrapper space-y-4">
-
-      <div className="mt-4">
+      <div className="mt-4 flex gap-4">
         <button
           type="button"
           disabled={rollbackMutation.isPending}
@@ -97,7 +91,7 @@ function SystemSettings() {
         onSubmit={(values) => saveMutation.mutate(values)}
       />
     </div>
-  )
+  );
 }
 
-export default SystemSettings
+export default SystemSettings;

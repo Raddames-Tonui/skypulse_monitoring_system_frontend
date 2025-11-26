@@ -6,8 +6,6 @@ import { useAuth } from "@/hooks/hooks";
 const Footer: React.FC = () => {
   const { user } = useAuth();
 
-  // console.log(user);
-
   return (
     <footer>
       <div className="footer-wrapper">

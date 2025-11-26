@@ -37,6 +37,22 @@ export default function Dashboard() {
       size: 80,
       renderCell: (val) => (val ? "Warn" : "OK"),
     },
+    {
+      id: "actions",
+      caption: "Actions",
+      size: 200,
+      renderCell: (_, row) => (
+        <button
+          className="btn btn-primary"
+          onClick={() => navigate({
+            to: "/services/$uuid",
+            params: { uuid: row.uuid }
+          })}
+        >
+          View
+        </button>
+      ),
+    },
   ];
 
 

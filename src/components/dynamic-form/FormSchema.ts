@@ -1,5 +1,5 @@
 // ------ LOGIN FORM SCHEMA -----------
-export const loginFormSchema: FormSchema = {
+export const loginFormSchema: any = {
   id: "login-form",
   meta: {
     title: "Login",

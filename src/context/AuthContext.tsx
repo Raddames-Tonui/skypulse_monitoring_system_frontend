@@ -25,37 +25,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     try {
       const response = await axiosClient.post("/auth/login", { email, password });
-      const userData = response.data?.user;
+      const userData = response.data?.data?.user;
 
-      if (!userData) throw new Error("Login failed: No user returned");
+      if (!userData) {
+        throw new Error(response.data?.message || "Login failed");
+      }
 
-      const mappedProfile: UserProfile = {
-        uuid: userData.uuid,
-        fullName: userData.full_name,
-        email: userData.email,
-        roleName: userData.role_name,
-        companyName: userData.company_name,
-        userContacts: userData.user_contacts || [],
-        userPreferences: {
-          alertChannel: userData.user_preferences.alert_channel,
-          receiveWeeklyReports: userData.user_preferences.receive_weekly_reports,
-          language: userData.user_preferences.language,
-          timezone: userData.user_preferences.timezone,
-          dashboardLayout: userData.user_preferences.dashboard_layout?.value
-            ? JSON.parse(userData.user_preferences.dashboard_layout.value)
-            : {},
-        },
-      };
+      const mappedProfile: UserProfile = mapProfile(userData);
 
       setUser(mappedProfile);
-      // await fetchProfile();
+
+      toast.success(response.data?.message || "Login successful");
 
     } catch (err: any) {
-      console.error(err);
       setUser(null);
-      const message = err.message || "Login failed. Please try again.";
-      setError(message);
-      toast.error(message);
+      const msg = err.response?.data?.message || err.message || "Login failed";
+      setError(msg);
+      toast.error(msg);
+      throw err; // Optional: let page handle styling
     } finally {
       setIsLoading(false);
     }
@@ -67,46 +54,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     try {
       const response = await axiosClient.get("/auth/profile");
-      const profile = response.data;
+      const profile = response.data?.data;
 
-      if (!profile) {
-        setUser(null);
-        const msg = "Profile not found";
-        setError(msg);
-        toast.error(msg);
-        return;
-      }
+      if (!profile) throw new Error(response.data?.message || "Profile not found");
 
-      const mappedProfile: UserProfile = {
-        uuid: profile.uuid,
-        fullName: profile.full_name,
-        email: profile.email,
-        roleName: profile.role_name,
-        companyName: profile.company_name,
-        userContacts: profile.user_contacts || [],
-        userPreferences: {
-          alertChannel: profile.user_preferences.alert_channel,
-          receiveWeeklyReports: profile.user_preferences.receive_weekly_reports,
-          language: profile.user_preferences.language,
-          timezone: profile.user_preferences.timezone,
-          dashboardLayout: profile.user_preferences.dashboard_layout?.value
-            ? JSON.parse(profile.user_preferences.dashboard_layout.value)
-            : {},
-        },
-      };
-
-      setUser(mappedProfile);
-
+      setUser(mapProfile(profile));
+      setError(null);
     } catch (err: any) {
-      console.error(err);
-      setUser(null);
-
-      const msg =
-        err.code === "ERR_NETWORK"
-          ? "Cannot connect to server. Please try again later."
-          : err.message || "Failed to load profile.";
-      setError(msg);
-      toast.error(msg);
+      setUser(null); // ensure user is null on failure
+      setError(err.response?.data?.message || err.message);
+      // Do NOT throw here — protected route handles redirect
     } finally {
       setIsLoading(false);
     }
@@ -117,12 +74,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setError(null);
 
     try {
-      await axiosClient.post("/auth/logout");
+      const response = await axiosClient.post("/auth/logout");
       setUser(null);
-      toast.success("Logged out successfully");
+      toast.success(response.data?.message || "Logged out successfully");
     } catch (err: any) {
-      console.error("Logout failed", err);
-      const msg = err.message || "Logout failed. Please try again.";
+      const msg = err.response?.data?.message || err.message || "Logout failed";
       setError(msg);
       toast.error(msg);
     } finally {
@@ -130,10 +86,30 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-
   return (
     <AuthContext.Provider value={{ user, isLoading, login, logout, fetchProfile, error }}>
       {children}
     </AuthContext.Provider>
   );
 };
+
+// helper function to map backend user object to our UserProfile type
+function mapProfile(userData: any): UserProfile {
+  return {
+    uuid: userData.uuid,
+    fullName: userData.full_name,
+    email: userData.email,
+    roleName: userData.role_name,
+    companyName: userData.company_name || undefined,
+    userContacts: userData.user_contacts || [],
+    userPreferences: {
+      alertChannel: userData.user_preferences?.alert_channel,
+      receiveWeeklyReports: userData.user_preferences?.receive_weekly_reports,
+      language: userData.user_preferences?.language,
+      timezone: userData.user_preferences?.timezone,
+      dashboardLayout: userData.user_preferences?.dashboard_layout?.value
+        ? JSON.parse(userData.user_preferences.dashboard_layout.value)
+        : {},
+    },
+  };
+}

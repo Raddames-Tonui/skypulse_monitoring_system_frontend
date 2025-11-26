@@ -51,7 +51,7 @@ export default function StatusSidebar({ data }) {
           <span>Incidents</span>
         </div>
 
-        <div class="status-row">
+        <div className="status-row">
           <span>1d</span>
           <span>Without incid.</span>
         </div>

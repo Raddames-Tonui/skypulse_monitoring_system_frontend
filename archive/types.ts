@@ -1,0 +1,62 @@
+export interface FieldNode {
+  id: string;
+  label: string;
+  renderer:
+    | "text"
+    | "select"
+    | "textarea"
+    | "checkbox"
+    | "number"
+    | "radio"
+    | "file"
+    | "date"
+    | "switch"
+    | "multiselect";
+  inputType?: string;
+  placeholder?: string;
+  rules?: Record<string, any>;
+  props?: Record<string, any>;
+  defaultValue?: any;
+  visibleWhen?: any;
+}
+
+export interface LayoutNode {
+  type: "row" | "column" | "tabs" | "group" | "field";
+  id?: string;
+  fieldId?: string;
+  title?: string;
+  kind?: string;
+  colSpan?: number;
+  cols?: number;
+  spacing?: string;
+  withDivider?: boolean;
+  tabLabels?: string[];
+  children?: LayoutNode[];
+  fields?: string[];
+  props?: Record<string, any>;
+}
+
+export interface FormSchema {
+  id: string;
+  meta: {
+    title?: string;
+    subtitle?: string;
+  };
+  fields: Record<string, FieldNode>;
+  layout: LayoutNode[];
+}
+
+export interface DynamicFormProps {
+  schema: FormSchema;
+  onSubmit?: (Values: Record<string, any>) => void;
+  initialData?: Record<string, any>;
+
+  className?: string;            // wrapper of the whole form
+  fieldClassName?: string;       // wrapper of each field
+  labelClassName?: string;       // label styling
+  inputClassName?: string;       // input/select/textarea styling
+  sectionClassName?: string;     // section <fieldset>
+  gridClassName?: string;        // grid container
+  stackClassName?: string;       // stack container
+  buttonClassName?: string;      // submit/reset buttons
+}

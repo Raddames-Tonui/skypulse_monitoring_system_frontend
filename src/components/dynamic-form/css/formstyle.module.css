@@ -454,3 +454,9 @@
 @media (max-width: 480px) {
   :global(.grid[data-responsive="true"]) { --min-col: 220px; }
 }
+
+
+
+
+
+

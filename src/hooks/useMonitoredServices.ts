@@ -2,16 +2,14 @@ import axiosClient from "@/utils/constants/axiosClient";
 import type { ApiResponse, MonitoredService } from "@/utils/types";
 import { useQuery } from "@tanstack/react-query";
 
-export function useMonitoredServices(params: Record<string, string | number>) {
+export function useMonitoredService(uuid: string) {
   return useQuery<ApiResponse<MonitoredService>, Error>({
-    queryKey: ["monitoredServices", params],
+    queryKey: ["monitoredService", uuid],
     queryFn: async () => {
-      const query = new URLSearchParams(
-        params as Record<string, string>
-      ).toString();
-
-      const { data } = await axiosClient.get(`/services?${query}`);
+      const params = new URLSearchParams({ uuid }).toString();
+      const { data } = await axiosClient.get(`/services?${params}`);
       return data;
     },
+    enabled: !!uuid, 
   });
 }

@@ -1,6 +1,5 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
-
 import { Toaster } from 'react-hot-toast';
 import { useAuth } from '@/hooks/hooks';
 
@@ -12,56 +11,47 @@ import Footer from '@/components/Footer';
 import Loader from '@/components/Loader';
 
 export const Route = createFileRoute('/_protected')({
-  beforeLoad: async () => {
-    return null;
-  },
+  beforeLoad: async () => null,
   component: ProtectedRouteComponent,
 });
 
 function ProtectedRouteComponent() {
-  const { user, isLoading, error, fetchProfile } = useAuth();
+  const { user, isLoading, error } = useAuth();
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
-  const toggleSidebar = () => {
-    setSidebarOpen(prev => !prev);
-  };
+  const toggleSidebar = () => setSidebarOpen(prev => !prev);
 
   useEffect(() => {
-    if (!isLoading) {
-      if (!user || error) {
-        return;
-      }
-      if (!user) {
-        throw redirect({
-          to: '/auth/login',
-          search: { returnTo: '/_protected/pages' }
-        });
-      }
+    if (isLoading) return;
 
-      const allowedRoles = ['ADMIN', 'OPERATOR', 'VIEWER'];
-      if (!allowedRoles.includes(user.roleName.toUpperCase())) {
-        throw redirect({
-          to: '/auth/unauthorized'
-        });
-      }
+    if (!user) {
+      throw redirect({
+        to: '/auth/login',
+        search: { returnTo: '/_protected/pages' },
+      });
+    }
+
+    if (error) {
+      throw redirect({
+        to: '/auth/login',
+        search: { returnTo: location.pathname },
+      });
+    }
+
+    const roleName = user.roleName?.toUpperCase(); 
+    const allowedRoles = ['ADMIN', 'OPERATOR', 'VIEWER'];
+    if (!roleName || !allowedRoles.includes(roleName)) {
+      throw redirect({ to: '/auth/unauthorized' });
     }
   }, [user, isLoading, error]);
 
-  if (error && !isLoading) {
+  if (isLoading || !user) {
     return (
-      <div className='server-error' >
-        <h1>Server Error</h1>
-        <p>{error}</p>
-        <button onClick={() => fetchProfile()}>Retry</button>
+      <div className='loader'>
+        <Loader size={80} speed={1.8} className="mx-auto" ariaLabel="Loading..." />
+        <p>Loading...</p>
       </div>
     );
-  }
-
-  if (isLoading || !user) {
-    return <div className='loader'>
-      <Loader size={80} speed={1.8} className="mx-auto" ariaLabel="Loading..." />
-      <p>Loading...</p>
-    </div>;
   }
 
   return (

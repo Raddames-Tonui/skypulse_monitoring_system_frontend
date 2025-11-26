@@ -1,26 +1,26 @@
 export interface UserContact {
-  contactType: string;
-  value: string;
-  verified: boolean;
-  isPrimary: boolean;
+  contactType?: string;       
+  value?: string;
+  verified?: boolean;
+  isPrimary?: boolean;       
 }
 
 export interface UserPreferences {
-  alertChannel: string;
-  receiveWeeklyReports: boolean;
-  language: string;
-  timezone: string;
-  dashboardLayout: Record<string, any>;
+  alertChannel?: string;     
+  receiveWeeklyReports?: boolean;
+  language?: string;
+  timezone?: string;
+  dashboardLayout?: Record<string, any>; 
 }
 
 export interface UserProfile {
   uuid: string;
-  fullName: string;
+  fullName: string;          
   email: string;
-  roleName: string;
-  companyName: string;
-  userContacts: UserContact[];
-  userPreferences: UserPreferences;
+  roleName: string;          
+  companyName?: string;      
+  userContacts?: UserContact[]; 
+  userPreferences?: UserPreferences; 
 }
 
 export interface AuthContextType {

@@ -1,23 +1,55 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { Route } from "@/routes/_protected/services";
 import { DataTable } from "@/components/table/DataTable";
 import { sortData } from "@/components/table/utils/tableUtils";
 import type { ColumnProps, SortRule, FilterRule } from "@/components/table/DataTable";
-import { useMonitoredServices } from "@/hooks/useMonitoredServices";
 import type { MonitoredService } from "@/utils/types";
-import { useDebounce } from "@/hooks/useDebounce"; // assume you have a debounce hook
+import axiosClient from "@/utils/constants/axiosClient";
+
+interface MonitoredServicesResponse {
+  data: MonitoredService[];
+  total_count: number;
+  current_page: number;
+  page_size: number;
+  last_page: number;
+}
+
+// --- Backend short names mapping ---
+const FILTER_MAP: Record<string, string> = {
+  monitored_service_name: "name",
+  monitored_service_region: "region",
+  is_active: "active",
+  ssl_enabled: "ssl",
+};
+
+const SORT_MAP: Record<string, string> = {
+  monitored_service_name: "name",
+  monitored_service_url: "url",
+  monitored_service_region: "region",
+  check_interval: "interval",
+  date_created: "created",
+  last_checked: "checked",
+  is_active: "active",
+  last_uptime_status: "status",
+};
+
+const fetchMonitoredServices = async (params: Record<string, string | number>) => {
+  const { data } = await axiosClient.get<MonitoredServicesResponse>("/services", { params });
+  return data;
+};
 
 export default function MonitoredServicesPage() {
   const searchParams = Route.useSearch();
   const navigate = useNavigate();
 
   // --- Initial sort & pagination ---
-  const initialSort: SortRule[] = searchParams.sortBy
-    ? searchParams.sortBy.split(",").filter(Boolean).map((s) => {
-        const [column, direction = "asc"] = s.trim().split(" ");
-        return { column, direction: direction as "asc" | "desc" };
-      })
+  const initialSort: SortRule[] = searchParams.sort
+    ? searchParams.sort.split(",").filter(Boolean).map((s) => {
+      const [column, direction = "asc"] = s.trim().split(":"); 
+      return { column: column as keyof MonitoredService, direction: direction as "asc" | "desc" };
+    })
     : [];
 
   const initialPage = Number(searchParams.page) || 1;
@@ -27,28 +59,36 @@ export default function MonitoredServicesPage() {
   const [sortBy, setSortBy] = useState<SortRule[]>(initialSort);
   const [page, setPage] = useState(initialPage);
   const [pageSize, setPageSize] = useState(initialPageSize);
-
-  // Filters: start empty
   const [filters, setFilters] = useState<FilterRule[]>([]);
 
-  // --- Backend query params ---
-  const rawParams: Record<string, string | number> = { page, pageSize };
-
+  // --- Build query params for backend ---
+  const queryParams: Record<string, string | number> = { page, pageSize };
   filters.forEach((f) => {
     if (f.value) {
-      rawParams[f.column] = f.value; // only include non-empty filters
+      const shortName = FILTER_MAP[f.column as keyof MonitoredService] ?? f.column;
+      queryParams[shortName] = f.value;
     }
   });
+  if (sortBy.length) {
+    queryParams.sort = sortBy
+      .map((r) => {
+        const shortName = SORT_MAP[r.column as keyof MonitoredService] ?? r.column;
+        return `${shortName}:${r.direction}`;
+      })
+      .join(",");
+  }
 
-  // --- Debounce filters & params ---
-  const debouncedParams = useDebounce(rawParams, 400);
+  // --- TanStack Query ---
+  const { data, isLoading, isError, error, refetch } = useQuery({
+    queryKey: ["monitored-services", queryParams],
+    queryFn: () => fetchMonitoredServices(queryParams),
+  });
 
-  const { data, isLoading, isError, error, refetch } = useMonitoredServices(debouncedParams);
-
+  // --- Sorted data (frontend fallback) ---
   const sortedServices = useMemo(() => {
-    const services = data?.records ?? [];
+    const services = data?.data ?? [];
     return sortData(services, sortBy);
-  }, [data?.records, sortBy]);
+  }, [data?.data, sortBy]);
 
   // --- Table columns ---
   const columns: ColumnProps<MonitoredService>[] = [
@@ -71,9 +111,7 @@ export default function MonitoredServicesPage() {
       size: 100,
       isSortable: true,
       renderCell: (value) => {
-        let color = "gray";
-        if (value === "UP") color = "green";
-        else if (value === "DOWN") color = "red";
+        const color = value === "UP" ? "green" : value === "DOWN" ? "red" : "gray";
         return <span style={{ color, fontWeight: "bold" }}>{value}</span>;
       },
     },
@@ -88,17 +126,23 @@ export default function MonitoredServicesPage() {
 
   // --- Update URL query ---
   const updateUrl = useCallback(() => {
-    navigate({
-      search: {
-        page,
-        pageSize,
-        sortBy: sortBy.map((r) => `${r.column} ${r.direction}`).join(","),
-        ...filters
-          .filter((f) => f.value)
-          .reduce((acc, f) => ({ ...acc, [f.column]: f.value }), {}),
-      },
+    const params: Record<string, string | number> = { page, pageSize };
+    filters.forEach((f) => {
+      if (f.value) {
+        const shortName = FILTER_MAP[f.column as keyof MonitoredService] ?? f.column;
+        params[shortName] = f.value;
+      }
     });
-  }, [navigate, page, pageSize, sortBy, filters]);
+    if (sortBy.length) {
+      params.sort = sortBy
+        .map((r) => {
+          const shortName = SORT_MAP[r.column as keyof MonitoredService] ?? r.column;
+          return `${shortName}:${r.direction}`;
+        })
+        .join(",");
+    }
+    navigate({ search: params });
+  }, [page, pageSize, sortBy, filters, navigate]);
 
   useEffect(() => {
     updateUrl();
@@ -107,7 +151,6 @@ export default function MonitoredServicesPage() {
   // --- Handlers ---
   const handleSortApply = (rules: SortRule[]) => setSortBy(rules);
   const handleFilterApply = (rules: FilterRule[]) => {
-    // Only store filters with values
     setFilters(rules.filter((f) => f.value));
     setPage(1);
   };
@@ -144,7 +187,7 @@ export default function MonitoredServicesPage() {
           columns={columns}
           data={sortedServices}
           isLoading={isLoading}
-          error={isError ? error?.message : undefined}
+          error={isError ? (error as any)?.message : undefined}
           onRefresh={refetch}
           initialSort={sortBy}
           initialFilter={filters}

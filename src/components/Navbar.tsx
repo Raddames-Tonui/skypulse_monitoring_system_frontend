@@ -46,7 +46,32 @@ const Navbar: React.FC<NavbarProps> = ({ isSidebarOpen, toggleSidebar }) => {
           transition: "width 0.3s ease",
         }}
       >
-        <Icon iconName="microphone" />
+        {/* <Icon iconName="microphone" /> */}
+        {/* <img src="/SkyPulseFlavicon.png" alt="Skypulse Logo" /> */}
+
+
+        <div>
+          <svg width="100%" height="40" viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg">
+            <polyline
+              points="0,25 10,25 20,15 30,35 40,25 50,25 60,10 70,40 80,25 90,25 100,25"
+              fill="none"
+              stroke="#ffffffff"
+              strokeWidth="4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeDasharray="0"
+              strokeDashoffset="0"
+            >
+              <animate
+                attributeName="stroke-dashoffset"
+                from="0"
+                to="20"
+                dur="0.5s"
+                repeatCount="indefinite"
+              />
+            </polyline>
+          </svg>
+        </div>
       </div>
 
       <div className="header-wrapper">
@@ -76,7 +101,6 @@ const Navbar: React.FC<NavbarProps> = ({ isSidebarOpen, toggleSidebar }) => {
             <Icon iconName="notification" />
           </div>
 
-          {/* Avatar */}
           <div className="avatar-dropdown">
             <div
               className={`${iconClass} avatar-icon`}
