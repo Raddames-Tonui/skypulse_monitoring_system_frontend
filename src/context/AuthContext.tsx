@@ -130,22 +130,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  if (error && !isLoading) {
-    return (
-      <div className="server-error">
-        <h1>Server Error</h1>
-        <p>{error}</p>
-        <button
-          onClick={() => {
-            setError(null);
-            fetchProfile();
-          }}
-        >
-          Retry
-        </button>
-      </div>
-    );
-  }
 
   return (
     <AuthContext.Provider value={{ user, isLoading, login, logout, fetchProfile, error }}>
