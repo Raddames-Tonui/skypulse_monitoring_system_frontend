@@ -1,41 +1,67 @@
 
+interface LoaderProps {
+  size?: string | number; 
+  speed?: number;         
+  className?: string;
+  ariaLabel?: string;
+}
+
 export default function Loader({
   size = "2em",
-  speed = 1.5,
+  speed = 1.4,
   className = "",
   ariaLabel = "Loading",
-}) {
-  const svgSize = typeof size === "number" ? `${size}px` : size;
+}: LoaderProps) {
+  // Convert size to string with px if number
+  const width = typeof size === "number" ? `${size}px` : size;
+
+  // Maintain 4:3 aspect ratio
+  const height = typeof size === "number" ? `${(size * 0.75).toFixed(2)}px` : `0.75em`;
+
+  // Stroke width scales with width
+  const strokeWidth = typeof size === "number" ? Math.max(size * 0.0469, 2) : 3; 
 
   return (
     <div
-      className={`inline-block align-middle ${className}`}
+      className={`loading inline-block align-middle ${className}`}
       role="img"
       aria-label={ariaLabel}
     >
-      <svg
-        viewBox="0 0 50 50"
-        style={{ width: svgSize, height: svgSize, animation: `spin ${speed}s linear infinite` }}
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <circle className="ring" cx="25" cy="25" r="20"></circle>
-        <circle className="ball" cx="25" cy="5" r="3.5"></circle>
+      <svg width={width} height={height} viewBox="0 0 64 48">
+        <polyline
+          points="0.157 23.954, 14 23.954, 21.843 48, 43 0, 50 24, 64 24"
+          id="back"
+          strokeWidth={strokeWidth}
+        />
+        <polyline
+          points="0.157 23.954, 14 23.954, 21.843 48, 43 0, 50 24, 64 24"
+          id="front"
+          strokeWidth={strokeWidth}
+          style={{ animationDuration: `${speed}s` }}
+        />
       </svg>
 
       <style>{`
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
-
-        .ring {
+        .loading svg polyline {
           fill: none;
-          stroke: #29a3c28f;
-          stroke-width: 2;
+          stroke-linecap: round;
+          stroke-linejoin: round;
         }
 
-        .ball {
-          fill: #2fbbfcff;
-          stroke: none;
+        .loading svg polyline#back {
+          stroke: #ff4d5033;
+        }
+
+        .loading svg polyline#front {
+          stroke: #ff4d4f;
+          stroke-dasharray: 48, 144;
+          stroke-dashoffset: 192;
+          animation: dash ${speed}s linear infinite;
+        }
+
+        @keyframes dash {
+          72.5% { opacity: 0; }
+          to { stroke-dashoffset: 0; }
         }
       `}</style>
     </div>

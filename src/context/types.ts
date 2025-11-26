@@ -18,7 +18,6 @@ export interface UserProfile {
   fullName: string;
   email: string;
   roleName: string;
-  roleId: number;
   companyName: string;
   userContacts: UserContact[];
   userPreferences: UserPreferences;
@@ -30,4 +29,5 @@ export interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   fetchProfile: () => Promise<void>;
+  error: string | null;
 }

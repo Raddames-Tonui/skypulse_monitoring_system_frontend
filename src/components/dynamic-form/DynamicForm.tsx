@@ -1,28 +1,35 @@
 import React, { useState } from "react";
 import { validateField } from "./utils/valitation";
-import type { DynamicFormProps, FieldNode, LayoutNode } from "./utils/types";
-
+import type { DynamicFormProps, FieldNode,  LayoutNode } from "./utils/types";
 import "./css/formstyle.css";
 
-export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
+
+export default function DynamicForm({ schema, onSubmit, initialData }: DynamicFormProps) {
   const { id, meta, fields, layout } = schema;
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  // ---------- Initial Values ----------
   const initialValues = Object.fromEntries(
     Object.entries(fields).map(([id, field]) => {
+      const defaultVal = field.defaultValue ?? "";
+      const initialVal = initialData?.[id] ?? defaultVal;
+
       if (field.renderer === "number") {
-        const val = field.defaultValue ?? "";
-        return [id, typeof val === "number" ? val : ""];
+        return [id, typeof initialVal === "number" ? initialVal : ""];
+      } else if (field.renderer === "checkbox" || field.renderer === "switch") {
+        return [id, !!initialVal];
+      } else if (field.renderer === "multiselect") {
+        return [id, Array.isArray(initialVal) ? initialVal : []];
+      } else {
+        return [id, initialVal];
       }
-      return [id, field.defaultValue ?? ""];
     })
   );
 
   const [formValues, setFormValues] = useState<Record<string, any>>(initialValues);
 
-
-
-  // ---------- Visibility Logic ---------- 
+    
+  // ---------- Visibility Logic ----------
   const isFieldVisible = (field: FieldNode): boolean => {
     const rule = field.visibleWhen;
     if (!rule) return true;
@@ -42,7 +49,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
     return Array.isArray(rule) ? rule.every(checkCondition) : checkCondition(rule);
   };
 
-  // ---------- Handle Input ---------- 
+  // ---------- Handle Input ----------
   const handleChange = (fieldId: string, value: any) => {
     setFormValues((prev) => {
       const updated = { ...prev, [fieldId]: value };
@@ -57,7 +64,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
     setErrors((p) => ({ ...p, [fieldId]: error || "" }));
   };
 
-  // ---------- Submission ---------- 
+  // ---------- Submission ----------
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const validationErrors: Record<string, string> = {};
@@ -72,7 +79,6 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
-      // Convert empty strings for numbers to undefined/null before submitting
       const sanitized = Object.fromEntries(
         Object.entries(formValues).map(([k, v]) => {
           const f = fields[k];
@@ -86,27 +92,19 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
     }
   };
 
-
-  // ---------- Render Field ---------- 
+  // ---------- Render Field ----------
   const renderField = (field: FieldNode) => {
     const value = formValues[field.id] ?? field.defaultValue ?? "";
-    const handleInputChange = (e: React.ChangeEvent<any>) =>
-      handleChange(field.id, e.target.value);
-
+    const handleInputChange = (e: React.ChangeEvent<any>) => handleChange(field.id, e.target.value);
     const hasError = !!errors[field.id];
     const errorClass = hasError ? "input-error" : "";
-
 
     if (!isFieldVisible(field)) return null;
 
     switch (field.renderer) {
       case "select":
         return (
-          <select id={field.id}
-            value={value}
-            onChange={handleInputChange}
-            className={errorClass}
-          >
+          <select id={field.id} value={value} onChange={handleInputChange} className={errorClass}>
             <option value="">{field.placeholder || "Select..."}</option>
             {field.props?.data?.map((opt: any, i: number) => {
               const val = typeof opt === "object" ? opt.value : opt;
@@ -132,7 +130,6 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
         );
 
       case "number": {
-        // Ensure value is a number or empty string
         const rawValue = formValues[field.id] ?? field.defaultValue;
         const value = typeof rawValue === "number" && !isNaN(rawValue) ? rawValue : "";
 
@@ -153,7 +150,6 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
           />
         );
       }
-
 
       case "radio":
         return (
@@ -203,10 +199,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
         );
 
       case "date":
-        return (
-          <input type="date" id={field.id} value={value} onChange={handleInputChange} className={errorClass}
-          />
-        );
+        return <input type="date" id={field.id} value={value} onChange={handleInputChange} className={errorClass} />;
 
       case "file":
         return (
@@ -234,7 +227,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
     }
   };
 
-  // ---------- Layout Renderer ---------- 
+  // ---------- Layout Renderer ----------
   const renderLayoutNode = (node: LayoutNode, index?: number): JSX.Element | null => {
     const key = node.fieldId || node.title || `${node.kind}-${index}`;
 
@@ -285,13 +278,12 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
     }
   };
 
-
   const handleReset = () => {
     setFormValues(initialValues);
     setErrors({});
   };
 
-  // ---------- Render Form ---------- 
+  // ---------- Render Form ----------
   return (
     <div className="dynamic-form">
       {meta.title && <h1 className="form-h1">{meta.title}</h1>}
@@ -308,7 +300,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
   );
 }
 
-// ---------- MultiSelect Component ---------- 
+// ---------- MultiSelect Component ----------
 function MultiSelectField({
   field,
   value,

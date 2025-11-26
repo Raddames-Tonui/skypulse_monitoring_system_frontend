@@ -39,5 +39,6 @@ export interface FormSchema {
 export interface DynamicFormProps {
   schema: FormSchema;
   onSubmit?: (Values: Record<string, any>) => void;
+  initialData?: Record<string, any>; 
 }
 

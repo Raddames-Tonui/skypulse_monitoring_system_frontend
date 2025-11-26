@@ -1,3 +1,4 @@
+
 // ------SYSTEM SETTINGS FORM SCHEMA------
 export const systemSettingsFormSchema: any = {
   id: "system-settings-form",
@@ -6,13 +7,13 @@ export const systemSettingsFormSchema: any = {
     subtitle: "Configure default values for monitored services"
   },
   fields: {
-    //  UPTIME 
+    // Uptime
     uptime_check_interval: {
       id: "uptime_check_interval",
       label: "Uptime Check Interval (seconds)",
       renderer: "number",
       props: { min: 1 },
-      placeholder: 60,
+      placeholder: 6,
       rules: {
         required: "Interval is required",
         min: { value: 1, message: "Must be >= 1" }
@@ -31,7 +32,7 @@ export const systemSettingsFormSchema: any = {
       label: "Uptime Retry Delay (seconds)",
       renderer: "number",
       props: { min: 1 },
-      placeholder: 10,
+      placeholder: 5,
       rules: { required: "Retry delay is required" }
     },
     sse_push_interval: {
@@ -39,24 +40,25 @@ export const systemSettingsFormSchema: any = {
       label: "SSE Push Interval (seconds)",
       renderer: "number",
       props: { min: 1 },
-      placeholder: 5,
+      placeholder: 6,
       rules: { required: "SSE push interval is required" }
     },
 
-    //  SSL 
+    // SSL
     ssl_check_interval: {
       id: "ssl_check_interval",
       label: "SSL Check Interval (seconds)",
       renderer: "number",
       props: { min: 1 },
-      placeholder: 3600,
+      placeholder: 6,
       rules: { required: "SSL check interval is required" }
     },
     ssl_alert_thresholds: {
       id: "ssl_alert_thresholds",
       label: "SSL Alert Thresholds (days)",
       renderer: "text",
-      placeholder: "30,14,7",
+      placeholder: "e.g. 30,14,7,3",
+      defaultValue: "30,15,7,3",
       rules: { required: "SSL alert thresholds are required" }
     },
     ssl_retry_count: {
@@ -72,17 +74,17 @@ export const systemSettingsFormSchema: any = {
       label: "SSL Retry Delay (seconds)",
       renderer: "number",
       props: { min: 1 },
-      placeholder: 300,
+      placeholder: 5,
       rules: { required: "SSL retry delay is required" }
     },
 
-    //  NOTIFICATIONS 
+    // Notification
     notification_check_interval: {
       id: "notification_check_interval",
       label: "Notification Check Interval (seconds)",
       renderer: "number",
       props: { min: 1 },
-      placeholder: 120,
+      placeholder: 6,
       rules: { required: "Notification check interval is required" }
     },
     notification_retry_count: {
@@ -90,7 +92,7 @@ export const systemSettingsFormSchema: any = {
       label: "Notification Retry Count",
       renderer: "number",
       props: { min: 0 },
-      placeholder: 5,
+      placeholder: 3,
       rules: { required: "Notification retry count is required" }
     },
     notification_cooldown_minutes: {
@@ -98,13 +100,11 @@ export const systemSettingsFormSchema: any = {
       label: "Notification Cooldown (minutes)",
       renderer: "number",
       props: { min: 0 },
-      placeholder: 15,
+      placeholder: 6,
       rules: { required: "Notification cooldown is required" }
     }
   },
-
   layout: [
-    // Uptime Section
     {
       kind: "section",
       title: "Uptime Settings",
@@ -123,8 +123,6 @@ export const systemSettingsFormSchema: any = {
         }
       ]
     },
-
-    // SSL Section
     {
       kind: "section",
       title: "SSL Settings",
@@ -143,8 +141,6 @@ export const systemSettingsFormSchema: any = {
         }
       ]
     },
-
-    // Notification Section
     {
       kind: "section",
       title: "Notification Settings",
@@ -160,137 +156,6 @@ export const systemSettingsFormSchema: any = {
             { kind: "field", fieldId: "notification_cooldown_minutes" }
           ]
         }
-      ]
-    }
-  ]
-};
-
-
-
-// ------MONITORED SERVICE FORM SCHEMA------
-export const monitoredServiceFormSchema: any = {
-  id: "monitored-service-form",
-  meta: {
-    title: "Add / Edit Monitored Service",
-    subtitle: "Provide the details of the service you want to monitor"
-  },
-  fields: {
-    monitored_service_name: {
-      id: "monitored_service_name",
-      label: "Service Name",
-      renderer: "text",
-      rules: { required: "Service name is required" }
-    },
-    monitored_service_url: {
-      id: "monitored_service_url",
-      label: "Service URL",
-      renderer: "text",
-      rules: {
-        required: "URL is required",
-        pattern: {
-          value: /^https?:\/\/.+/,
-          message: "Enter a valid URL starting with http:// or https://"
-        }
-      }
-    },
-    monitored_service_region: {
-      id: "monitored_service_region",
-      label: "Region",
-      renderer: "select",
-      props: {
-        data: ["US-East", "US-West", "EU", "APAC", "Custom"]
-      },
-      rules: {  }
-    },
-    check_interval: {
-      id: "check_interval",
-      label: "Check Interval (seconds)",
-      renderer: "number",
-      props: { min: 10, max: 86400 },
-    //   rules: { required: "Check interval is required" }
-    },
-    is_active: {
-      id: "is_active",
-      label: "Active",
-      renderer: "switch",
-      defaultValue: true
-    },
-    retry_count: {
-      id: "retry_count",
-      label: "Retry Count",
-      renderer: "number",
-      props: { min: 0, max: 10 },
-      defaultValue: 3
-    },
-    retry_delay: {
-      id: "retry_delay",
-      label: "Retry Delay (seconds)",
-      renderer: "number",
-      props: { min: 0, max: 300 },
-      defaultValue: 10
-    },
-    expected_status_code: {
-      id: "expected_status_code",
-      label: "Expected Status Code",
-      renderer: "number",
-      props: { min: 100, max: 599 },
-      defaultValue: 200
-    },
-    ssl_enabled: {
-      id: "ssl_enabled",
-      label: "SSL Enabled",
-      renderer: "switch",
-      defaultValue: true
-    }
-  },
-  layout: [
-    {
-      kind: "section",
-      title: "Basic Information",
-      withDivider: true,
-      children: [
-        {
-          kind: "grid",
-          cols: 2,
-          spacing: "md",
-          children: [
-            { kind: "field", fieldId: "monitored_service_name" },
-            { kind: "field", fieldId: "monitored_service_url" }
-          ]
-        },
-        {
-          kind: "grid",
-          cols: 2,
-          spacing: "md",
-          children: [
-            { kind: "field", fieldId: "monitored_service_region" },
-            { kind: "field", fieldId: "check_interval" }
-          ]
-        },
-        {
-          kind: "grid",
-          cols: 1,
-          spacing: "md",
-          children: [{ kind: "field", fieldId: "is_active" }]
-        }
-      ]
-    },
-    {
-      kind: "section",
-      title: "Retry & Status Settings",
-      withDivider: true,
-      children: [
-        {
-          kind: "grid",
-          cols: 3,
-          spacing: "md",
-          children: [
-            { kind: "field", fieldId: "retry_count" },
-            { kind: "field", fieldId: "retry_delay" },
-            { kind: "field", fieldId: "expected_status_code" }
-          ]
-        },
-        { kind: "field", fieldId: "ssl_enabled" }
       ]
     }
   ]

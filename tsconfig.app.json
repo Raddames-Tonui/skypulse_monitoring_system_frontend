@@ -32,5 +32,5 @@
       "@components/*": ["components/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "archive/DynamicForm.tsx"]
 }

@@ -9,6 +9,7 @@ import "@css/Form.css";
 import Navbar from '@/components/Navbar';
 import Sidebar from '@/components/Sidebar';
 import Footer from '@/components/Footer';
+import Loader from '@/components/Loader';
 
 export const Route = createFileRoute('/_protected')({
   beforeLoad: async () => {
@@ -18,7 +19,7 @@ export const Route = createFileRoute('/_protected')({
 });
 
 function ProtectedRouteComponent() {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, error, fetchProfile } = useAuth();
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -27,10 +28,13 @@ function ProtectedRouteComponent() {
 
   useEffect(() => {
     if (!isLoading) {
+      if (!user || error) {
+        return;
+      }
       if (!user) {
         throw redirect({
           to: '/auth/login',
-          search: { returnTo: '/_protected/pages' }
+          search: { returnTo: '/_protected/pages'}
         });
       }
 
@@ -41,10 +45,22 @@ function ProtectedRouteComponent() {
         });
       }
     }
-  }, [user, isLoading]);
+  }, [user, isLoading, error]);
+
+  //   if (error && !isLoading) {
+  //   return (
+  //     <div style={{ textAlign: "center", padding: 40 }}>
+  //       <h1>Server Error</h1>
+  //       <p>{error}</p>
+  //       <button onClick={() => fetchProfile()}>Retry</button>
+  //     </div>
+  //   );
+  // }
 
   if (isLoading || !user) {
-    return <div>Loading...</div>;
+    return <div>
+      <Loader />
+    </div>;
   }
 
   return (
