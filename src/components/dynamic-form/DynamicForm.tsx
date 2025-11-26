@@ -3,8 +3,6 @@ import { validateField } from "./utils/valitation";
 import type { DynamicFormProps, FieldNode, LayoutNode } from "./utils/types";
 
 import "./css/formstyle.css";
-// import "./css/formstyle.module.css";
-
 
 export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
   const { id, meta, fields, layout } = schema;
@@ -149,7 +147,6 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             placeholder={field.placeholder}
             onChange={(e) => {
               const num = e.target.valueAsNumber;
-              // Convert NaN to undefined so React never gets NaN
               handleChange(field.id, isNaN(num) ? undefined : num);
             }}
             className={errorClass}

@@ -1,0 +1,74 @@
+.status-sidebar {
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  color: #fff;
+  font-family: system-ui, sans-serif;
+}
+
+.status-card {
+  background: #0d1117;
+  padding: 16px;
+  border: 1px solid #1f2937;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.status-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.status-icon-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.status-icon {
+  width: 40px;
+  height: 40px;
+  background: #22c55e;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 4px 0;
+  font-size: 0.9rem;
+  color: #d1d5db;
+}
+
+.status-row span {
+  color: #d1d5db;
+}
+
+.status-row .red {
+  color: #ef4444;
+}
+
+.status-row .green {
+  color: #22c55e;
+}
+
+.status-row .gray {
+  color: #9ca3af;
+}
+
+.red-bold {
+  color: #ef4444;
+  font-weight: bold;
+}
+
+.status-subtext {
+  margin-top: 10px;
+  font-size: 0.75rem;
+  color: #6b7280;
+  text-align: center;
+}

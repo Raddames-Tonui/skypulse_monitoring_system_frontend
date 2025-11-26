@@ -23,6 +23,8 @@ import { Route as PublicAuthUnauthorizedRouteImport } from './routes/_public/aut
 import { Route as PublicAuthResetpasswordRouteImport } from './routes/_public/auth/resetpassword'
 import { Route as PublicAuthRegisterRouteImport } from './routes/_public/auth/register'
 import { Route as PublicAuthLoginRouteImport } from './routes/_public/auth/login'
+import { Route as ProtectedServicesCreateRouteImport } from './routes/_protected/services/create'
+import { Route as ProtectedServicesUpdateRouteImport } from './routes/_protected/services/$update'
 
 const ProtectedRoute = ProtectedRouteImport.update({
   id: '/_protected',
@@ -95,9 +97,21 @@ const PublicAuthLoginRoute = PublicAuthLoginRouteImport.update({
   path: '/auth/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProtectedServicesCreateRoute = ProtectedServicesCreateRouteImport.update({
+  id: '/services/create',
+  path: '/services/create',
+  getParentRoute: () => ProtectedRoute,
+} as any)
+const ProtectedServicesUpdateRoute = ProtectedServicesUpdateRouteImport.update({
+  id: '/services/$update',
+  path: '/services/$update',
+  getParentRoute: () => ProtectedRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/services/$update': typeof ProtectedServicesUpdateRoute
+  '/services/create': typeof ProtectedServicesCreateRoute
   '/auth/login': typeof PublicAuthLoginRoute
   '/auth/register': typeof PublicAuthRegisterRoute
   '/auth/resetpassword': typeof PublicAuthResetpasswordRoute
@@ -113,6 +127,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/services/$update': typeof ProtectedServicesUpdateRoute
+  '/services/create': typeof ProtectedServicesCreateRoute
   '/auth/login': typeof PublicAuthLoginRoute
   '/auth/register': typeof PublicAuthRegisterRoute
   '/auth/resetpassword': typeof PublicAuthResetpasswordRoute
@@ -130,6 +146,8 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_protected': typeof ProtectedRouteWithChildren
+  '/_protected/services/$update': typeof ProtectedServicesUpdateRoute
+  '/_protected/services/create': typeof ProtectedServicesCreateRoute
   '/_public/auth/login': typeof PublicAuthLoginRoute
   '/_public/auth/register': typeof PublicAuthRegisterRoute
   '/_public/auth/resetpassword': typeof PublicAuthResetpasswordRoute
@@ -147,6 +165,8 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/services/$update'
+    | '/services/create'
     | '/auth/login'
     | '/auth/register'
     | '/auth/resetpassword'
@@ -162,6 +182,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/services/$update'
+    | '/services/create'
     | '/auth/login'
     | '/auth/register'
     | '/auth/resetpassword'
@@ -178,6 +200,8 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_protected'
+    | '/_protected/services/$update'
+    | '/_protected/services/create'
     | '/_public/auth/login'
     | '/_public/auth/register'
     | '/_public/auth/resetpassword'
@@ -302,10 +326,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicAuthLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_protected/services/create': {
+      id: '/_protected/services/create'
+      path: '/services/create'
+      fullPath: '/services/create'
+      preLoaderRoute: typeof ProtectedServicesCreateRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
+    '/_protected/services/$update': {
+      id: '/_protected/services/$update'
+      path: '/services/$update'
+      fullPath: '/services/$update'
+      preLoaderRoute: typeof ProtectedServicesUpdateRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
   }
 }
 
 interface ProtectedRouteChildren {
+  ProtectedServicesUpdateRoute: typeof ProtectedServicesUpdateRoute
+  ProtectedServicesCreateRoute: typeof ProtectedServicesCreateRoute
   ProtectedDashboardIndexRoute: typeof ProtectedDashboardIndexRoute
   ProtectedGroupsIndexRoute: typeof ProtectedGroupsIndexRoute
   ProtectedNotificationsIndexRoute: typeof ProtectedNotificationsIndexRoute
@@ -316,6 +356,8 @@ interface ProtectedRouteChildren {
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
+  ProtectedServicesUpdateRoute: ProtectedServicesUpdateRoute,
+  ProtectedServicesCreateRoute: ProtectedServicesCreateRoute,
   ProtectedDashboardIndexRoute: ProtectedDashboardIndexRoute,
   ProtectedGroupsIndexRoute: ProtectedGroupsIndexRoute,
   ProtectedNotificationsIndexRoute: ProtectedNotificationsIndexRoute,

@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet } from '@tanstack/react-router';
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 
 import { Toaster } from 'react-hot-toast';
@@ -18,34 +18,37 @@ export const Route = createFileRoute('/_protected')({
 });
 
 function ProtectedRouteComponent() {
-  const { user, isLoading } = useAuth();  
+  const { user, isLoading } = useAuth();
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
     setSidebarOpen(prev => !prev);
   };
 
-  // Redirect if user not logged in or role unauthorized
   useEffect(() => {
     if (!isLoading) {
       if (!user) {
-        window.location.href = '/auth/login'; // simple redirect
-        return;
+        throw redirect({
+          to: '/auth/login',
+          search: { returnTo: '/_protected/pages' }
+        });
       }
 
-      const allowedRoles = ['admin', 'operator', 'viewer']; // your roles
-      if (!allowedRoles.includes(user.roleName.toLowerCase())) {
-        window.location.href = '/auth/unauthorized';
+      const allowedRoles = ['ADMIN', 'OPERATOR', 'VIEWER'];
+      if (!allowedRoles.includes(user.roleName.toUpperCase())) {
+        throw redirect({
+          to: '/auth/unauthorized'
+        });
       }
     }
   }, [user, isLoading]);
 
   if (isLoading || !user) {
-    return <div>Loading...</div>; // or spinner
+    return <div>Loading...</div>;
   }
 
   return (
-    <div
+    <section
       className="body-wrapper"
       style={{ '--sidebar-width': isSidebarOpen ? '240px' : '48px' } as React.CSSProperties}
     >
@@ -56,6 +59,6 @@ function ProtectedRouteComponent() {
         <Outlet />
       </main>
       <Footer />
-    </div>
+    </section>
   );
 }

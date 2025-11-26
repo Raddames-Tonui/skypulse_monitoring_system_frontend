@@ -418,6 +418,7 @@ header,
 /* ---------------------------------------------
    3. Transform into mobile navbar (≤ 768px)
    --------------------------------------------- */
+   
 @media (max-width: 768px) {
     header {
         position: fixed;
@@ -460,13 +461,13 @@ header,
         padding: 3px;
     }
 
-    /* dropdown expands full width on mobile */
     .dropdown-menu {
         right: -40px;
         min-width: 240px;
         transform: translateY(10px);
     }
 }
+
 
 /* ---------------------------------------------
    4. Ultra-small screens (≤ 480px)
@@ -511,6 +512,8 @@ This makes the left mic-icon behave like a sliding block: */
 .mic-icon {
     transition: width 0.3s ease, border-color 0.3s ease;
 }
+
+
 
 
 /* 

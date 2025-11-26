@@ -12,6 +12,9 @@ interface SidebarProps {
 const menuConfig: Record<string, { icon: IconName; label: string; path: string }[]> = {
   admin: [
     { icon: "pie", label: "Odata Dashboard", path: "/dashboard" },
+    { icon: "user", label: "Users", path: "/users" },
+    { icon: "users", label: "Groups", path: "/groups" },
+    { icon: "services", label: "Services", path: "/services" },
     { icon: "settings", label: "Settings", path: "/settings" },
   ],
   operator: [
@@ -36,7 +39,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
   }, [isLoading, menuItems.length, navigate]);
 
   if (isLoading || !user) {
-    return null; 
+    return null;
   }
 
   return (

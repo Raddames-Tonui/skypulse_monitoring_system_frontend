@@ -75,12 +75,21 @@ export const Users: React.FC<IconBaseProps> = ({ className }) => (
 )
 
 export const User: React.FC<IconBaseProps> = ({ className }) => (
-    <svg className={className} width="14" height="19" viewBox="0 0 14 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0.333328 18.3334C0.333328 16.5653 1.03571 14.8696 2.28595 13.6193C3.53619 12.3691 5.23188 11.6667 6.99999 11.6667C8.7681 11.6667 10.4638 12.3691 11.714 13.6193C12.9643 14.8696 13.6667 16.5653 13.6667 18.3334H12C12 17.0073 11.4732 15.7355 10.5355 14.7978C9.59785 13.8602 8.32608 13.3334 6.99999 13.3334C5.67391 13.3334 4.40214 13.8602 3.46446 14.7978C2.52678 15.7355 1.99999 17.0073 1.99999 18.3334H0.333328ZM6.99999 10.8334C4.23749 10.8334 1.99999 8.59587 1.99999 5.83337C1.99999 3.07087 4.23749 0.833374 6.99999 0.833374C9.7625 0.833374 12 3.07087 12 5.83337C12 8.59587 9.7625 10.8334 6.99999 10.8334ZM6.99999 9.16671C8.84166 9.16671 10.3333 7.67504 10.3333 5.83337C10.3333 3.99171 8.84166 2.50004 6.99999 2.50004C5.15833 2.50004 3.66666 3.99171 3.66666 5.83337C3.66666 7.67504 5.15833 9.16671 6.99999 9.16671Z" fill="#144D5A" />
+    <svg
+        className={className}
+        width="14"
+        height="19"
+        viewBox="0 0 14 19"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path
+            d="M0.333328 18.3334C0.333328 16.5653 1.03571 14.8696 2.28595 13.6193C3.53619 12.3691 5.23188 11.6667 6.99999 11.6667C8.7681 11.6667 10.4638 12.3691 11.714 13.6193C12.9643 14.8696 13.6667 16.5653 13.6667 18.3334H12C12 17.0073 11.4732 15.7355 10.5355 14.7978C9.59785 13.8602 8.32608 13.3334 6.99999 13.3334C5.67391 13.3334 4.40214 13.8602 3.46446 14.7978C2.52678 15.7355 1.99999 17.0073 1.99999 18.3334H0.333328ZM6.99999 10.8334C4.23749 10.8334 1.99999 8.59587 1.99999 5.83337C1.99999 3.07087 4.23749 0.833374 6.99999 0.833374C9.7625 0.833374 12 3.07087 12 5.83337C12 8.59587 9.7625 10.8334 6.99999 10.8334ZM6.99999 9.16671C8.84166 9.16671 10.3333 7.67504 10.3333 5.83337C10.3333 3.99171 8.84166 2.50004 6.99999 2.50004C5.15833 2.50004 3.66666 3.99171 3.66666 5.83337C3.66666 7.67504 5.15833 9.16671 6.99999 9.16671Z"
+            fill="white"
+        />
     </svg>
+);
 
-
-)
 
 export const Settings: React.FC<IconBaseProps> = ({ className }) => (
     <svg className={className} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -124,7 +133,7 @@ export const Menu: React.FC<IconBaseProps> = ({ className }) => (
 
 export const Hamburger: React.FC<IconBaseProps> = ({ className }) => (
     <svg
-        className={className}width="24"height="24"viewBox="0 0 24 24"fill="none"xmlns="http://www.w3.org/2000/svg"
+        className={className} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
     >
         <path
             d="M4 6H20"
@@ -369,54 +378,74 @@ export const EyeView: React.FC<IconBaseProps> = ({ className, style }) => (
         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
         <circle cx="12" cy="12" r="3" />
     </svg>
-
 )
 
+
+export const Services: React.FC<IconBaseProps> = ({ className }) => (
+    <svg
+        className={className}
+        width="22"
+        height="20"
+        viewBox="0 0 22 20"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path
+            d="M2 10H20M2 5H20M2 15H20M5 2V18M11 2V18M17 2V18"
+            stroke="white"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+    </svg>
+);
+
 export const Icons = {
-    attachment: Attachment,
-    eyeView: EyeView,
-    delete: Delete,
-    dangerIcon: DangerIcon,
-    avatar: Avatar,
-    notification: Notification,
-    editIcon: EditIcon,
-    search: Search,
     add: Add,
+    alignCenter: AlignCenter,
+    alignLeft: AlignLeft,
+    alignRight: AlignRight,
+    attachment: Attachment,
+    avatar: Avatar,
+    bold: Bold,
     building: Building,
     close: Close,
-    open: Open,
-    settings: Settings,
-    user: User,
-    users: Users,
-    notes: Notes,
-    notepad: NoteReload,
-    razor: Razor,
-    pie: Pie,
-    microphone: MicroPhone,
-    bold: Bold,
-    italic: Italic,
-    underline: Underline,
-    strikethrough: Strikethrough,
-    type: Type,
+    code: Code,
+    dangerIcon: DangerIcon,
+    delete: Delete,
+    editIcon: EditIcon,
+    eyeView: EyeView,
     h1: H1,
     h2: H2,
     h3: H3,
     h4: H4,
-    list: List,
-    numberedList: NumberedList,
-    link: Link,
-    image: Image,
-    youtube: Youtube,
-    quote: Quote,
-    code: Code,
-    alignCenter: AlignCenter,
-    alignLeft: AlignLeft,
-    alignRight: AlignRight,
-    superScript: SuperScript,
-    subscript: Subscript,
-    menu: Menu,
     hamburger: Hamburger,
-
+    image: Image,
+    italic: Italic,
+    link: Link,
+    list: List,
+    menu: Menu,
+    microphone: MicroPhone,
+    notepad: NoteReload,
+    notes: Notes,
+    notification: Notification,
+    numberedList: NumberedList,
+    open: Open,
+    pie: Pie,
+    quote: Quote,
+    razor: Razor,
+    search: Search,
+    settings: Settings,
+    services: Services,
+    strikethrough: Strikethrough,
+    subscript: Subscript,
+    superScript: SuperScript,
+    type: Type,
+    underline: Underline,
+    user: User,
+    users: Users,
+    youtube: Youtube,
 } as const;
+
 
 export type IconName = keyof typeof Icons;

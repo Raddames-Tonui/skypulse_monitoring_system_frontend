@@ -31,7 +31,7 @@ const RootLayout = () => (
 
 export const Route = createRootRoute({
   component: RootLayout,
-  notFoundComponent: () => <div className="auth-page">
+  notFoundComponent: () => <section className="auth-page">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       className="auth-svg"
@@ -52,5 +52,5 @@ export const Route = createRootRoute({
       Looks like this page ran away... 🏃💨 <br />
       Or maybe it never existed 🤔
     </p>
-  </div>
+  </section>
 })
