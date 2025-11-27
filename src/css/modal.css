@@ -1,62 +1,59 @@
 @import url('./variables.css');
 
-.modal-overlay {
+.custom-modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.45);
+  inset: 0;
+  background: rgba(75, 73, 73, 0.45);
   display: none;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 500;
+  padding: 20px;
 }
 
-.modal-box {
+.custom-modal-box {
   background: var(--bg-default);
-  width: 600px;
-  max-width: 90%;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
-  overflow: hidden;
+  min-width: 80vw;
+  max-width: 95vw;
+  max-height: 90vh;           
+  min-height: 80vh;
   display: flex;
   flex-direction: column;
-  min-height: 280px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  overflow: hidden;
 }
 
-/* Header */
-.modal-header {
+.custom-modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--primary-800);
+  background: var(--primary-700);
   color: var(--bg-default);
-  padding: 12px 20px;
+  padding: 5px 20px;
 }
 
-.modal-header h2 {
-  font-size: 18px;
+.custom-modal-header h2 {
+  font-size: 16px;
   margin: 0;
-  color: var(--primary-100); 
+  color: var(--primary-100);
 }
 
-.modal-close-icon {
+.custom-modal-close-icon {
   background: none;
   border: none;
-  font-size: 20px;
+  font-size: 22px;
   cursor: pointer;
   color: var(--bg-default);
-  transition: transform 0.2s ease;
 }
 
-.modal-close-icon:hover {
-  transform: scale(1.2);
+.custom-modal-close-icon:hover {
+  transform: scale(1.15);
 }
 
-/* Body */
-.modal-body {
-  padding: 18px 20px;
-  flex: 1;
+.custom-modal-body {
+  padding: 5px;
+  flex: 1;                    
+  overflow-y: auto;           
   color: var(--primary-900);
 }
 
@@ -80,14 +77,14 @@
   font-weight: 500;
 }
 
-/* Footer */
-.modal-footer {
+.custom-modal-footer {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  padding: 14px 20px;
+  padding: 16px 20px;
+  background: var(--bg-default);
   flex-wrap: wrap;
-  background: white;
+  border-top: 1px solid var(--primary-100);
 }
 
 .modal-close-btn {
@@ -114,10 +111,27 @@
   padding: 8px 16px;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-right: 0.5rem;
 }
 
 .cancel:hover {
   background: var(--primary-50);
   color: var(--primary-700);
+}
+
+@media (max-width: 480px) {
+  .custom-modal-box {
+    width: 100%;
+    height: 100%;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+
+  .custom-modal-header,
+  .custom-modal-footer {
+    padding: 12px 16px;
+  }
+
+  .custom-modal-body {
+    padding: 16px;
+  }
 }

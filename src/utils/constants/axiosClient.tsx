@@ -13,7 +13,13 @@ axiosClient.interceptors.response.use(
     if (!error.response) {
       return Promise.reject({ code: "ERR_NETWORK", message: error.message });
     }
-    return Promise.reject(error.response);
+
+    const res = error.response;
+
+    if (typeof res.data === "string") {
+      try { res.data = JSON.parse(res.data); } catch { }
+    }
+    return Promise.reject(error);
   }
 );
 

@@ -1,4 +1,3 @@
-
 // ----------- GENERIC API RESPONSE -----------
 export type ApiResponse<T> = {
   domain: string;
@@ -14,6 +13,23 @@ export type ApiError = {
   code?: string;
   details?: any;
 };
+
+// ----------- USERS -----------
+export interface User {
+  id: number;
+  uuid: string;
+  first_name: string;
+  last_name: string;
+  user_email: string;
+  role_name: string;
+  company_name: string;
+  is_active: boolean;
+  date_created: string;
+  date_modified: string;
+}
+
+export type UsersResponse = ApiResponse<User>;
+
 
 // ----------- MONITORED SERVICE TYPE -----------
 export type MonitoredService = {

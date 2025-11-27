@@ -2,7 +2,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useSSE } from "@/utils/constants/useSSE";
 import { DataTable, } from "@/components/table/DataTable";
 import type { ColumnProps } from "@/components/table/DataTable";
-import StatusSidebar from "./StatusSidebar";
+import StatusSidebar from "../components/StatusSidebar";
 import "@/css/dashboard.css"
 
 interface Service {
@@ -59,7 +59,10 @@ export default function Dashboard() {
 
   return (
     <div>
-      <h2>Service Monitoring Dashboard</h2>
+      <div className="page-header">
+        <h1>Dashboard</h1>
+      </div>
+      <h2></h2>
       <div className="dashboard-wrapper">
         <div className="data-table-wrapper">
           <DataTable<Service>

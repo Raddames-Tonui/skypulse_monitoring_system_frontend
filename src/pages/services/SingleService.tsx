@@ -74,17 +74,13 @@ export default function SingleServicePage() {
     { name: "Maintenance", value: uptimeCount.maintenance },
   ];
 
-  // --------------------------
   // Response Time Chart
-  // --------------------------
   const responseChartData = service.uptime_logs.map((log) => ({
     name: new Date(log.checked_at).toLocaleTimeString(),
     uv: log.response_time_ms,
   }));
 
-  // --------------------------
   // Component UI
-  // --------------------------
   return (
     <div className="service-container">
       <header className="service-header">

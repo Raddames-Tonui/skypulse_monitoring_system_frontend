@@ -11,11 +11,11 @@ function SystemSettings() {
   const { data, isLoading, isFetching } = useQuery({
     queryKey: ["system-settings"],
     queryFn: async () => {
-      const s = await axiosClient.get("/settings");
+      const res = await axiosClient.get("/settings");
       return {
-        ...s.data,
-        ssl_alert_thresholds: s.data.ssl_alert_thresholds
-          ? s.data.ssl_alert_thresholds.split(",").map((v: string) => v.trim())
+        ...res.data,
+        ssl_alert_thresholds: res.data.ssl_alert_thresholds
+          ? res.data.ssl_alert_thresholds.split(",").map((v: string) => v.trim())
           : [],
       };
     },
@@ -32,7 +32,7 @@ function SystemSettings() {
       return axiosClient.post("/settings", payload);
     },
     onSuccess: () => {
-      toast.success("Settings saved successfully!");
+      toast.success("Settings saved successfully");
       queryClient.invalidateQueries({ queryKey: ["system-settings"] });
     },
     onError: (err: any) => {
@@ -44,7 +44,6 @@ function SystemSettings() {
     mutationFn: async () => axiosClient.post("/settings/rollback", { rollback: true }),
     onSuccess: async () => {
       toast.success("Settings reverted to previous version!");
-      // Invalidate and refetch to reload data
       await queryClient.invalidateQueries({ queryKey: ["system-settings"] });
     },
     onError: (err: any) => {
@@ -54,7 +53,7 @@ function SystemSettings() {
 
   const restartApplication = useMutation({
     mutationFn: async () => axiosClient.get("/system/tasks/reload"),
-    onSuccess: async (data: any) => {
+    onSuccess: (data: any) => {
       toast.success(data?.message || "Application restart initiated!");
     },
     onError: (err: any) => {
@@ -65,16 +64,15 @@ function SystemSettings() {
   if (isLoading || isFetching) return <Loader />;
 
   return (
-    <div className="page-wrapper space-y-4">
+    <div className="page-wrapper">
       <div className="page-header">
         <h1>System Settings</h1>
-
-        <div>
+        <div className="page-header-buttons">
           <button
             type="button"
             disabled={rollbackMutation.isPending}
             onClick={() => rollbackMutation.mutate()}
-            className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded"
+            className="btn btn-danger"
           >
             {rollbackMutation.isPending ? "Reverting..." : "Revert to Previous Version"}
           </button>
@@ -82,19 +80,21 @@ function SystemSettings() {
             type="button"
             disabled={restartApplication.isPending}
             onClick={() => restartApplication.mutate()}
-            className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded"
+            className="btn btn-danger"
           >
             {restartApplication.isPending ? "Restarting..." : "Restart Application"}
           </button>
         </div>
       </div>
 
-
-
       <DynamicForm
         schema={systemSettingsFormSchema}
-        initialData={data}
+        initialData={data?.data}
         onSubmit={(values) => saveMutation.mutate(values)}
+        className="dynamic-form-wrapper"
+        fieldClassName="system-form-field-wrapper"
+        buttonClassName="form-buttons-wrapper"
+        style={{ maxWidth: "800px", margin: "0 auto" }}
       />
     </div>
   );

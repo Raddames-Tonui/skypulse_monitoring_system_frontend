@@ -38,7 +38,10 @@ export interface FormSchema {
 
 export interface DynamicFormProps {
   schema: FormSchema;
-  onSubmit?: (Values: Record<string, any>) => void;
-  initialData?: Record<string, any>; 
+  onSubmit?: (values: Record<string, any>) => void;
+  initialData?: Record<string, any>;
+  className?: string;          
+  fieldClassName?: string;    
+  buttonClassName?: string;     
+  style?: React.CSSProperties; 
 }
-

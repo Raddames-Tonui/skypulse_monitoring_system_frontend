@@ -1,5 +1,4 @@
-
-
+import "@/css/StatusSidebar.module.css"
 export default function StatusSidebar({ data }) {
   const uptimePercent =
     data && data.total_services > 0
@@ -8,13 +7,11 @@ export default function StatusSidebar({ data }) {
 
   return (
     <div className="status-sidebar">
-      {/* CURRENT STATUS */}
       <div className="status-card">
         <h3 className="status-title">Current status.</h3>
 
         <div className="status-icon-wrapper">
-          <div className="status-icon">
-          </div>
+          <div className="status-icon"></div>
         </div>
 
         <div className="status-row">
@@ -37,7 +34,6 @@ export default function StatusSidebar({ data }) {
         </p>
       </div>
 
-      {/* LAST 24 HOURS */}
       <div className="status-card">
         <h3 className="status-title">Last 24 hours.</h3>
 

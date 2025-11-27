@@ -26,6 +26,7 @@ import { Route as ProtectedServicesCreateRouteImport } from './routes/_protected
 import { Route as ProtectedServicesUuidRouteImport } from './routes/_protected/services/$uuid'
 import { Route as ProtectedLogsUptimelogsRouteImport } from './routes/_protected/logs/uptimelogs'
 import { Route as ProtectedLogsSsllogsRouteImport } from './routes/_protected/logs/ssllogs'
+import { Route as ProtectedGroupsUuidRouteImport } from './routes/_protected/groups/$uuid'
 
 const ProtectedRoute = ProtectedRouteImport.update({
   id: '/_protected',
@@ -113,9 +114,15 @@ const ProtectedLogsSsllogsRoute = ProtectedLogsSsllogsRouteImport.update({
   path: '/logs/ssllogs',
   getParentRoute: () => ProtectedRoute,
 } as any)
+const ProtectedGroupsUuidRoute = ProtectedGroupsUuidRouteImport.update({
+  id: '/groups/$uuid',
+  path: '/groups/$uuid',
+  getParentRoute: () => ProtectedRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/groups/$uuid': typeof ProtectedGroupsUuidRoute
   '/logs/ssllogs': typeof ProtectedLogsSsllogsRoute
   '/logs/uptimelogs': typeof ProtectedLogsUptimelogsRoute
   '/services/$uuid': typeof ProtectedServicesUuidRoute
@@ -134,6 +141,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/groups/$uuid': typeof ProtectedGroupsUuidRoute
   '/logs/ssllogs': typeof ProtectedLogsSsllogsRoute
   '/logs/uptimelogs': typeof ProtectedLogsUptimelogsRoute
   '/services/$uuid': typeof ProtectedServicesUuidRoute
@@ -154,6 +162,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_protected': typeof ProtectedRouteWithChildren
+  '/_protected/groups/$uuid': typeof ProtectedGroupsUuidRoute
   '/_protected/logs/ssllogs': typeof ProtectedLogsSsllogsRoute
   '/_protected/logs/uptimelogs': typeof ProtectedLogsUptimelogsRoute
   '/_protected/services/$uuid': typeof ProtectedServicesUuidRoute
@@ -174,6 +183,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/groups/$uuid'
     | '/logs/ssllogs'
     | '/logs/uptimelogs'
     | '/services/$uuid'
@@ -192,6 +202,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/groups/$uuid'
     | '/logs/ssllogs'
     | '/logs/uptimelogs'
     | '/services/$uuid'
@@ -211,6 +222,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_protected'
+    | '/_protected/groups/$uuid'
     | '/_protected/logs/ssllogs'
     | '/_protected/logs/uptimelogs'
     | '/_protected/services/$uuid'
@@ -358,10 +370,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedLogsSsllogsRouteImport
       parentRoute: typeof ProtectedRoute
     }
+    '/_protected/groups/$uuid': {
+      id: '/_protected/groups/$uuid'
+      path: '/groups/$uuid'
+      fullPath: '/groups/$uuid'
+      preLoaderRoute: typeof ProtectedGroupsUuidRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
   }
 }
 
 interface ProtectedRouteChildren {
+  ProtectedGroupsUuidRoute: typeof ProtectedGroupsUuidRoute
   ProtectedLogsSsllogsRoute: typeof ProtectedLogsSsllogsRoute
   ProtectedLogsUptimelogsRoute: typeof ProtectedLogsUptimelogsRoute
   ProtectedServicesUuidRoute: typeof ProtectedServicesUuidRoute
@@ -376,6 +396,7 @@ interface ProtectedRouteChildren {
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
+  ProtectedGroupsUuidRoute: ProtectedGroupsUuidRoute,
   ProtectedLogsSsllogsRoute: ProtectedLogsSsllogsRoute,
   ProtectedLogsUptimelogsRoute: ProtectedLogsUptimelogsRoute,
   ProtectedServicesUuidRoute: ProtectedServicesUuidRoute,

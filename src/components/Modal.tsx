@@ -25,24 +25,24 @@ const Modal: React.FC<ModalProps> = ({
 
   return (
     <div
-      className="modal-overlay"
+      className="custom-modal-overlay"
       style={{ display: isOpen ? "flex" : "none" }}
       onClick={handleOverlayClick}
     >
-      <div className="modal-box">
-        <header className="modal-header">
+      <div className="custom-modal-box">
+        <header className="custom-modal-header">
           <h2>{title}</h2>
-          <button className="modal-close-icon" onClick={onClose}>
+          <button className="custom-modal-close-icon" onClick={onClose}>
             ✖
           </button>
         </header>
 
-        <div className="modal-body">{body}</div>
+        <div className="custom-modal-body">
+          {body}
+        </div>
 
-        <footer className="modal-footer">
-          {footer || (
-   ""
-          )}
+        <footer className="custom-modal-footer">
+          {footer || ""}
         </footer>
       </div>
     </div>

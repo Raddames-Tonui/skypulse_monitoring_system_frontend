@@ -28,7 +28,6 @@ function Index() {
             in mind.
           </p>
           <div className="hero-actions">
-            <Link to="/auth/register" className="btn btn-primary">Get Started</Link>
             <Link to="/auth/login" className="btn btn-outline">Learn More</Link>
           </div>
         </div>

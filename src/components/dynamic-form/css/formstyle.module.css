@@ -1,7 +1,7 @@
 /* formstyle.module.css */
 @import "./variables.css";
 
-/* ===== GLOBAL / VARIABLES ===== */
+/*GLOBAL / VARIABLES*/
 /* Keep global html/root selectors available for theme vars */
 :global(html) {
   font-size: 16px;
@@ -49,7 +49,7 @@
   }
 }
 
-/* ===== ANIMATIONS ===== */
+/*ANIMATIONS*/
 @keyframes fadeInUp {
   from {
     transform: translateY(6px);
@@ -67,14 +67,14 @@
   100% { transform: scale(1); }
 }
 
-/* ===== GLOBAL RESET (kept) ===== */
+/*GLOBAL RESET (kept)*/
 :global(*) {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* ===== DYNAMIC FORM WRAPPER ===== */
+/*DYNAMIC FORM WRAPPER*/
 :global(.dynamic-form) {
   background: var(--bg-default);
   border-radius: var(--border-radius);
@@ -112,7 +112,7 @@
   transition: color .2s ease;
 }
 
-/* ===== FORM FIELDS ===== */
+/*FORM FIELDS*/
 :global(.form-field) {
   display: flex;
   flex-direction: column;
@@ -406,7 +406,7 @@
   box-shadow: 0 6px 16px rgba(219,52,66,0.08);
 }
 
-/* ===== RESPONSIVENESS ===== */
+/*RESPONSIVENESS*/
 /* Small devices (phones ≤ 600px) */
 @media (max-width: 600px) {
   :global(.dynamic-form) {

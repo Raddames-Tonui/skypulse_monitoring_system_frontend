@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { validateField } from "./utils/valitation";
-import type { DynamicFormProps, FieldNode,  LayoutNode } from "./utils/types";
+import type { DynamicFormProps, FieldNode, LayoutNode } from "./utils/types";
 import "./css/formstyle.css";
 
 
-export default function DynamicForm({ schema, onSubmit, initialData }: DynamicFormProps) {
+export default function DynamicForm({ schema, onSubmit, initialData, className, fieldClassName, buttonClassName, style, }: DynamicFormProps) {
   const { id, meta, fields, layout } = schema;
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -27,8 +27,18 @@ export default function DynamicForm({ schema, onSubmit, initialData }: DynamicFo
   );
 
   const [formValues, setFormValues] = useState<Record<string, any>>(initialValues);
+  useEffect(() => {
+    if (initialData) {
+      const newValues = Object.fromEntries(
+        Object.entries(fields).map(([id, field]) => [
+          id,
+          initialData[id] ?? field.defaultValue ?? "",
+        ])
+      );
+      setFormValues(newValues);
+    }
+  }, [initialData, fields]);
 
-    
   // ---------- Visibility Logic ----------
   const isFieldVisible = (field: FieldNode): boolean => {
     const rule = field.visibleWhen;
@@ -104,29 +114,37 @@ export default function DynamicForm({ schema, onSubmit, initialData }: DynamicFo
     switch (field.renderer) {
       case "select":
         return (
-          <select id={field.id} value={value} onChange={handleInputChange} className={errorClass}>
-            <option value="">{field.placeholder || "Select..."}</option>
-            {field.props?.data?.map((opt: any, i: number) => {
-              const val = typeof opt === "object" ? opt.value : opt;
-              const label = typeof opt === "object" ? opt.label : opt;
-              return <option key={i} value={val}>{label}</option>;
-            })}
-          </select>
+          <div className={fieldClassName || ""}>
+            <select id={field.id} value={value} onChange={handleInputChange} className={errorClass}>
+              <option value="">{field.placeholder || "Select..."}</option>
+              {field.props?.data?.map((opt: any, i: number) => {
+                const val = typeof opt === "object" ? opt.value : opt;
+                const label = typeof opt === "object" ? opt.label : opt;
+                return <option key={i} value={val}>{label}</option>;
+              })}
+            </select>
+          </div>
         );
 
       case "multiselect":
-        return <MultiSelectField field={field} value={value} onChange={handleChange} />;
+        return (
+          <div className={fieldClassName || ""}>
+            <MultiSelectField field={field} value={value} onChange={handleChange} />
+          </div>
+        );
 
       case "textarea":
         return (
-          <textarea
-            id={field.id}
-            placeholder={field.placeholder}
-            rows={field.props?.minRows || 3}
-            value={value}
-            onChange={handleInputChange}
-            className={errorClass}
-          />
+          <div className={fieldClassName || ""}>
+            <textarea
+              id={field.id}
+              placeholder={field.placeholder}
+              rows={field.props?.minRows || 3}
+              value={value}
+              onChange={handleInputChange}
+              className={errorClass}
+            />
+          </div>
         );
 
       case "number": {
@@ -134,26 +152,28 @@ export default function DynamicForm({ schema, onSubmit, initialData }: DynamicFo
         const value = typeof rawValue === "number" && !isNaN(rawValue) ? rawValue : "";
 
         return (
-          <input
-            id={field.id}
-            type="number"
-            value={value}
-            min={field.props?.min}
-            max={field.props?.max}
-            step={field.props?.step || 1}
-            placeholder={field.placeholder}
-            onChange={(e) => {
-              const num = e.target.valueAsNumber;
-              handleChange(field.id, isNaN(num) ? undefined : num);
-            }}
-            className={errorClass}
-          />
+          <div className={fieldClassName || ""}>
+            <input
+              id={field.id}
+              type="number"
+              value={value}
+              min={field.props?.min}
+              max={field.props?.max}
+              step={field.props?.step || 1}
+              placeholder={field.placeholder}
+              onChange={(e) => {
+                const num = e.target.valueAsNumber;
+                handleChange(field.id, isNaN(num) ? undefined : num);
+              }}
+              className={errorClass}
+            />
+          </div>
         );
       }
 
       case "radio":
         return (
-          <div id={field.id}>
+          <div id={field.id} className={fieldClassName || ""}>
             {field.props?.options?.map((opt: any) => (
               <label key={opt.value} style={{ marginRight: 10 }}>
                 <input
@@ -172,7 +192,7 @@ export default function DynamicForm({ schema, onSubmit, initialData }: DynamicFo
 
       case "checkbox":
         return (
-          <label>
+          <label className={fieldClassName || ""}>
             <input
               type="checkbox"
               id={field.id}
@@ -186,7 +206,7 @@ export default function DynamicForm({ schema, onSubmit, initialData }: DynamicFo
 
       case "switch":
         return (
-          <label className="switch">
+          <label className={`switch ${fieldClassName || ""}`}>
             <input
               type="checkbox"
               checked={!!value}
@@ -199,54 +219,74 @@ export default function DynamicForm({ schema, onSubmit, initialData }: DynamicFo
         );
 
       case "date":
-        return <input type="date" id={field.id} value={value} onChange={handleInputChange} className={errorClass} />;
+        return (
+          <div className={fieldClassName || ""}>
+            <input type="date" id={field.id} value={value} onChange={handleInputChange} className={errorClass} />
+          </div>
+        );
 
       case "file":
         return (
-          <input
-            id={field.id}
-            type="file"
-            accept={field.props?.accept}
-            multiple={field.props?.multiple || false}
-            onChange={(e) => handleChange(field.id, e.target.files)}
-            className={errorClass}
-          />
+          <div className={fieldClassName || ""}>
+            <input
+              id={field.id}
+              type="file"
+              accept={field.props?.accept}
+              multiple={field.props?.multiple || false}
+              onChange={(e) => handleChange(field.id, e.target.files)}
+              className={errorClass}
+            />
+          </div>
         );
 
       default:
         return (
-          <input
-            id={field.id}
-            type={field.inputType || "text"}
-            placeholder={field.placeholder}
-            value={value}
-            onChange={handleInputChange}
-            className={errorClass}
-          />
+          <div className={fieldClassName || ""}>
+            <input
+              id={field.id}
+              type={field.inputType || "text"}
+              placeholder={field.placeholder}
+              value={value}
+              onChange={handleInputChange}
+              className={errorClass}
+            />
+          </div>
         );
     }
   };
-
   // ---------- Layout Renderer ----------
   const renderLayoutNode = (node: LayoutNode, index?: number): JSX.Element | null => {
     const key = node.fieldId || node.title || `${node.kind}-${index}`;
 
     switch (node.kind) {
       case "field": {
-        const field = fields[node.fieldId];
+        const field = fields[node.fieldId!];
         if (!isFieldVisible(field)) return null;
         return (
-          <div key={field.id} className="form-field">
+          <div key={field.id} className={`form-field ${fieldClassName || ""}`}>
             {field.renderer !== "checkbox" && field.renderer !== "switch" && (
               <label htmlFor={field.id}>{field.label}</label>
             )}
             {renderField(field)}
-            {errors[field.id] && <p className="error-text">
-              <svg
-                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="error-icon"
-              ><circle cx="12" cy="12" r="10" /><line x1="12" y1="7" x2="12" y2="13" /><circle cx="12" cy="17" r="1" fill="currentColor" />
-              </svg>
-              {errors[field.id]}</p>}
+            {errors[field.id] && (
+              <p className="error-text">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="error-icon"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="7" x2="12" y2="13" />
+                  <circle cx="12" cy="17" r="1" fill="currentColor" />
+                </svg>
+                {errors[field.id]}
+              </p>
+            )}
           </div>
         );
       }
@@ -278,6 +318,7 @@ export default function DynamicForm({ schema, onSubmit, initialData }: DynamicFo
     }
   };
 
+
   const handleReset = () => {
     setFormValues(initialValues);
     setErrors({});
@@ -285,81 +326,83 @@ export default function DynamicForm({ schema, onSubmit, initialData }: DynamicFo
 
   // ---------- Render Form ----------
   return (
-    <div className="dynamic-form">
+    <div className={`dynamic-form ${className || ""}`} style={style}>
       {meta.title && <h1 className="form-h1">{meta.title}</h1>}
       {meta.subtitle && <h2 className="form-h2">{meta.subtitle}</h2>}
 
       <form id={id} onSubmit={handleSubmit}>
         {layout?.map((node, i) => renderLayoutNode(node))}
-        <div className="form-buttons">
+        <div className={`form-buttons ${buttonClassName || ""}`}>
           <button type="submit">Submit</button>
           <button type="reset" onClick={handleReset}>Reset</button>
         </div>
       </form>
     </div>
   );
-}
 
-// ---------- MultiSelect Component ----------
-function MultiSelectField({
-  field,
-  value,
-  onChange,
-}: {
-  field: FieldNode;
-  value: string[];
-  onChange: (id: string, value: any) => void;
-}) {
-  const [search, setSearch] = useState("");
-  const options = field.props?.data || [];
-  const selected = value || [];
+  // ---------- MultiSelect Component ----------
+  function MultiSelectField({
+    field,
+    value,
+    onChange,
+    wrapperClassName,
+  }: {
+    field: FieldNode;
+    value: string[];
+    onChange: (id: string, value: any) => void;
+    wrapperClassName?: string;
+  }) {
+    const [search, setSearch] = useState("");
+    const options = field.props?.data || [];
+    const selected = value || [];
 
-  const filtered = field.props?.searchable
-    ? options.filter((o: string) => o.toLowerCase().includes(search.toLowerCase()))
-    : options;
+    const filtered = field.props?.searchable
+      ? options.filter((o: string) => o.toLowerCase().includes(search.toLowerCase()))
+      : options;
 
-  const toggle = (opt: string) => {
-    const newVals = selected.includes(opt)
-      ? selected.filter((v) => v !== opt)
-      : [...selected, opt];
-    onChange(field.id, newVals);
-  };
+    const toggle = (opt: string) => {
+      const newVals = selected.includes(opt)
+        ? selected.filter((v) => v !== opt)
+        : [...selected, opt];
+      onChange(field.id, newVals);
+    };
 
-  const remove = (opt: string) =>
-    onChange(field.id, selected.filter((v) => v !== opt));
+    const remove = (opt: string) =>
+      onChange(field.id, selected.filter((v) => v !== opt));
 
-  return (
-    <div className="multiselect-wrapper">
-      {field.props?.searchable && (
-        <input
-          type="text"
-          placeholder="Search..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="search-input"
-        />
-      )}
-      <div className="options-list">
-        {filtered.map((opt: string, i: number) => (
-          <div
-            key={i}
-            className={`option-item ${selected.includes(opt) ? "selected" : ""}`}
-            onClick={() => toggle(opt)}
-          >
-            {opt}
-          </div>
-        ))}
-      </div>
-      {selected.length > 0 && (
-        <div className="selected-tags">
-          {selected.map((item, i) => (
-            <span key={i} className="tag">
-              {item}
-              <button onClick={() => remove(item)} type="button">×</button>
-            </span>
+    return (
+      <div className={`multiselect-wrapper ${wrapperClassName || ""}`}>
+        {field.props?.searchable && (
+          <input
+            type="text"
+            placeholder="Search..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="search-input"
+          />
+        )}
+        <div className="options-list">
+          {filtered.map((opt: string, i: number) => (
+            <div
+              key={i}
+              className={`option-item ${selected.includes(opt) ? "selected" : ""}`}
+              onClick={() => toggle(opt)}
+            >
+              {opt}
+            </div>
           ))}
         </div>
-      )}
-    </div>
-  );
+        {selected.length > 0 && (
+          <div className="selected-tags">
+            {selected.map((item, i) => (
+              <span key={i} className="tag">
+                {item}
+                <button onClick={() => remove(item)} type="button">×</button>
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
 }

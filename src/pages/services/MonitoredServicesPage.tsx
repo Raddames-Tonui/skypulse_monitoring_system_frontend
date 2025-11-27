@@ -1,207 +1,151 @@
-import { useState, useMemo, useCallback, useEffect } from "react";
-import { useNavigate } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Route } from "@/routes/_protected/services";
+
 import { DataTable } from "@/components/table/DataTable";
-import { sortData } from "@/components/table/utils/tableUtils";
-import type { ColumnProps, SortRule, FilterRule } from "@/components/table/DataTable";
+import Modal from "@/components/Modal";
+import DynamicForm from "@/components/dynamic-form/DynamicForm";
+import { monitoredServiceFormSchema } from "@/components/dynamic-form/FormSchema";
+
+import { useMonitoredServices, useUpdateService } from "@/hooks/services";
+
 import type { MonitoredService } from "@/utils/types";
-import axiosClient from "@/utils/constants/axiosClient";
-
-interface MonitoredServicesResponse {
-  data: MonitoredService[];
-  total_count: number;
-  current_page: number;
-  page_size: number;
-  last_page: number;
-}
-
-// --- Backend short names mapping ---
-const FILTER_MAP: Record<string, string> = {
-  monitored_service_name: "name",
-  monitored_service_region: "region",
-  is_active: "active",
-  ssl_enabled: "ssl",
-};
-
-const SORT_MAP: Record<string, string> = {
-  monitored_service_name: "name",
-  monitored_service_url: "url",
-  monitored_service_region: "region",
-  check_interval: "interval",
-  date_created: "created",
-  last_checked: "checked",
-  is_active: "active",
-  last_uptime_status: "status",
-};
-
-const fetchMonitoredServices = async (params: Record<string, string | number>) => {
-  const { data } = await axiosClient.get<MonitoredServicesResponse>("/services", { params });
-  return data;
-};
+import Loader from "@/components/Loader";
 
 export default function MonitoredServicesPage() {
-  const searchParams = Route.useSearch();
   const navigate = useNavigate();
+  const searchParams = Route.useSearch();
 
-  // --- Initial sort & pagination ---
-  const initialSort: SortRule[] = searchParams.sort
-    ? searchParams.sort.split(",").filter(Boolean).map((s) => {
-      const [column, direction = "asc"] = s.trim().split(":");
-      return { column: column as keyof MonitoredService, direction: direction as "asc" | "desc" };
-    })
-    : [];
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [editData, setEditData] = useState<Record<string, any> | null>(null);
 
-  const initialPage = Number(searchParams.page) || 1;
-  const initialPageSize = Number(searchParams.pageSize) || 10;
+  const page = Number(searchParams.page) || 1;
+  const pageSize = Number(searchParams.pageSize) || 10;
 
-  // --- State ---
-  const [sortBy, setSortBy] = useState<SortRule[]>(initialSort);
-  const [page, setPage] = useState(initialPage);
-  const [pageSize, setPageSize] = useState(initialPageSize);
-  const [filters, setFilters] = useState<FilterRule[]>([]);
-
-  // --- Build query params for backend ---
-  const queryParams: Record<string, string | number> = { page, pageSize };
-  filters.forEach((f) => {
-    if (f.value) {
-      const shortName = FILTER_MAP[f.column as keyof MonitoredService] ?? f.column;
-      queryParams[shortName] = f.value;
-    }
-  });
-  if (sortBy.length) {
-    queryParams.sort = sortBy
-      .map((r) => {
-        const shortName = SORT_MAP[r.column as keyof MonitoredService] ?? r.column;
-        return `${shortName}:${r.direction}`;
-      })
-      .join(",");
-  }
-
-  // --- TanStack Query ---
-  const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ["monitored-services", queryParams],
-    queryFn: () => fetchMonitoredServices(queryParams),
+  const { data, isLoading, refetch } = useMonitoredServices({
+    page,
+    pageSize,
   });
 
-  // --- Sorted data (frontend fallback) ---
-  const sortedServices = useMemo(() => {
-    const services = data?.data ?? [];
-    return sortData(services, sortBy);
-  }, [data?.data, sortBy]);
+  const updateService = useUpdateService();
 
-  const columns: ColumnProps<MonitoredService>[] = [
-    { id: "id", caption: "ID", size: 5, isSortable: false },
-    { id: "monitored_service_name", caption: "Name", size: 150, isSortable: true, isFilterable: true },
-    { id: "monitored_service_url", caption: "URL", size: 250, isSortable: true, isFilterable: true },
-    { id: "monitored_service_region", caption: "Region", size: 100, isSortable: true, isFilterable: true },
-    { id: "check_interval", caption: "Interval", size: 80, isSortable: true, isFilterable: true },
+  const normalizeRow = (row: MonitoredService) => ({
+    monitored_service_name: row.monitored_service_name || "",
+    monitored_service_url: row.monitored_service_url || "",
+    monitored_service_region: row.monitored_service_region || "",
+    check_interval: row.check_interval ?? "",
+    retry_count: row.retry_count ?? "",
+    retry_delay: row.retry_delay ?? "",
+    expected_status_code: row.expected_status_code ?? "",
+    ssl_enabled: row.ssl_enabled ?? true,
+    uuid: row.uuid, 
+  });
+
+
+  const openEditModal = (row: MonitoredService) => {
+    if (!row) return;
+    setEditData(normalizeRow(row));
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setEditData(null);
+  };
+
+  const renderCell = (cellData: any) => {
+    const row: MonitoredService = cellData?.row || cellData;
+    return (
+      <button className="button-secondary" onClick={() => openEditModal(row)}>
+        Edit
+      </button>
+    );
+  };
+
+
+  const columns = [
+    { id: "monitored_service_name", caption: "Name", size: 150 },
+    { id: "monitored_service_url", caption: "URL", size: 250 },
+    { id: "monitored_service_region", caption: "Region", size: 100 },
+    { id: "check_interval", caption: "Interval", size: 80 },
     {
       id: "is_active",
       caption: "Active",
       size: 80,
-      isSortable: true,
-      isFilterable: true,
-      renderCell: (value) => (value ? "Yes" : "No"),
+      renderCell: (v: boolean) => (v ? "Yes" : "No"),
     },
     {
       id: "last_uptime_status",
       caption: "Status",
       size: 100,
-      isSortable: true,
-      renderCell: (value) => {
-        const color = value === "UP" ? "green" : value === "DOWN" ? "red" : "gray";
-        return <span style={{ color, fontWeight: "bold" }}>{value}</span>;
+      renderCell: (v: string) => {
+        const color = v === "UP" ? "green" : v === "DOWN" ? "red" : "gray";
+        return <span style={{ color, fontWeight: "bold" }}>{v}</span>;
       },
     },
     {
       id: "date_created",
       caption: "Created",
       size: 120,
-      isSortable: true,
-      renderCell: (v) => new Date(v as string).toLocaleDateString(),
+      renderCell: (v: string) => new Date(v).toLocaleDateString(),
+    },
+    {
+      id: "actions",
+      caption: "Actions",
+      size: 80,
+      renderCell,
     },
   ];
 
-  const updateUrl = useCallback(() => {
-    const params: Record<string, string | number> = { page, pageSize };
-    filters.forEach((f) => {
-      if (f.value) {
-        const shortName = FILTER_MAP[f.column as keyof MonitoredService] ?? f.column;
-        params[shortName] = f.value;
-      }
-    });
-    if (sortBy.length) {
-      params.sort = sortBy
-        .map((r) => {
-          const shortName = SORT_MAP[r.column as keyof MonitoredService] ?? r.column;
-          return `${shortName}:${r.direction}`;
-        })
-        .join(",");
-    }
-    navigate({ search: params });
-  }, [page, pageSize, sortBy, filters, navigate]);
-
-  useEffect(() => {
-    updateUrl();
-  }, [updateUrl]);
-
-  const handleSortApply = (rules: SortRule[]) => setSortBy(rules);
-  const handleFilterApply = (rules: FilterRule[]) => {
-    setFilters(rules.filter((f) => f.value));
-    setPage(1);
-  };
-  const handlePageChange = (newPage: number) => setPage(newPage);
-  const handlePageSizeChange = (newSize: number) => {
-    setPageSize(newSize);
-    setPage(1);
-  };
-
-  const tableActionsRight = (
-    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-      <select
-        value={pageSize}
-        onChange={(e) => handlePageSizeChange(Number(e.target.value))}
-        className="button-sec"
-        style={{ padding: "0.4rem 1rem" }}
-      >
-        {[5, 10, 20, 50].map((size) => (
-          <option key={size} value={size}>
-            {size}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
-
   return (
-    <div>
+    <div className="page-wrapper">
       <div className="page-header">
         <h1>Monitored Services</h1>
-        <button>
-          Create New Service
-        </button>
+        <Link to="/services/create"> Create Service </Link>
+
       </div>
-      <div className="table-wrapper">
-        <DataTable
+
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <DataTable<MonitoredService>
           columns={columns}
-          data={sortedServices}
-          isLoading={isLoading}
-          error={isError ? (error as Error)?.message : undefined}
-          onRefresh={refetch}
-          initialSort={sortBy}
-          initialFilter={filters}
-          onSortApply={handleSortApply}
-          onFilterApply={handleFilterApply}
-          tableActionsRight={tableActionsRight}
+          data={data?.data || []}
           pagination={{
             page,
             pageSize,
-            total: data?.total_count ?? 0,
-            onPageChange: handlePageChange,
+            total: data?.total_count || 0,
+            onPageChange: (newPage) =>
+              navigate({ search: { ...searchParams, page: newPage } }),
           }}
+          onRefresh={refetch}
         />
-      </div>
+      )}
+
+    
+      <Modal
+        isOpen={isModalOpen}
+        title="Update Monitored Service"
+        onClose={closeModal}
+        body={
+          <DynamicForm
+            schema={monitoredServiceFormSchema}
+            initialData={editData || {}}
+            onSubmit={(values) => {
+              if (editData?.uuid) {
+                updateService.mutate(
+                  { ...values, uuid: editData.uuid },
+                  { onSuccess: closeModal }
+                );
+              }
+            }}
+            className="dynamic-form-wrapper"
+            fieldClassName="form-field-wrapper"
+            buttonClassName="form-buttons-wrapper"
+            style={{ maxWidth: "800px", margin: "0 auto" }}
+          />
+        }
+      />
     </div>
   );
 }

@@ -1,39 +1,66 @@
 // ------ LOGIN FORM SCHEMA -----------
 export const loginFormSchema: any = {
-  id: "login-form",
-  meta: {
-    title: "Login",
-    subtitle: "Enter your credentials",
-  },
-  fields: {
-    email: {
-      id: "email",
-      label: "Email",
-      renderer: "text",
-      inputType: "email",
-      placeholder: "Enter your email",
-      rules: {
-        required: "Email is required",
-        pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Invalid email" },
-      },
+    id: "user-login",
+    meta: {
+        title: "Welcome Back",
+        subtitle: "Sign in to continue"
     },
-    password: {
-      id: "password",
-      label: "Password",
-      renderer: "text",
-      inputType: "password",
-      placeholder: "Enter your password",
-      rules: {
-        required: "Password is required",
-        minLength: { value: 6, message: "Password must be at least 6 characters" },
-      },
+
+    fields: {
+        email: {
+            id: "email",
+            label: "Email",
+            renderer: "text",
+            inputType: "email",
+            placeholder: "you@example.com",
+            rules: {
+                required: "Email is required",
+                pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: "Invalid email"
+                }
+            }
+        },
+
+        password: {
+            id: "password",
+            label: "Password",
+            renderer: "text",
+            inputType: "password",
+            placeholder: "••••••••",
+            rules: {
+                required: "Password is required"
+            }
+        },
+
+        rememberMe: {
+            id: "rememberMe",
+            label: "Remember me",
+            renderer: "checkbox",
+            defaultValue: false
+        }
     },
-  },
-  layout: [
-    { kind: "field", fieldId: "email" },
-    { kind: "field", fieldId: "password" },
-  ],
+
+    layout: [
+        {
+            kind: "section",
+            title: "Login",
+            withDivider: true,
+            children: [
+                {
+                    kind: "stack",
+                    spacing: "md",
+                    children: [
+                        { kind: "field", fieldId: "email" },
+                        { kind: "field", fieldId: "password" },
+                        { kind: "field", fieldId: "rememberMe" }
+                    ]
+                }
+            ]
+        }
+    ]
 };
+
 
 
 
@@ -51,7 +78,7 @@ export const systemSettingsFormSchema: any = {
       label: "Uptime Check Interval (seconds)",
       renderer: "number",
       props: { min: 1 },
-      defaultValue: 60,
+      placeholders: 60,
       rules: {
         required: "Interval is required",
         min: { value: 1, message: "Must be >= 1" }
@@ -62,7 +89,7 @@ export const systemSettingsFormSchema: any = {
       label: "Uptime Retry Count",
       renderer: "number",
       props: { min: 0 },
-      defaultValue: 3,
+      placeholders: 3,
       rules: { required: "Retry count is required" }
     },
     uptime_retry_delay: {
@@ -70,7 +97,7 @@ export const systemSettingsFormSchema: any = {
       label: "Uptime Retry Delay (seconds)",
       renderer: "number",
       props: { min: 1 },
-      defaultValue: 10,
+      placeholders: 10,
       rules: { required: "Retry delay is required" }
     },
     sse_push_interval: {
@@ -78,7 +105,7 @@ export const systemSettingsFormSchema: any = {
       label: "SSE Push Interval (seconds)",
       renderer: "number",
       props: { min: 1 },
-      defaultValue: 5,
+      placeholders: 5,
       rules: { required: "SSE push interval is required" }
     },
 
@@ -88,14 +115,14 @@ export const systemSettingsFormSchema: any = {
       label: "SSL Check Interval (seconds)",
       renderer: "number",
       props: { min: 1 },
-      defaultValue: 3600,
+      placeholders: 3600,
       rules: { required: "SSL check interval is required" }
     },
     ssl_alert_thresholds: {
       id: "ssl_alert_thresholds",
       label: "SSL Alert Thresholds (days)",
       renderer: "text",
-      defaultValue: "30,14,7",
+      placeholders: "30,14,7",
       rules: { required: "SSL alert thresholds are required" }
     },
     ssl_retry_count: {
@@ -103,7 +130,7 @@ export const systemSettingsFormSchema: any = {
       label: "SSL Retry Count",
       renderer: "number",
       props: { min: 0 },
-      defaultValue: 3,
+      placeholders: 3,
       rules: { required: "SSL retry count is required" }
     },
     ssl_retry_delay: {
@@ -111,7 +138,7 @@ export const systemSettingsFormSchema: any = {
       label: "SSL Retry Delay (seconds)",
       renderer: "number",
       props: { min: 1 },
-      defaultValue: 300,
+      placeholders: 300,
       rules: { required: "SSL retry delay is required" }
     },
 
@@ -121,7 +148,7 @@ export const systemSettingsFormSchema: any = {
       label: "Notification Check Interval (seconds)",
       renderer: "number",
       props: { min: 1 },
-      defaultValue: 120,
+      placeholders: 120,
       rules: { required: "Notification check interval is required" }
     },
     notification_retry_count: {
@@ -129,7 +156,7 @@ export const systemSettingsFormSchema: any = {
       label: "Notification Retry Count",
       renderer: "number",
       props: { min: 0 },
-      defaultValue: 5,
+      placeholders: 5,
       rules: { required: "Notification retry count is required" }
     },
     notification_cooldown_minutes: {
@@ -137,7 +164,7 @@ export const systemSettingsFormSchema: any = {
       label: "Notification Cooldown (minutes)",
       renderer: "number",
       props: { min: 0 },
-      defaultValue: 15,
+      placeholders: 15,
       rules: { required: "Notification cooldown is required" }
     }
   },
@@ -208,129 +235,163 @@ export const systemSettingsFormSchema: any = {
 
 // ------MONITORED SERVICE FORM SCHEMA------
 export const monitoredServiceFormSchema: any = {
-  id: "monitored-service-form",
-  meta: {
-    title: "Add / Edit Monitored Service",
-    subtitle: "Provide the details of the service you want to monitor"
-  },
-  fields: {
-    monitored_service_name: {
-      id: "monitored_service_name",
-      label: "Service Name",
-      renderer: "text",
-      rules: { required: "Service name is required" }
+    id: "monitored-service-form",
+    meta: {
+        title: "Add / Edit Monitored Service",
+        subtitle: "Provide the details of the service you want to monitor"
     },
-    monitored_service_url: {
-      id: "monitored_service_url",
-      label: "Service URL",
-      renderer: "text",
-      rules: {
-        required: "URL is required",
-        pattern: {
-          value: /^https?:\/\/.+/,
-          message: "Enter a valid URL starting with http:// or https://"
+
+    fields: {
+        monitored_service_name: {
+            id: "monitored_service_name",
+            label: "Service Name",
+            renderer: "text",
+            placeholder: "Enter service name",
+            rules: {
+                required: "Service name is required",
+                minLength: {
+                    value: 3,
+                    message: "Name must be at least 3 characters"
+                }
+            }
+        },
+
+        monitored_service_url: {
+            id: "monitored_service_url",
+            label: "Service URL",
+            renderer: "text",
+            placeholder: "https://example.com",
+            rules: {
+                required: "URL is required",
+                pattern: {
+                    value: /^https?:\/\/.+/,
+                    message: "Must start with http:// or https://"
+                }
+            }
+        },
+
+        monitored_service_region: {
+            id: "monitored_service_region",
+            label: "Region",
+            renderer: "select",
+            placeholder: "Select region",
+            props: {
+                data: [
+                    { label: "US-East", value: "us-east" },
+                    { label: "US-West", value: "us-west" },
+                    { label: "EU", value: "eu" },
+                    { label: "APAC", value: "apac" },
+                    { label: "default", value: "default" }
+                ]
+            }
+        },
+
+        check_interval: {
+            id: "check_interval",
+            label: "Check Interval (seconds)",
+            renderer: "number",
+            placeholder: "60",
+            props: {
+                min: 5,
+                max: 86400
+            },
+           
+        },
+
+        is_active: {
+            id: "is_active",
+            label: "Active",
+            renderer: "switch",
+            defaultValue: true
+        },
+
+        retry_count: {
+            id: "retry_count",
+            label: "Retry Count",
+            renderer: "number",
+            placeholder: "3",
+            props: { min: 0, max: 10 },
+        },
+
+        retry_delay: {
+            id: "retry_delay",
+            label: "Retry Delay (seconds)",
+            renderer: "number",
+            placeholder: "10",
+            props: { min: 0, max: 300 },
+        },
+
+        expected_status_code: {
+            id: "expected_status_code",
+            label: "Expected Status Code",
+            renderer: "number",
+            placeholder: "200",
+            props: { min: 100, max: 599 },
+        },
+
+        ssl_enabled: {
+            id: "ssl_enabled",
+            label: "SSL Enabled",
+            renderer: "switch",
+            defaultValue: true
         }
-      }
     },
-    monitored_service_region: {
-      id: "monitored_service_region",
-      label: "Region",
-      renderer: "select",
-      props: {
-        data: ["US-East", "US-West", "EU", "APAC", "Custom"]
-      },
-      rules: {  }
-    },
-    check_interval: {
-      id: "check_interval",
-      label: "Check Interval (seconds)",
-      renderer: "number",
-      props: { min: 10, max: 86400 },
-    //   rules: { required: "Check interval is required" }
-    },
-    is_active: {
-      id: "is_active",
-      label: "Active",
-      renderer: "switch",
-      defaultValue: true
-    },
-    retry_count: {
-      id: "retry_count",
-      label: "Retry Count",
-      renderer: "number",
-      props: { min: 0, max: 10 },
-      defaultValue: 3
-    },
-    retry_delay: {
-      id: "retry_delay",
-      label: "Retry Delay (seconds)",
-      renderer: "number",
-      props: { min: 0, max: 300 },
-      defaultValue: 10
-    },
-    expected_status_code: {
-      id: "expected_status_code",
-      label: "Expected Status Code",
-      renderer: "number",
-      props: { min: 100, max: 599 },
-      defaultValue: 200
-    },
-    ssl_enabled: {
-      id: "ssl_enabled",
-      label: "SSL Enabled",
-      renderer: "switch",
-      defaultValue: true
-    }
-  },
-  layout: [
-    {
-      kind: "section",
-      title: "Basic Information",
-      withDivider: true,
-      children: [
+
+    layout: [
         {
-          kind: "grid",
-          cols: 2,
-          spacing: "md",
-          children: [
-            { kind: "field", fieldId: "monitored_service_name" },
-            { kind: "field", fieldId: "monitored_service_url" }
-          ]
+            kind: "section",
+            title: "Basic Information",
+            withDivider: true,
+            children: [
+                {
+                    kind: "grid",
+                    cols: 2,
+                    spacing: "md",
+                    children: [
+                        { kind: "field", fieldId: "monitored_service_name" },
+                        { kind: "field", fieldId: "monitored_service_url" }
+                    ]
+                },
+                {
+                    kind: "grid",
+                    cols: 2,
+                    spacing: "md",
+                    children: [
+                        { kind: "field", fieldId: "monitored_service_region" },
+                        { kind: "field", fieldId: "check_interval" }
+                    ]
+                },
+                {
+                    kind: "grid",
+                    cols: 1,
+                    spacing: "md",
+                    children: [
+                        { kind: "field", fieldId: "is_active" }
+                    ]
+                }
+            ]
         },
+
         {
-          kind: "grid",
-          cols: 2,
-          spacing: "md",
-          children: [
-            { kind: "field", fieldId: "monitored_service_region" },
-            { kind: "field", fieldId: "check_interval" }
-          ]
-        },
-        {
-          kind: "grid",
-          cols: 1,
-          spacing: "md",
-          children: [{ kind: "field", fieldId: "is_active" }]
+            kind: "section",
+            title: "Retry & Status Settings",
+            withDivider: true,
+            children: [
+                {
+                    kind: "grid",
+                    cols: 3,
+                    spacing: "md",
+                    children: [
+                        { kind: "field", fieldId: "retry_count" },
+                        { kind: "field", fieldId: "retry_delay" },
+                        { kind: "field", fieldId: "expected_status_code" }
+                    ]
+                },
+                {
+                    kind: "field",
+                    fieldId: "ssl_enabled"
+                }
+            ]
         }
-      ]
-    },
-    {
-      kind: "section",
-      title: "Retry & Status Settings",
-      withDivider: true,
-      children: [
-        {
-          kind: "grid",
-          cols: 3,
-          spacing: "md",
-          children: [
-            { kind: "field", fieldId: "retry_count" },
-            { kind: "field", fieldId: "retry_delay" },
-            { kind: "field", fieldId: "expected_status_code" }
-          ]
-        },
-        { kind: "field", fieldId: "ssl_enabled" }
-      ]
-    }
-  ]
+    ]
 };

@@ -13,13 +13,6 @@ html {
 }
 
 
-/* ==========================================================
-   RESPONSIVENESS — OPTIMIZED FOR SMALL → LARGE SCREENS
-   ========================================================== */
-
-/* ----------------------------
-   Small devices (phones ≤ 600px)
-   ---------------------------- */
 @media (max-width: 600px) {
   .dynamic-form {
     padding: var(--space-md);
@@ -36,7 +29,6 @@ html {
     margin-bottom: var(--space-sm);
   }
 
-  /* Collapse grids → single column */
   .grid,
   .grid-cols-2,
   .grid-cols-3 {
@@ -128,9 +120,9 @@ html {
   }
 }
 
-/* ==========================================================
+/* 
    AUTO-RESPONSIVE GRID (3 → 2 → 1) 
-   ========================================================== */
+   */
 .grid[data-responsive="true"] {
   --min-col: 260px;
   grid-template-columns: repeat(auto-fit, minmax(var(--min-col), 1fr));
@@ -155,8 +147,8 @@ html {
   border-radius: var(--border-radius);
   padding: var(--space-lg);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
-  max-width: 800px;
-  margin: 2rem auto;
+  /* max-width: 800px; */
+  margin: 0.5rem auto;
 }
 
 .form-h1 {
