@@ -13,7 +13,6 @@ const Icon: React.FC<IconProps> = ({ iconName, className, label, style }) => {
   const IconComponent = Icons[iconName];
   return (
     <div className="flex items-center space-x-2">
-      {/* pass style to the actual SVG component */}
       <IconComponent className={className} style={style} />
       {label && <span>{label}</span>}
     </div>

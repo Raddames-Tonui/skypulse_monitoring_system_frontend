@@ -75,6 +75,7 @@ export interface DataTableProps<T> {
 
   enableSort?: boolean;
   enableFilter?: boolean;
+  enableRefresh?: boolean;
 }
 
 /** ---- Context ---- */
@@ -98,6 +99,7 @@ interface DataTableContextType<T> {
 
   enableSort?: boolean;
   enableFilter?: boolean;
+  enableRefresh?: boolean;
 }
 
 const DataTableContext = createContext<DataTableContextType<any> | undefined>(
@@ -125,6 +127,7 @@ export function DataTable<T>({
   isLoading,
   enableSort = true,
   enableFilter = true,
+  enableRefresh= true,
 }: DataTableProps<T>) {
   const [sortBy, setSortBy] = useState<SortRule[]>(initialSort);
   const [filter, setFilter] = useState<FilterRule[]>(initialFilter);
@@ -157,6 +160,7 @@ export function DataTable<T>({
     isLoading,
     enableSort,
     enableFilter,
+    enableRefresh
   };
 
   return (

@@ -38,7 +38,7 @@ function ProtectedRouteComponent() {
       });
     }
 
-    const roleName = user.roleName?.toUpperCase(); 
+    const roleName = user.roleName?.toUpperCase();
     const allowedRoles = ['ADMIN', 'OPERATOR', 'VIEWER'];
     if (!roleName || !allowedRoles.includes(roleName)) {
       throw redirect({ to: '/auth/unauthorized' });
@@ -49,7 +49,6 @@ function ProtectedRouteComponent() {
     return (
       <div className='loader'>
         <Loader size={80} speed={1.8} className="mx-auto" ariaLabel="Loading..." />
-        <p>Loading...</p>
       </div>
     );
   }

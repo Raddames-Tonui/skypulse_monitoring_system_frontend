@@ -1,83 +1,151 @@
-import React from "react";
 import { useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import axiosClient from "@/utils/constants/axiosClient";
 import type { MonitoredService } from "@/utils/types";
 import { Route as SingleServiceRoute } from "@/routes/_protected/services/$uuid";
 
+import SimpleAreaChart from "@/components/charts/SimpleAreaChart";
+import PieChartWithCustomizedLabel from "@/components/charts/PieChartWithCustomizedLabel";
+
+import { DataTable } from "@/components/table/DataTable";
+import type { ColumnProps } from "@/components/table/DataTable";
+import "@/css/singleService.css";
+
 export default function SingleServicePage() {
-  // Get the dynamic route param (uuid)
   const { uuid } = useParams({ from: SingleServiceRoute.id });
 
-const { data, isLoading, isError, error } = useQuery<MonitoredService, Error>({
-  queryKey: ["monitoredService", uuid],
-  queryFn: async () => {
-    if (!uuid) throw new Error("Missing UUID");
+  const { data, isLoading, isError, error } = useQuery<MonitoredService, Error>({
+    queryKey: ["monitoredService", uuid],
+    queryFn: async () => {
+      if (!uuid) throw new Error("Missing UUID");
 
-    const params = new URLSearchParams({ uuid }).toString();
-    const response = await axiosClient.get(`/services/service?${params}`);
+      const response = await axiosClient.get(`/services/service?uuid=${uuid}`);
+      const record = response.data?.data;
+      if (!record) throw new Error("Service not found");
 
-    // Backend returns { records: [ ... ] }
-    const record = response.data.records?.[0];
-    if (!record) throw new Error("Service not found");
+      return record as MonitoredService;
+    },
+    enabled: !!uuid,
+  });
 
-    return record as MonitoredService;
-  },
-  enabled: !!uuid,
-});
+  // if (isLoading) return <div className="loading">Loading service...</div>;
+  if (isError) return <div className="error">Error: {error?.message}</div>;
+  if (!data) return <div className="error">No service found</div>;
 
-
-  // Handle missing or invalid UUID
-  if (!uuid) return <div className="text-red-500">UUID missing in route</div>;
-
-  // Handle loading / error states
-  if (isLoading) return <div>Loading service...</div>;
-  if (isError) return <div className="text-red-500">Error: {error?.message}</div>;
-  if (!data) return <div className="text-red-500">No service found</div>;
-
-  // Now 'data' is the 'MonitoredService' object directly
   const service = data;
 
+
+  const uptimeTableRows = service.uptime_logs.map((log) => ({
+    uuid: service.uuid,
+    name: `Check #${log.id}`,
+    status: log.status,
+    response_time_ms: log.response_time_ms,
+    ssl_warning: service.ssl_logs?.[0]?.days_remaining < 30,
+  }));
+
+  const columns: ColumnProps<any>[] = [
+    { id: "name", caption: "Service Name", size: 200 },
+    { id: "status", caption: "Status", size: 100 },
+    { id: "response_time_ms", caption: "Response Time (ms)", size: 150 },
+    {
+      id: "ssl_warning",
+      caption: "SSL",
+      size: 80,
+      renderCell: (val) => (val ? "Warn" : "OK"),
+    },
+  ];
+
+  // Uptime Pie Chart Values
+  const uptimeCount = {
+    up: 0,
+    down: 0,
+    maintenance: 0,
+  };
+
+  service.uptime_logs.forEach((log) => {
+    if (log.status === "UP") uptimeCount.up++;
+    else if (log.status === "DOWN") uptimeCount.down++;
+    else uptimeCount.maintenance++;
+  });
+
+  const uptimePieData = [
+    { name: "Up", value: uptimeCount.up },
+    { name: "Down", value: uptimeCount.down },
+    { name: "Maintenance", value: uptimeCount.maintenance },
+  ];
+
+  // --------------------------
+  // Response Time Chart
+  // --------------------------
+  const responseChartData = service.uptime_logs.map((log) => ({
+    name: new Date(log.checked_at).toLocaleTimeString(),
+    uv: log.response_time_ms,
+  }));
+
+  // --------------------------
+  // Component UI
+  // --------------------------
   return (
-    <div className="p-6 bg-white rounded-xl shadow-sm border border-gray-200 w-full max-w-2xl">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-800">
-        {service.monitored_service_name}
-      </h2>
+    <div className="service-container">
+      <header className="service-header">
+        <h2>{service.name}</h2>
 
-      <div className="space-y-2 text-gray-700">
-        <p><strong>URL:</strong> {service.monitored_service_url}</p>
-        <p>
-          <strong>Status:</strong>{" "}
-          <span
-            className={`ml-2 px-2 py-1 text-sm rounded-md ${
-              service.last_uptime_status === "UP"
-                ? "bg-green-100 text-green-700"
-                : "bg-red-100 text-red-700"
-            }`}
-          >
-            {service.last_uptime_status}
-          </span>
-        </p>
-        <p><strong>Expected Status Code:</strong> {service.expected_status_code}</p>
-        <p><strong>Check Interval:</strong> {service.check_interval} sec</p>
-        <p><strong>Retry Count:</strong> {service.retry_count}</p>
-        <p><strong>Retry Delay:</strong> {service.retry_delay} sec</p>
-        <p><strong>SSL Enabled:</strong> {service.ssl_enabled ? "Yes" : "No"}</p>
-        <p><strong>Region:</strong> {service.monitored_service_region}</p>
-        <p><strong>Consecutive Failures:</strong> {service.consecutive_failures}</p>
-        <p>
-          <strong>Last Checked:</strong>{" "}
-          {service.last_checked
-            ? new Date(service.last_checked).toLocaleString()
-            : "Never"}
-        </p>
+        <span
+          className={
+            service.last_uptime_status === "UP"
+              ? "status-badge status-up"
+              : "status-badge status-down"
+          }
+        >
+          {service.last_uptime_status}
+        </span>
+      </header>
+
+      <div className="page-header">
+        <h2>{service.name}</h2>
       </div>
 
-      <div className="mt-4 text-sm text-gray-500">
-        <p><strong>Date Created:</strong> {new Date(service.date_created).toLocaleString()}</p>
-        <p><strong>Date Modified:</strong> {new Date(service.date_modified).toLocaleString()}</p>
-        <p><strong>UUID:</strong> {service.uuid}</p>
-      </div>
+      <section className="service-section">
+        <h3>Service Details</h3>
+        <div className="service-grid">
+          <div><strong>URL:</strong> {service.url}</div>
+          <div><strong>Expected Status:</strong> {service.expected_status_code}</div>
+          <div><strong>Check Interval:</strong> {service.check_interval}s</div>
+          <div><strong>Retry Count:</strong> {service.retry_count}</div>
+          <div><strong>Retry Delay:</strong> {service.retry_delay}s</div>
+          <div><strong>Region:</strong> {service.region}</div>
+          <div><strong>SSL Enabled:</strong> {service.ssl_enabled ? "Yes" : "No"}</div>
+          <div><strong>Consecutive Failures:</strong> {service.consecutive_failures}</div>
+        </div>
+      </section>
+
+      <section className="service-section">
+        <h3>Charts</h3>
+        <div className="charts-container">
+          <div className="chart-card">
+            <h4>Uptime History</h4>
+            <PieChartWithCustomizedLabel data={uptimePieData} />
+          </div>
+
+          <div className="chart-card">
+            <h4>Response Time Over Time</h4>
+            <SimpleAreaChart data={responseChartData} />
+          </div>
+        </div>
+      </section>
+
+      <section className="service-section">
+        <h3>Uptime Logs</h3>
+
+        <DataTable
+          columns={columns}
+          data={uptimeTableRows}
+          isLoading={false}
+          enableFilter={false}
+          enableSort={false}
+          enableRefresh={false}
+        />
+      </section>
     </div>
   );
 }

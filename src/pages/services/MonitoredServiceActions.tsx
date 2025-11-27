@@ -37,7 +37,7 @@ const MonitoredServiceActions: React.FC<MonitoredServiceActionsProps> = ({ servi
       queryClient.invalidateQueries({ queryKey: ["monitored-services"] });
       toast.success("Service deleted successfully!");
     },
-    onError: (err: any) => toast.error(err.message || "Failed to delete service"),
+    onError: (err: Error) => toast.error(err.message || "Failed to delete service"),
   });
 
   const handleEdit = () => {

@@ -66,24 +66,30 @@ function SystemSettings() {
 
   return (
     <div className="page-wrapper space-y-4">
-      <div className="mt-4 flex gap-4">
-        <button
-          type="button"
-          disabled={rollbackMutation.isPending}
-          onClick={() => rollbackMutation.mutate()}
-          className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded"
-        >
-          {rollbackMutation.isPending ? "Reverting..." : "Revert to Previous Version"}
-        </button>
-        <button
-          type="button"
-          disabled={restartApplication.isPending}
-          onClick={() => restartApplication.mutate()}
-          className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded"
-        >
-          {restartApplication.isPending ? "Restarting..." : "Restart Application"}
-        </button>
+      <div className="page-header">
+        <h1>System Settings</h1>
+
+        <div>
+          <button
+            type="button"
+            disabled={rollbackMutation.isPending}
+            onClick={() => rollbackMutation.mutate()}
+            className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded"
+          >
+            {rollbackMutation.isPending ? "Reverting..." : "Revert to Previous Version"}
+          </button>
+          <button
+            type="button"
+            disabled={restartApplication.isPending}
+            onClick={() => restartApplication.mutate()}
+            className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded"
+          >
+            {restartApplication.isPending ? "Restarting..." : "Restart Application"}
+          </button>
+        </div>
       </div>
+
+
 
       <DynamicForm
         schema={systemSettingsFormSchema}

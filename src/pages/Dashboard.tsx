@@ -11,6 +11,7 @@ interface Service {
   status: string;
   response_time_ms: number;
   ssl_warning: boolean;
+  actions: () => void;
 }
 
 interface SSEPayload {
@@ -59,7 +60,6 @@ export default function Dashboard() {
   return (
     <div>
       <h2>Service Monitoring Dashboard</h2>
-
       <div className="dashboard-wrapper">
         <div className="data-table-wrapper">
           <DataTable<Service>

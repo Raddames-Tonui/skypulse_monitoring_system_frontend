@@ -87,7 +87,7 @@ export default function ModalFilter<T>({ isOpen, onClose }: ModalFilterProps) {
                   ))}
                 </select>
 
-                <select
+                {/* <select
                   value={rule.operator}
                   onChange={(e) => updateRule(i, "operator", e.target.value)}
                   className="button-sec"
@@ -97,7 +97,7 @@ export default function ModalFilter<T>({ isOpen, onClose }: ModalFilterProps) {
                       {r.label}
                     </option>
                   ))}
-                </select>
+                </select> */}
 
                 {column?.filterType === "dropdown" ? (
                   <select
@@ -131,8 +131,8 @@ export default function ModalFilter<T>({ isOpen, onClose }: ModalFilterProps) {
             );
           })}
 
-          <button className="button-sec" onClick={addRule}>
-            ➕ Add Filter
+          <button className="cancel" onClick={addRule}>
+             Add Filter
           </button>
         </div>
       }

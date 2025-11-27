@@ -47,7 +47,7 @@ export default function MonitoredServicesPage() {
   // --- Initial sort & pagination ---
   const initialSort: SortRule[] = searchParams.sort
     ? searchParams.sort.split(",").filter(Boolean).map((s) => {
-      const [column, direction = "asc"] = s.trim().split(":"); 
+      const [column, direction = "asc"] = s.trim().split(":");
       return { column: column as keyof MonitoredService, direction: direction as "asc" | "desc" };
     })
     : [];
@@ -90,9 +90,8 @@ export default function MonitoredServicesPage() {
     return sortData(services, sortBy);
   }, [data?.data, sortBy]);
 
-  // --- Table columns ---
   const columns: ColumnProps<MonitoredService>[] = [
-    { id: "id", caption: "ID", size: 5, isSortable: true },
+    { id: "id", caption: "ID", size: 5, isSortable: false },
     { id: "monitored_service_name", caption: "Name", size: 150, isSortable: true, isFilterable: true },
     { id: "monitored_service_url", caption: "URL", size: 250, isSortable: true, isFilterable: true },
     { id: "monitored_service_region", caption: "Region", size: 100, isSortable: true, isFilterable: true },
@@ -124,7 +123,6 @@ export default function MonitoredServicesPage() {
     },
   ];
 
-  // --- Update URL query ---
   const updateUrl = useCallback(() => {
     const params: Record<string, string | number> = { page, pageSize };
     filters.forEach((f) => {
@@ -148,7 +146,6 @@ export default function MonitoredServicesPage() {
     updateUrl();
   }, [updateUrl]);
 
-  // --- Handlers ---
   const handleSortApply = (rules: SortRule[]) => setSortBy(rules);
   const handleFilterApply = (rules: FilterRule[]) => {
     setFilters(rules.filter((f) => f.value));
@@ -168,7 +165,7 @@ export default function MonitoredServicesPage() {
         className="button-sec"
         style={{ padding: "0.4rem 1rem" }}
       >
-        {[5, 10, 20].map((size) => (
+        {[5, 10, 20, 50].map((size) => (
           <option key={size} value={size}>
             {size}
           </option>
@@ -181,13 +178,16 @@ export default function MonitoredServicesPage() {
     <div>
       <div className="page-header">
         <h1>Monitored Services</h1>
+        <button>
+          Create New Service
+        </button>
       </div>
       <div className="table-wrapper">
         <DataTable
           columns={columns}
           data={sortedServices}
           isLoading={isLoading}
-          error={isError ? (error as any)?.message : undefined}
+          error={isError ? (error as Error)?.message : undefined}
           onRefresh={refetch}
           initialSort={sortBy}
           initialFilter={filters}

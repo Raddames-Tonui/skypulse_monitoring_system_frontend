@@ -16,7 +16,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchProfile().finally(() => setIsLoading(false));
+    const initProfile = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        await fetchProfile();
+      } catch (err: any) {
+        console.error("Failed to fetch profile:", err);
+        setError(err.response?.data?.message || err.message || "Failed to load profile");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    initProfile();
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -31,18 +43,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         throw new Error(response.data?.message || "Login failed");
       }
 
-      const mappedProfile: UserProfile = mapProfile(userData);
-
-      setUser(mappedProfile);
-
-      toast.success(response.data?.message || "Login successful");
-
+      setUser(mapProfile(userData));
     } catch (err: any) {
       setUser(null);
       const msg = err.response?.data?.message || err.message || "Login failed";
       setError(msg);
       toast.error(msg);
-      throw err; // Optional: let page handle styling
+      throw err; 
     } finally {
       setIsLoading(false);
     }
@@ -61,9 +68,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setUser(mapProfile(profile));
       setError(null);
     } catch (err: any) {
-      setUser(null); // ensure user is null on failure
-      setError(err.response?.data?.message || err.message);
-      // Do NOT throw here — protected route handles redirect
+      setUser(null);
+      setError(err.response?.data?.message || err.message || "Failed to fetch profile");
     } finally {
       setIsLoading(false);
     }
@@ -93,14 +99,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   );
 };
 
-// helper function to map backend user object to our UserProfile type
 function mapProfile(userData: any): UserProfile {
   return {
     uuid: userData.uuid,
     fullName: userData.full_name,
     email: userData.email,
     roleName: userData.role_name,
-    companyName: userData.company_name || undefined,
+    companyName: userData?.company_name || undefined,
     userContacts: userData.user_contacts || [],
     userPreferences: {
       alertChannel: userData.user_preferences?.alert_channel,

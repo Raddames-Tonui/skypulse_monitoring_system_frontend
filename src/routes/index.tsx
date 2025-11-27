@@ -2,43 +2,42 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 
 
 export const Route = createFileRoute("/")({
-    component: Index,
+  component: Index,
 });
 
 function Index() {
-    return (
-        <div className="home-container">
-            <nav className="navbar">
-                <div className="logo">
-                    <svg width="25" height="25" viewBox="0 0 18 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9 0C4 0 0 4 0 9V16C0 16.7956 0.316071 17.5587 0.87868 18.1213C1.44129 18.6839 2.20435 19 3 19H6V11H2V9C2 7.14348 2.7375 5.36301 4.05025 4.05025C5.36301 2.7375 7.14348 2 9 2C10.8565 2 12.637 2.7375 13.9497 4.05025C15.2625 5.36301 16 7.14348 16 9V11H12V19H16V20H9V22H15C15.7956 22 16.5587 21.6839 17.1213 21.1213C17.6839 20.5587 18 19.7956 18 19V9C18 4 13.97 0 9 0Z" fill="#257d9e" />
-                    </svg>
-                    <h1>HOLLA DESK</h1>
-                  </div>
-                <div className="nav-actions">
-                    <Link to="/auth/login" className="btn btn-outline">Login</Link>
-                    <Link to="/auth/register" className="btn btn-primary">Create Account</Link>
-                </div>
-            </nav>
+  return (
+    <div className="home-container">
+      <nav className="navbar">
+        <div className="logo">
+          {/* <svg width="25" height="25" viewBox="0 0 18 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 0C4 0 0 4 0 9V16C0 16.7956 0.316071 17.5587 0.87868 18.1213C1.44129 18.6839 2.20435 19 3 19H6V11H2V9C2 7.14348 2.7375 5.36301 4.05025 4.05025C5.36301 2.7375 7.14348 2 9 2C10.8565 2 12.637 2.7375 13.9497 4.05025C15.2625 5.36301 16 7.14348 16 9V11H12V19H16V20H9V22H15C15.7956 22 16.5587 21.6839 17.1213 21.1213C17.6839 20.5587 18 19.7956 18 19V9C18 4 13.97 0 9 0Z" fill="#257d9e" />
+          </svg> */}
+          <img src="/skypulse_flavicon.png" alt="" style={{ height: 60 }} />
+        </div>
+        <div className="nav-actions">
+          <Link to="/auth/login" className="btn btn-outline">Login</Link>
+        </div>
+      </nav>
 
-            <main className="main">
-                <div className="hero">
-                    <h1>Welcome to HOLLA DESK</h1>
-                    <p>
-                        A modern platform built with simplicity, performance, and elegance
-                        in mind.
-                    </p>
-                    <div className="hero-actions">
-                        <Link to="/auth/register" className="btn btn-primary">Get Started</Link>
-                        <Link to="/auth/login" className="btn btn-outline">Learn More</Link>
-                    </div>
-                </div>
-            </main>
-
+      <main className="main">
+        <div className="hero">
+          <h1>Welcome to Sky Pulse</h1>
+          <p>
+            A modern platform built with simplicity, performance, and elegance
+            in mind.
+          </p>
+          <div className="hero-actions">
+            <Link to="/auth/register" className="btn btn-primary">Get Started</Link>
+            <Link to="/auth/login" className="btn btn-outline">Learn More</Link>
+          </div>
+        </div>
+      </main>
 
 
 
-            <style>{`
+
+      <style>{`
         :root {
           --bg-default: #ffffff;
           --bg-secondary: #F5F7F9;
@@ -160,6 +159,6 @@ function Index() {
           background: var(--primary-100);
         }
       `}</style>
-        </div>
-    );
+    </div>
+  );
 }

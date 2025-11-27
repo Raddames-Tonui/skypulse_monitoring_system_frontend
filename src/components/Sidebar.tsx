@@ -15,7 +15,7 @@ const menuConfig: Record<string, { icon: IconName; label: string; path: string }
     { icon: "user", label: "Users", path: "/users" },
     { icon: "users", label: "Groups", path: "/groups" },
     { icon: "services", label: "Services", path: "/services" },
-    { icon: "notepad", label: "Logs", path: "/services/logs" },
+    { icon: "notepad", label: "Logs", path: "/logs/uptimelogs" },
     { icon: "settings", label: "Settings", path: "/settings" },
   ],
   operator: [

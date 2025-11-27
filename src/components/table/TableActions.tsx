@@ -4,7 +4,7 @@ import ModalSort from "./modals/ModalSort";
 import ModalFilter from "./modals/ModalFilter";
 
 export function TableActions<T>() {
-    const { tableActionsLeft, tableActionsRight, onSortApply, onFilterApply, onRefresh, sortBy, filter, enableSort, enableFilter } = useDataTable<T>();
+    const { tableActionsLeft, tableActionsRight, onSortApply, onFilterApply, onRefresh, sortBy, filter, enableSort, enableFilter, enableRefresh } = useDataTable<T>();
     const [isSortOpen, setSortOpen] = useState(false);
     const [isFilterOpen, setFilterOpen] = useState(false);
 
@@ -69,10 +69,14 @@ export function TableActions<T>() {
                             Sort
                         </button>
                     ))}
+                {enableRefresh
+                    ? <button onClick={() => onRefresh?.()} className="action-btn">
+                        Refresh
+                    </button>
+                    :
+                    null
+                }
 
-                <button onClick={() => onRefresh?.()} className="action-btn">
-                    Refresh
-                </button>
             </div>
 
             <div className="table-actions-right">
