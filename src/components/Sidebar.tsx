@@ -20,9 +20,14 @@ const menuConfig: Record<string, { icon: IconName; label: string; path: string }
   ],
   operator: [
     { icon: "pie", label: "Operator Dashboard", path: "/dashboard" },
+    { icon: "services", label: "Services", path: "/services" },
+    { icon: "notepad", label: "Logs", path: "/logs/uptimelogs" }
   ],
   viewer: [
     { icon: "pie", label: "Viewer Dashboard", path: "/dashboard" },
+    { icon: "services", label: "Services", path: "/services" },
+    { icon: "notepad", label: "Logs", path: "/logs/uptimelogs" },
+
   ],
 };
 

@@ -1,4 +1,3 @@
-// src/utils/tableUtils.ts
 export type FilterRule<T = any> = { column: keyof T; operator: string; value: string };
 
 /**

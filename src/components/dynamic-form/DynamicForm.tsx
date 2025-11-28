@@ -142,10 +142,11 @@ export default function DynamicForm({ schema, onSubmit, initialData, className, 
               rows={field.props?.minRows || 3}
               value={value}
               onChange={handleInputChange}
-              className={errorClass}
+              className={`${errorClass} ${field.props?.className || ""}`} 
             />
           </div>
         );
+
 
       case "number": {
         const rawValue = formValues[field.id] ?? field.defaultValue;

@@ -13,7 +13,7 @@
 
 .custom-modal-box {
   background: var(--bg-default);
-  min-width: 80vw;
+  min-width: 50vw;
   max-width: 95vw;
   max-height: 90vh;           
   min-height: 80vh;

@@ -46,9 +46,7 @@ const Navbar: React.FC<NavbarProps> = ({ isSidebarOpen, toggleSidebar }) => {
           transition: "width 0.3s ease",
         }}
       >
-        {/* <Icon iconName="microphone" /> */}
-        {/* <img src="/SkyPulseFlavicon.png" alt="Skypulse Logo" /> */}
-
+  
 
         <div>
           <svg width="100%" height="40" viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg">
@@ -83,20 +81,7 @@ const Navbar: React.FC<NavbarProps> = ({ isSidebarOpen, toggleSidebar }) => {
         </div>
 
         <div className="icon-search">
-          <select
-            name="search"
-            id="select-institution"
-            value={selectedValue}
-            onChange={(e) => setSelectedValue(e.target.value)}
-            className="responsive-hide"
-          >
-            <option value="default" disabled>
-              Select Institution
-            </option>
-            <option value="apstar">Apstar SACCO Limited</option>
-            <option value="another">Another Institution</option>
-          </select>
-
+      
           <div className={iconClass}>
             <Icon iconName="notification" />
           </div>

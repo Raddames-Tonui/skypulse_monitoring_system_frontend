@@ -36,6 +36,7 @@ export default function Loader({
           strokeWidth={strokeWidth}
         />
       </svg>
+      <p className="loader-p">Loading...</p>
     </div>
   );
 }

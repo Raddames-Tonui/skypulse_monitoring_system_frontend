@@ -7,10 +7,10 @@ import Modal from "@/components/Modal";
 import DynamicForm from "@/components/dynamic-form/DynamicForm";
 import { monitoredServiceFormSchema } from "@/components/dynamic-form/FormSchema";
 
-import { useMonitoredServices, useUpdateService } from "@/hooks/services";
 
 import type { MonitoredService } from "@/utils/types";
 import Loader from "@/components/Loader";
+import { useMonitoredServices, useUpdateService } from "@/hooks/hooks";
 
 export default function MonitoredServicesPage() {
   const navigate = useNavigate();

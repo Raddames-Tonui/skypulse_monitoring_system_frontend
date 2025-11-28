@@ -1,4 +1,5 @@
-import React, { ReactNode } from "react";
+import React from "react";
+import type { ReactNode } from "react";
 import "../css/modal.css"; 
 
 interface ModalProps {
@@ -24,23 +25,23 @@ const Modal: React.FC<ModalProps> = ({
 
   return (
     <div
-      className="modal-overlay"
+      className="table-modal-overlay"
       style={{ display: isOpen ? "flex" : "none" }}
       onClick={handleOverlayClick}
     >
-      <div className="modal-box">
-        <header className="modal-header">
+      <div className="table-modal-box">
+        <header className="table-modal-header">
           <h2>{title}</h2>
-          <button className="modal-close-icon" onClick={onClose}>
+          <button className="table-modal-close-icon" onClick={onClose}>
             ✖
           </button>
         </header>
 
-        <div className="modal-body">{body}</div>
+        <div className="table-modal-body">{body}</div>
 
-        <footer className="modal-footer">
+        <footer className="table-modal-footer">
           {footer || (
-            <button className="modal-close-btn" onClick={onClose}>
+            <button className="table-modal-close-btn" onClick={onClose}>
               Close
             </button>
           )}

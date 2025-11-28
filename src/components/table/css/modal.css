@@ -1,19 +1,19 @@
 @import url('../../../css/variables.css');
 
-.modal-overlay {
+.table-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0,0,0,0.45);
+  background: rgba(126, 122, 122, 0.45);
   display: none;
   align-items: center;
   justify-content: center;
   z-index: 1000;
 }
 
-.modal-box {
+.table-modal-box {
   background: var(--bg-default);
   width: 600px;
   max-width: 90%;
@@ -25,7 +25,7 @@
 }
 
 /* Header */
-.modal-header {
+.table-modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -34,13 +34,13 @@
   padding: 12px 20px;
 }
 
-.modal-header h2 {
+.table-modal-header h2 {
   font-size: 18px;
   margin: 0;
   color: var(--primary-100); 
 }
 
-.modal-close-icon {
+.table-modal-close-icon {
   background: none;
   border: none;
   font-size: 20px;
@@ -49,30 +49,30 @@
   transition: transform 0.2s ease;
 }
 
-.modal-close-icon:hover {
+.table-modal-close-icon:hover {
   transform: scale(1.2);
 }
 
 /* Body */
-.modal-body {
+.table-modal-body {
   padding: 18px 20px;
   flex: 1;
   color: var(--primary-900);
 }
 
-.alert-message-wrapper {
+.table-modal-alert-message-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 20px;
 }
 
-.alert-message {
+.table-modal-alert-message {
   text-align: center;
   color: var(--text-blue);
 }
 
-.confirmation-text {
+.table-modal-confirmation-text {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -81,7 +81,7 @@
 }
 
 /* Footer */
-.modal-footer {
+.table-modal-footer {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
@@ -90,7 +90,7 @@
   background: white;
 }
 
-.modal-close-btn {
+.table-modal-close-btn {
   background: var(--primary-700);
   color: var(--bg-default);
   border: none;
@@ -101,11 +101,11 @@
   transition: background 0.2s ease;
 }
 
-.modal-close-btn:hover {
+.table-modal-close-btn:hover {
   background: var(--primary-800);
 }
 
-.cancel {
+.table-modal-cancel {
   border: 1px solid var(--primary-700);
   background: var(--bg-default);
   color: var(--primary-800);
@@ -117,7 +117,7 @@
   margin-right: 0.5rem;
 }
 
-.cancel:hover {
+.table-modal-cancel:hover {
   background: var(--primary-50);
   color: var(--primary-700);
 }

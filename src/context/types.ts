@@ -6,7 +6,7 @@ export type ApiResponse<T> = {
     last_page: number;
     page_size: number;
     total_count: number;
-    records: T[];
+    data: T[];
 }
 
 export type ApiError = {
@@ -14,6 +14,7 @@ export type ApiError = {
     code?: string;
     details?: any;
 };
+
 
 
 

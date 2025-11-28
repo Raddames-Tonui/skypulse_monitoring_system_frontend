@@ -5,7 +5,7 @@ export type ApiResponse<T> = {
   last_page: number;
   page_size: number;
   total_count: number;
-  records: T[];
+  data: T[];
 };
 
 export type ApiError = {
@@ -13,6 +13,53 @@ export type ApiError = {
   code?: string;
   details?: any;
 };
+
+
+// ---- users -------
+export type Users = {
+  uuid: string;
+  user_id: number;
+  first_name: string;
+  last_name: string;
+  user_email: string;
+  role_id: number;
+  role_name: string;
+  company_id: number;
+  company_name: string;
+  is_active: boolean;
+  date_created: string;
+  date_modified: string;
+};
+
+
+// ----------- MONITORED SERVICE TYPE -----------
+export interface MonitoredService {
+  monitored_service_name: string;
+  monitored_service_url: string;
+  monitored_service_id: number;
+  uuid: string;
+  is_active: boolean;
+  ssl_enabled: boolean;
+
+  check_interval?: number | null;
+  expected_status_code?: number | null;
+  monitored_service_region?: string | null;
+
+  retry_delay?: number | null;
+  retry_count?: number | null;
+
+  last_uptime_status?: string | null;
+  last_checked?: string | null;
+  consecutive_failures?: number | null;
+
+  date_created?: string;
+  date_modified?: string;
+
+  created_by?: number;
+}
+
+
+
 
 // ----------- USERS -----------
 export interface User {
@@ -31,26 +78,6 @@ export interface User {
 export type UsersResponse = ApiResponse<User>;
 
 
-// ----------- MONITORED SERVICE TYPE -----------
-export type MonitoredService = {
-  id: number;
-  uuid: string;
-  monitored_service_name: string;
-  monitored_service_url: string;
-  monitored_service_region: string;
-  check_interval: number | null;
-  expected_status_code: number;
-  created_by: number;
-  retry_delay: number;
-  retry_count: number;
-  consecutive_failures: number;
-  ssl_enabled: boolean;
-  is_active: boolean;
-  last_checked: string;        
-  date_created: string;        
-  date_modified: string;       
-  last_uptime_status: "UP" | "DOWN" | "UNKNOWN";
-};
 
 
 

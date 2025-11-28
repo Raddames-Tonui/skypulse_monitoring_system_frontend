@@ -25,7 +25,6 @@ export default function Modalsort<T>({
 }: SortModalProps<T>) {
   const [rules, setRules] = useState<SortRule[]>([]);
 
-  // when modal opens, parse initialSort
   useEffect(() => {
     if (isOpen && initialSort) {
       const parsed = initialSort.split(",").map((rule) => {
@@ -73,7 +72,6 @@ export default function Modalsort<T>({
               key={i}
               style={{ display: "flex", gap: "8px", marginBottom: "10px" }}
             >
-              {/* Column select */}
               <select
                 value={rule.column}
                 className="button-sec"
@@ -89,7 +87,6 @@ export default function Modalsort<T>({
                   ))}
               </select>
 
-              {/* Direction */}
               <select
                 value={rule.direction}
                 className="button-sec"

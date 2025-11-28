@@ -3,16 +3,18 @@ import { useQuery } from "@tanstack/react-query";
 import axiosClient from "@/utils/constants/axiosClient";
 import { DataTable } from "@/components/table/DataTable";
 import type { ColumnProps } from "@/components/table/DataTable";
-import "@/css/singleService.css";
 import { useState } from "react";
+import { toast } from "react-hot-toast"; 
 import AddMembersModal from "./AddMembersModal";
+import AddServicesModal from "./AddServicesModal";
+import "@/css/singleService.css";
 
 export default function SingleContactGroupPage() {
   const { uuid } = useParams({ from: SingleContactGroupPage.id });
   const [openMembersModal, setOpenMembersModal] = useState(false);
+  const [openServicesModal, setServicesModal] = useState(false);
 
-
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["contactGroup", uuid],
     queryFn: async () => {
       if (!uuid) throw new Error("Missing UUID");
@@ -30,13 +32,15 @@ export default function SingleContactGroupPage() {
 
   const group = data;
 
-
   const membersColumns: ColumnProps<any>[] = [
     { id: "first_name", caption: "First Name", size: 120 },
     { id: "last_name", caption: "Last Name", size: 120 },
     {
-      id: "contacts", caption: "Contacts", size: 250, renderCell: (contacts: any[]) =>
-        contacts.map(c => `${c.type}: ${c.value}`).join(", ")
+      id: "contacts",
+      caption: "Contacts",
+      size: 250,
+      renderCell: (contacts: any[]) =>
+        contacts.map((c) => `${c.type}: ${c.value}`).join(", "),
     },
   ];
 
@@ -59,8 +63,10 @@ export default function SingleContactGroupPage() {
       <section className="service-section">
         <h3>Group Info</h3>
         <div className="service-grid">
-          <div><strong>Description:</strong> {group.contact_group_description}</div>
-          <div><strong>UUID:</strong> {group.uuid}</div>
+          <div>
+            <strong>Description:</strong> {group.contact_group_description}
+          </div>
+
         </div>
       </section>
 
@@ -76,21 +82,23 @@ export default function SingleContactGroupPage() {
           isLoading={isLoading}
           enableFilter={false}
           enableSort={false}
-
+          enableRefresh={false}
         />
       </section>
 
       <section className="service-section">
         <div>
           <h3>Monitored Services</h3>
-          <button>Add Services</button>
+          <button onClick={() => setServicesModal(true)}>Add Services</button>
         </div>
+
         <DataTable
           columns={servicesColumns}
           data={group.monitored_services || []}
           isLoading={isLoading}
           enableFilter={false}
           enableSort={false}
+          enableRefresh={false}
         />
       </section>
 
@@ -102,16 +110,34 @@ export default function SingleContactGroupPage() {
           isLoading={isLoading}
           enableFilter={false}
           enableSort={false}
+          enableRefresh={false}
         />
       </section>
 
+      {/* Modals */}
       <AddMembersModal
         isOpen={openMembersModal}
         onClose={() => setOpenMembersModal(false)}
         groupUuid={group.uuid}
         currentMembers={group.members}
+        onSuccess={() => {
+          toast.success("Members added successfully");
+          refetch();
+        }}
+        onError={(msg: string) => toast.error(`Failed to add members: ${msg}`)}
       />
 
+      <AddServicesModal
+        isOpen={openServicesModal}
+        onClose={() => setServicesModal(false)}
+        groupUuid={group.uuid}
+        currentServices={group.monitored_services}
+        onSuccess={() => {
+          toast.success("Services added successfully");
+          refetch();
+        }}
+        onError={(msg: string) => toast.error(`Failed to add services: ${msg}`)}
+      />
     </div>
   );
 }

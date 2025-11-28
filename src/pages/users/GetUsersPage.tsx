@@ -1,9 +1,11 @@
-import  { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { Route } from "@/routes/_protected/users";
 import { useUsers } from "@/hooks/hooks";
 import { DataTable } from "@/components/table/DataTable";
 import type { SortRule, FilterRule } from "@/context/types";
+import type { ApiResponse, Users } from "@/utils/types";
+
 
 const FILTER_MAP: Record<string, string> = {
   first_name: "u.first_name",
@@ -26,7 +28,7 @@ const SORT_MAP: Record<string, string> = {
 };
 
 const columns = [
-  { id: "id", caption: "ID", size: 80 },
+  { id: "user_id", caption: "ID", size: 80 },
   { id: "first_name", caption: "First Name", isSortable: true, isFilterable: true, size: 120 },
   { id: "last_name", caption: "Last Name", isSortable: true, isFilterable: true, size: 120 },
   { id: "user_email", caption: "Email", isSortable: true, isFilterable: true, size: 200 },
@@ -95,21 +97,20 @@ export default function GetUsers() {
     navigate({ search: queryParams });
   }, [queryParams]);
 
-  const { data, isLoading, isError, error, refetch } = useUsers(queryParams);
+  const { data, isLoading, isError, error, refetch } = useUsers< ApiResponse<Users> >(queryParams);
 
+  // Handlers
   const handleSortApply = (rules: SortRule[]) => setSortBy(rules);
-
   const handleFilterApply = (rules: FilterRule[]) => {
     setFilters(rules.filter((r) => r.value));
     setPage(1);
   };
-
-  const handlePage = (p: number) => setPage(p);
+  const handlePageChange = (p: number) => setPage(p);
 
   return (
     <DataTable
       columns={columns}
-      data={data?.data ?? []}
+      data={data?.data ?? []} 
       isLoading={isLoading}
       error={isError ? (error as any)?.message : undefined}
       onRefresh={refetch}
@@ -120,7 +121,7 @@ export default function GetUsers() {
         page,
         pageSize,
         total: data?.total_count ?? 0,
-        onPageChange: handlePage,
+        onPageChange: handlePageChange,
       }}
     />
   );

@@ -232,6 +232,20 @@ export const systemSettingsFormSchema: any = {
 };
 
 
+export  const createGroupSchema: any = {
+    id: "create-contact-group",
+    meta: {
+      title: "Create Contact Group",
+      subtitle: "Enter new group details",
+    },
+    fields: {
+      contact_group_name: { id: "contact_group_name", label: "Group Name", renderer: "text" },
+      contact_group_description: { id: "contact_group_description", label: "Description", renderer: "textarea" },
+    },
+    layout: [{ kind: "stack", spacing: "md", children: [{ kind: "field", fieldId: "contact_group_name" }, { kind: "field", fieldId: "contact_group_description" }] }],
+  };
+
+
 
 // ------MONITORED SERVICE FORM SCHEMA------
 export const monitoredServiceFormSchema: any = {

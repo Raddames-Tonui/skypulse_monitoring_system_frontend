@@ -1,26 +1,7 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {  useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosClient from "@/utils/constants/axiosClient";
-import type { MonitoredService } from "@/utils/types";
 import toast from "react-hot-toast";
 
-interface MonitoredServicesResponse {
-  data: MonitoredService[];
-  total_count: number;
-  current_page: number;
-  page_size: number;
-  last_page: number;
-}
-
-// --- Fetch services ---
-export const useMonitoredServices = (params: Record<string, string | number>) => {
-  return useQuery<MonitoredServicesResponse>({
-    queryKey: ["monitored-services", params],
-    queryFn: async () => {
-      const { data } = await axiosClient.get("/services", { params });
-      return data;
-    },
-  });
-};
 
 // --- Create service ---
 export const useCreateService = () => {

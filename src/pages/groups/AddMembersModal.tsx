@@ -1,7 +1,9 @@
-import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 import axiosClient from "@/utils/constants/axiosClient";
 import Modal from "@/components/Modal";
 import DynamicForm from "@/components/dynamic-form/DynamicForm";
+import { useUsers } from "@/hooks/hooks";
+import type { User } from "@/utils/types";
 
 interface AddMembersModalProps {
     isOpen: boolean;
@@ -18,16 +20,10 @@ export default function AddMembersModal({
 }: AddMembersModalProps) {
     const queryClient = useQueryClient();
 
-    // Fetch all users
-    const { data: users = [], isLoading } = useQuery({
-        queryKey: ["users"],
-        queryFn: async () => {
-            const { data } = await axiosClient.get("/users");
-            return data?.data || [];
-        },
-    });
+    const { data, isLoading } = useUsers({ page: 1, pageSize: 50 }); 
 
-    // Mutation to add members
+    const users: User[] = data?.data ?? [];
+
     const mutation = useMutation({
         mutationFn: async (selectedIds: string[]) => {
             await axiosClient.post(`/contacts/groups/${groupUuid}/members`, {
@@ -54,7 +50,7 @@ export default function AddMembersModal({
                 props: {
                     data: users.map((u) => ({
                         label: `${u.first_name} ${u.last_name}`,
-                        value: String(u.id),
+                        value: String(u.user_id),
                     })),
                     searchable: true,
                     valueKey: "value",
@@ -83,14 +79,21 @@ export default function AddMembersModal({
                     <DynamicForm
                         schema={schema}
                         initialData={{
-                            members: currentMembers.map((m) => String(m.id)),
+                            members: currentMembers
+                                .map((m) => m.user_id ?? m.id) 
+                                .filter((id) => id != null)  
+                                .map((id) => String(id)),      
                         }}
                         onSubmit={(values) => {
-                            const membersIds = values.members.map((id: string) => Number(id));
-                            mutation.mutate(membersIds);
+                            const membersIds = (values.members ?? [])
+                                .map((id: string) => parseInt(id, 10))
+                                .filter((id) => Number.isInteger(id));
+
+                            if (membersIds.length > 0) {
+                                mutation.mutate(membersIds);
+                            }
                         }}
                     />
-
                 )
             }
         />
