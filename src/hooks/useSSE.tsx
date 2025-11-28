@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { CONFIG } from "@/utils/constants/Constants";
 
+
+
 export function useSSE<T>(path: string) {
   const [data, setData] = useState<T | null>(null);
 

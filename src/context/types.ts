@@ -150,3 +150,24 @@ export type UserRecord = {
 };
 
 export type UsersApiResponse = ApiResponse<UserRecord>;
+
+
+// SETTINGS
+
+export interface Service {
+  uuid: string;
+  name: string;
+  status: string;
+  response_time_ms: number;
+  ssl_warning: boolean;
+  actions: () => void;
+}
+
+export interface SSEPayload {
+  timestamp: string;
+  total_services: number;
+  up_count: number;
+  down_count: number;
+  ssl_warnings: number;
+  services: Service[];
+}

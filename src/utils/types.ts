@@ -59,7 +59,6 @@ export interface ServiceDataResponse {
   data: ServiceData;
 }
 
-// Core service data
 export interface ServiceData {
   check_interval: number;
   is_active: boolean;
@@ -75,7 +74,6 @@ export interface ServiceData {
   uptime_logs: UptimeLog[];
 }
 
-// Maintenance windows
 export interface MaintenanceWindow {
   start_time?: string;
   end_time?: string;
@@ -85,7 +83,6 @@ export interface MaintenanceWindow {
   created_by?: number | null;
 }
 
-// User info
 export interface User {
   id: number;
   first_name: string;
@@ -93,7 +90,6 @@ export interface User {
   email: string;
 }
 
-// SSL log
 export interface SslLog {
   id: number;
   domain: string;
@@ -112,7 +108,6 @@ export interface SslLog {
   san_list: string;
 }
 
-// Uptime log
 export interface UptimeLog {
   id: number;
   checked_at: string;

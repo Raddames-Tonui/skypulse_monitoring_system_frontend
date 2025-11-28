@@ -10,6 +10,7 @@ import PieChartWithCustomizedLabel from "@/components/charts/PieChartWithCustomi
 import { DataTable } from "@/components/table/DataTable";
 import type { ColumnProps } from "@/components/table/DataTable";
 import "@/css/singleService.css";
+import Loader from "@/components/Loader";
 
 export default function SingleServicePage() {
   const { uuid } = useParams({ from: SingleServiceRoute.id });
@@ -28,7 +29,7 @@ export default function SingleServicePage() {
     enabled: !!uuid,
   });
 
-  // if (isLoading) return <div className="loading">Loading service...</div>;
+  if (isLoading) return <div className="loading"><Loader /></div>;
   if (isError) return <div className="error">Error: {error?.message}</div>;
   if (!data) return <div className="error">No service found</div>;
 

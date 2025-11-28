@@ -395,3 +395,53 @@ export const monitoredServiceFormSchema: any = {
         }
     ]
 };
+
+
+
+
+//--------- ADD MEMBERS
+export const addMembersSchema: any = {
+  id: "add-members",
+  meta: {
+    title: "Add Members",
+    subtitle: "Select users to add to this contact group"
+  },
+
+  fields: {
+    members: {
+      id: "members",
+      label: "Select Members",
+      renderer: "multiselect",
+      props: {
+        dataSource: "users",      
+        labelKey: (u: any) => `${u.first_name} ${u.last_name}`,
+        valueKey: "id",
+        searchable: true,
+        maxValues: 100,
+        minValues: 1,
+      },
+      rules: {
+        required: "Select at least one user",
+        validate: (value: number[]) =>
+          value?.length > 0 || "You must select at least one member"
+      }
+    }
+  },
+
+  layout: [
+    {
+      kind: "section",
+      title: "Available Users",
+      withDivider: true,
+      children: [
+        {
+          kind: "stack",
+          spacing: "md",
+          children: [
+            { kind: "field", fieldId: "members" }
+          ]
+        }
+      ]
+    }
+  ]
+};

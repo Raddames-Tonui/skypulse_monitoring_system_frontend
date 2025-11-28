@@ -357,18 +357,17 @@ export default function DynamicForm({ schema, onSubmit, initialData, className, 
     const selected = value || [];
 
     const filtered = field.props?.searchable
-      ? options.filter((o: string) => o.toLowerCase().includes(search.toLowerCase()))
+      ? options.filter((o: any) =>
+        o.label.toLowerCase().includes(search.toLowerCase())
+      )
       : options;
 
-    const toggle = (opt: string) => {
-      const newVals = selected.includes(opt)
-        ? selected.filter((v) => v !== opt)
-        : [...selected, opt];
+    const toggle = (optValue: string) => {
+      const newVals = selected.includes(optValue)
+        ? selected.filter((v) => v !== optValue)
+        : [...selected, optValue];
       onChange(field.id, newVals);
     };
-
-    const remove = (opt: string) =>
-      onChange(field.id, selected.filter((v) => v !== opt));
 
     return (
       <div className={`multiselect-wrapper ${wrapperClassName || ""}`}>
@@ -382,27 +381,32 @@ export default function DynamicForm({ schema, onSubmit, initialData, className, 
           />
         )}
         <div className="options-list">
-          {filtered.map((opt: string, i: number) => (
+          {filtered.map((opt: any, i: number) => (
             <div
               key={i}
-              className={`option-item ${selected.includes(opt) ? "selected" : ""}`}
-              onClick={() => toggle(opt)}
+              className={`option-item ${selected.includes(opt.value) ? "selected" : ""}`}
+              onClick={() => toggle(opt.value)}
             >
-              {opt}
+              {opt.label}
             </div>
           ))}
         </div>
         {selected.length > 0 && (
           <div className="selected-tags">
-            {selected.map((item, i) => (
-              <span key={i} className="tag">
-                {item}
-                <button onClick={() => remove(item)} type="button">×</button>
-              </span>
-            ))}
+            {selected.map((val, i) => {
+              const item = options.find((o: any) => o.value === val);
+              return (
+                <span key={i} className="tag">
+                  {item?.label || val}
+                  <button onClick={() => remove(val)} type="button">
+                    ×
+                  </button>
+                </span>
+              );
+            })}
           </div>
         )}
       </div>
-    );
+    )
   }
-}
+};

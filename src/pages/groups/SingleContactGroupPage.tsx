@@ -4,9 +4,13 @@ import axiosClient from "@/utils/constants/axiosClient";
 import { DataTable } from "@/components/table/DataTable";
 import type { ColumnProps } from "@/components/table/DataTable";
 import "@/css/singleService.css";
+import { useState } from "react";
+import AddMembersModal from "./AddMembersModal";
 
 export default function SingleContactGroupPage() {
-  const { uuid } = useParams<{ uuid: string }>();
+  const { uuid } = useParams({ from: SingleContactGroupPage.id });
+  const [openMembersModal, setOpenMembersModal] = useState(false);
+
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["contactGroup", uuid],
@@ -26,22 +30,21 @@ export default function SingleContactGroupPage() {
 
   const group = data;
 
-  // Members table
+
   const membersColumns: ColumnProps<any>[] = [
     { id: "first_name", caption: "First Name", size: 120 },
     { id: "last_name", caption: "Last Name", size: 120 },
-    { id: "contacts", caption: "Contacts", size: 250, renderCell: (contacts: any[]) =>
+    {
+      id: "contacts", caption: "Contacts", size: 250, renderCell: (contacts: any[]) =>
         contacts.map(c => `${c.type}: ${c.value}`).join(", ")
     },
   ];
 
-  // Monitored services table
   const servicesColumns: ColumnProps<any>[] = [
     { id: "monitored_service_name", caption: "Service Name", size: 200 },
     { id: "uuid", caption: "UUID", size: 240, hide: true },
   ];
 
-  // Notification channels table
   const channelsColumns: ColumnProps<any>[] = [
     { id: "notification_channel_name", caption: "Channel Name", size: 200 },
     { id: "notification_channel_code", caption: "Code", size: 120 },
@@ -62,24 +65,32 @@ export default function SingleContactGroupPage() {
       </section>
 
       <section className="service-section">
-        <h3>Members</h3>
+        <div>
+          <h3>Members</h3>
+          <button onClick={() => setOpenMembersModal(true)}>Add Members</button>
+        </div>
+
         <DataTable
           columns={membersColumns}
           data={group.members}
           isLoading={isLoading}
-          enableFilter={true}
-          enableSort={true}
+          enableFilter={false}
+          enableSort={false}
+
         />
       </section>
 
       <section className="service-section">
-        <h3>Monitored Services</h3>
+        <div>
+          <h3>Monitored Services</h3>
+          <button>Add Services</button>
+        </div>
         <DataTable
           columns={servicesColumns}
           data={group.monitored_services || []}
           isLoading={isLoading}
-          enableFilter={true}
-          enableSort={true}
+          enableFilter={false}
+          enableSort={false}
         />
       </section>
 
@@ -89,10 +100,18 @@ export default function SingleContactGroupPage() {
           columns={channelsColumns}
           data={group.notification_channels || []}
           isLoading={isLoading}
-          enableFilter={true}
-          enableSort={true}
+          enableFilter={false}
+          enableSort={false}
         />
       </section>
+
+      <AddMembersModal
+        isOpen={openMembersModal}
+        onClose={() => setOpenMembersModal(false)}
+        groupUuid={group.uuid}
+        currentMembers={group.members}
+      />
+
     </div>
   );
 }

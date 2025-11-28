@@ -49,7 +49,7 @@ export default function ContactGroupsPage() {
   const groups = useMemo(() => data?.data ?? [], [data?.data]);
 
   const columns = [
-    { id: "uuid", caption: "UUID", size: 240, hide: true },
+    { id: "uuid", caption: "UUID", size: 240, hide: false },
     { id: "contact_group_name", caption: "Group Name", isSortable: true, isFilterable: true },
     { id: "contact_group_description", caption: "Description", size: 250, isSortable: true },
     { id: "members_count", caption: "Members", size: 100, isSortable: true },
@@ -65,34 +65,22 @@ export default function ContactGroupsPage() {
       id: "actions",
       caption: "Actions",
       size: 160,
-      renderCell: (row: any) => (
+      renderCell: (_, row: any) => (
         <div className="flex gap-2">
           <button
             className="btn btn-sm btn-primary"
             onClick={() =>
               navigate({
-                to: SingleGroupRoute.id,
-                params: { uuid: row.uuid },
+                to: "/groups/$uuid",
+                params: { uuid: row.uuid }
               })
             }
           >
             View
           </button>
-          <button
-            className="btn btn-sm btn-secondary"
-            onClick={() =>
-              navigate({
-                to: SingleGroupRoute.id,
-                params: { uuid: row.uuid },
-                search: { mode: "edit" }, // optional: your page can read this to switch to edit
-              })
-            }
-          >
-            Edit
-          </button>
         </div>
       ),
-    },
+    }
   ];
 
   const updateUrl = useCallback(() => {
@@ -134,7 +122,7 @@ export default function ContactGroupsPage() {
     <>
       <div className="page-header">
         <h1>Contact Groups</h1>
-        <NavigationBar />
+        <button>Create New Service</button>
       </div>
 
       <DataTable

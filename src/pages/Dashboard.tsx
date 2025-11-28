@@ -1,27 +1,12 @@
 import { useNavigate } from "@tanstack/react-router";
-import { useSSE } from "@/utils/constants/useSSE";
 import { DataTable, } from "@/components/table/DataTable";
 import type { ColumnProps } from "@/components/table/DataTable";
 import StatusSidebar from "../components/StatusSidebar";
 import "@/css/dashboard.css"
+import type { Service, SSEPayload } from "@/context/types";
+import { useSSE } from "@/hooks/useSSE";
 
-interface Service {
-  uuid: string;
-  name: string;
-  status: string;
-  response_time_ms: number;
-  ssl_warning: boolean;
-  actions: () => void;
-}
 
-interface SSEPayload {
-  timestamp: string;
-  total_services: number;
-  up_count: number;
-  down_count: number;
-  ssl_warnings: number;
-  services: Service[];
-}
 
 export default function Dashboard() {
   const navigate = useNavigate();

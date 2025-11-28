@@ -9,9 +9,11 @@
     grid-template-areas:
         "header header "
         "aside main "
-        "footer footer"  ;
+        /* "footer footer"  */
+         ;
     grid-template-columns: var(--sidebar-width) 1fr;
-    grid-template-rows: 48px 1fr 36px;
+    /* grid-template-rows: 48px 1fr 36px; */
+    grid-template-rows: 48px 1fr;
     height: 100vh;
     transition: grid-template-columns 0.3s ease;
 }
