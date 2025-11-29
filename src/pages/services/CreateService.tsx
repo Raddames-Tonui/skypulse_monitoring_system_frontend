@@ -1,13 +1,20 @@
 import DynamicForm from "@/components/dynamic-form/DynamicForm";
 import { monitoredServiceFormSchema } from "@/components/dynamic-form/FormSchema";
+import NavigationBar from "@/components/NavigationBar";
 import { useCreateService } from "@/hooks/services";
 
 function CreateService() {
   const createService = useCreateService();
 
+
+  const links = [
+    { label: "Back", to: "/services", match: (p) => p.includes("uptime-reports") },
+  ];
   return (
     <div className="page-wrapper">
-      <h1>Create Monitored Service</h1>
+      <div className="page-header">
+        <NavigationBar links={links} />
+      </div>
       <DynamicForm
         schema={monitoredServiceFormSchema}
         initialData={{

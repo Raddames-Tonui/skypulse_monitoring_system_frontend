@@ -1,41 +1,69 @@
-import { createContext,useState } from "react";
+import { createContext, useContext, useState } from "react";
+import type { ReactNode } from "react";
 
+type ThemeType = "light" | "dark";
 
-interface ThemeContextType {
-    theme: "light" | "dark" | "system";
+export interface ThemeContextType {
+    theme: ThemeType;
     toggleTheme: () => void;
     isSidebarOpen: boolean;
     toggleSidebar: () => void;
+    isMobileSidebarOpen: boolean;
+    toggleMobileSidebar: () => void;
 }
+
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
-    const [theme, setTheme] = useState<"light" | "dark">(
-        () => (localStorage.getItem("theme") as "light" | "dark") || "light"
-    )
-    const [isSidebaOpen, setSidebarOpen] = useState<boolean>(() => (
-        (localStorage.getItem("isSidebarOpen") === "true")
-    ))
+export const ThemeProvider = ({ children }: { children: ReactNode }) => {
+    const [theme, setTheme] = useState<ThemeType>(() => {
+        return (localStorage.getItem("theme") as ThemeType) || "light";
+    });
 
+    const [isSidebarOpen, setSidebarOpen] = useState<boolean>(() => {
+        const saved = localStorage.getItem("isSidebarOpen");
+        return saved === null ? true : saved === "true";
+    });
+
+    const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
     const toggleTheme = () => {
-        const newTheme = theme === "light" ? "dark" : "light";
-        setTheme(newTheme);
-        localStorage.setItem("theme", newTheme);
+        setTheme(prev => {
+            const newTheme = prev === "light" ? "dark" : "light";
+            localStorage.setItem("theme", newTheme);
+            document.documentElement.classList.remove(prev);
+            document.documentElement.classList.add(newTheme);
+            return newTheme;
+        });
     };
 
     const toggleSidebar = () => {
-        const newState = !isSidebaOpen;
-        localStorage.setItem("isSidebarOpen", newState.toString());
-        setSidebarOpen(newState);
-    }
+        setSidebarOpen(prev => {
+            const newState = !prev;
+            localStorage.setItem("isSidebarOpen", newState.toString());
+            return newState;
+        });
+    };
 
-    const values = {
-        theme,
-        toggleTheme,
-        isSidebarOpen: isSidebaOpen,
-        toggleSidebar
-    }
+    const toggleMobileSidebar = () => {
+        setMobileSidebarOpen(prev => !prev);
+    };
 
-    return <ThemeContext.Provider value={values}>{children}</ThemeContext.Provider>;
-}
+    return (
+        <ThemeContext.Provider value={{
+            theme,
+            toggleTheme,
+            isSidebarOpen,
+            toggleSidebar,
+            isMobileSidebarOpen,
+            toggleMobileSidebar
+        }}>
+            {children}
+        </ThemeContext.Provider>
+    );
+};
+
+export const useTheme = (): ThemeContextType => {
+    const context = useContext(ThemeContext);
+    if (!context) throw new Error("useTheme must be used within a ThemeProvider");
+    return context;
+};

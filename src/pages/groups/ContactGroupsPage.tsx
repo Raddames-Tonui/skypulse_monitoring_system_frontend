@@ -96,9 +96,6 @@ export default function ContactGroupsPage() {
           </option>
         ))}
       </select>
-      <button className="btn btn-primary" onClick={() => setModalOpen(true)}>
-        New Contact Group
-      </button>
     </>
   );
 
@@ -119,6 +116,9 @@ export default function ContactGroupsPage() {
     <>
       <div className="page-header">
         <h1>Contact Groups</h1>
+        <button className="btn btn-primary" onClick={() => setModalOpen(true)}>
+          New Contact Group
+        </button>
       </div>
 
       <DataTable

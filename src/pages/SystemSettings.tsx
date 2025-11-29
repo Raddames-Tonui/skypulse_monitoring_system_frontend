@@ -14,7 +14,6 @@ interface ApiResponse {
 function SystemSettings() {
   const queryClient = useQueryClient();
 
-  // ---------- Query for system settings ----------
   const { data, isLoading, isFetching } = useQuery({
     queryKey: ["system-settings"],
     queryFn: async () => {
@@ -28,7 +27,6 @@ function SystemSettings() {
     },
   });
 
-  // ----------  Save settings ----------
   const saveMutation = useMutation({
     mutationFn: async (values: Record<string, any>) => {
       const payload = {
@@ -91,7 +89,7 @@ function SystemSettings() {
             type="button"
             disabled={rollbackMutation.isPending}
             onClick={() => rollbackMutation.mutate()}
-            className="btn btn-danger"
+            className="btn-secondary"
           >
             {rollbackMutation.isPending ? "Reverting..." : "Revert to Previous Version"}
           </button>
@@ -99,22 +97,24 @@ function SystemSettings() {
             type="button"
             disabled={restartApplication.isPending}
             onClick={() => restartApplication.mutate()}
-            className="btn btn-danger"
+            className="btn-primary"
           >
             {restartApplication.isPending ? "Restarting..." : "Restart Application"}
           </button>
         </div>
       </div>
 
-      <DynamicForm
-        schema={systemSettingsFormSchema}
-        initialData={data?.data}
-        onSubmit={(values) => saveMutation.mutate(values)}
-        className="dynamic-form-wrapper"
-        fieldClassName="system-form-field-wrapper"
-        buttonClassName="form-buttons-wrapper"
-        style={{ maxWidth: "800px", margin: "0 auto" }}
-      />
+      <section>
+        <DynamicForm
+          schema={systemSettingsFormSchema}
+          initialData={data?.data}
+          onSubmit={(values) => saveMutation.mutate(values)}
+          className="dynamic-form-wrapper"
+          fieldClassName="system-form-field-wrapper"
+          buttonClassName="form-buttons-wrapper"
+          style={{ }}
+        />
+      </section>
     </div>
   );
 }

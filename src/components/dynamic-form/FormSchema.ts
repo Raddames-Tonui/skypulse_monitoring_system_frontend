@@ -251,7 +251,7 @@ export  const createGroupSchema: any = {
 export const monitoredServiceFormSchema: any = {
     id: "monitored-service-form",
     meta: {
-        title: "Add / Edit Monitored Service",
+        title: "Create Monitored Service",
         subtitle: "Provide the details of the service you want to monitor"
     },
 

@@ -4,7 +4,7 @@ import axiosClient from "@/utils/constants/axiosClient";
 import { DataTable } from "@/components/table/DataTable";
 import type { ColumnProps } from "@/components/table/DataTable";
 import { useState } from "react";
-import { toast } from "react-hot-toast"; 
+import { toast } from "react-hot-toast";
 import AddMembersModal from "./AddMembersModal";
 import AddServicesModal from "./AddServicesModal";
 import "@/css/singleService.css";
@@ -55,11 +55,11 @@ export default function SingleContactGroupPage() {
   ];
 
   return (
-    <div className="service-container">
-      <header className="service-header">
-        <h2>{group.contact_group_name}</h2>
-      </header>
+    <>
 
+      <div className="page-header">
+        <h1>{group.contact_group_name}</h1>
+      </div>
       <section className="service-section">
         <h3>Group Info</h3>
         <div className="service-grid">
@@ -138,6 +138,6 @@ export default function SingleContactGroupPage() {
         }}
         onError={(msg: string) => toast.error(`Failed to add services: ${msg}`)}
       />
-    </div>
+    </>
   );
 }

@@ -11,6 +11,7 @@ import { monitoredServiceFormSchema } from "@/components/dynamic-form/FormSchema
 import type { MonitoredService } from "@/utils/types";
 import Loader from "@/components/Loader";
 import { useMonitoredServices, useUpdateService } from "@/hooks/hooks";
+import NavigationBar from "@/components/NavigationBar";
 
 export default function MonitoredServicesPage() {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ export default function MonitoredServicesPage() {
     retry_delay: row.retry_delay ?? "",
     expected_status_code: row.expected_status_code ?? "",
     ssl_enabled: row.ssl_enabled ?? true,
-    uuid: row.uuid, 
+    uuid: row.uuid,
   });
 
 
@@ -97,11 +98,15 @@ export default function MonitoredServicesPage() {
     },
   ];
 
+  const links = [
+    { label: "Create Service", to: "/services/create", match: (p) => p.includes("uptime-reports") },
+  ];
+
   return (
     <div className="page-wrapper">
       <div className="page-header">
         <h1>Monitored Services</h1>
-        <Link to="/services/create"> Create Service </Link>
+        <NavigationBar links={links} />
 
       </div>
 
@@ -122,7 +127,7 @@ export default function MonitoredServicesPage() {
         />
       )}
 
-    
+
       <Modal
         isOpen={isModalOpen}
         title="Update Monitored Service"

@@ -63,10 +63,10 @@ export default function GetUsers() {
 
   const initialSort: SortRule[] = search.sort
     ? search.sort.split(",").map((s) => {
-        const [key, dir = "asc"] = s.split(":");
-        const col = Object.keys(SORT_MAP).find((k) => SORT_MAP[k] === key);
-        return { column: col ?? key, direction: dir as "asc" | "desc" };
-      })
+      const [key, dir = "asc"] = s.split(":");
+      const col = Object.keys(SORT_MAP).find((k) => SORT_MAP[k] === key);
+      return { column: col ?? key, direction: dir as "asc" | "desc" };
+    })
     : [];
 
   const initialPage = Number(search.page) || 1;
@@ -97,7 +97,7 @@ export default function GetUsers() {
     navigate({ search: queryParams });
   }, [queryParams]);
 
-  const { data, isLoading, isError, error, refetch } = useUsers< ApiResponse<Users> >(queryParams);
+  const { data, isLoading, isError, error, refetch } = useUsers<ApiResponse<Users>>(queryParams);
 
   // Handlers
   const handleSortApply = (rules: SortRule[]) => setSortBy(rules);
@@ -108,21 +108,28 @@ export default function GetUsers() {
   const handlePageChange = (p: number) => setPage(p);
 
   return (
-    <DataTable
-      columns={columns}
-      data={data?.data ?? []} 
-      isLoading={isLoading}
-      error={isError ? (error as any)?.message : undefined}
-      onRefresh={refetch}
-      initialSort={sortBy}
-      onSortApply={handleSortApply}
-      onFilterApply={handleFilterApply}
-      pagination={{
-        page,
-        pageSize,
-        total: data?.total_count ?? 0,
-        onPageChange: handlePageChange,
-      }}
-    />
+    <>
+      <div className="page-header">
+        <h1>Users</h1>
+      </div>
+
+      <DataTable
+        columns={columns}
+        data={data?.data ?? []}
+        isLoading={isLoading}
+        error={isError ? (error as any)?.message : undefined}
+        onRefresh={refetch}
+        initialSort={sortBy}
+        onSortApply={handleSortApply}
+        onFilterApply={handleFilterApply}
+        pagination={{
+          page,
+          pageSize,
+          total: data?.total_count ?? 0,
+          onPageChange: handlePageChange,
+        }}
+      />
+    </>
+
   );
 }

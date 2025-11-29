@@ -24,8 +24,8 @@ import { Route as PublicAuthResetpasswordRouteImport } from './routes/_public/au
 import { Route as PublicAuthLoginRouteImport } from './routes/_public/auth/login'
 import { Route as ProtectedServicesCreateRouteImport } from './routes/_protected/services/create'
 import { Route as ProtectedServicesUuidRouteImport } from './routes/_protected/services/$uuid'
-import { Route as ProtectedLogsUptimelogsRouteImport } from './routes/_protected/logs/uptimelogs'
-import { Route as ProtectedLogsSsllogsRouteImport } from './routes/_protected/logs/ssllogs'
+import { Route as ProtectedReportsUptimeReportsRouteImport } from './routes/_protected/reports/uptime-reports'
+import { Route as ProtectedReportsSslReportsRouteImport } from './routes/_protected/reports/ssl-reports'
 import { Route as ProtectedGroupsUuidRouteImport } from './routes/_protected/groups/$uuid'
 
 const ProtectedRoute = ProtectedRouteImport.update({
@@ -104,16 +104,18 @@ const ProtectedServicesUuidRoute = ProtectedServicesUuidRouteImport.update({
   path: '/services/$uuid',
   getParentRoute: () => ProtectedRoute,
 } as any)
-const ProtectedLogsUptimelogsRoute = ProtectedLogsUptimelogsRouteImport.update({
-  id: '/logs/uptimelogs',
-  path: '/logs/uptimelogs',
-  getParentRoute: () => ProtectedRoute,
-} as any)
-const ProtectedLogsSsllogsRoute = ProtectedLogsSsllogsRouteImport.update({
-  id: '/logs/ssllogs',
-  path: '/logs/ssllogs',
-  getParentRoute: () => ProtectedRoute,
-} as any)
+const ProtectedReportsUptimeReportsRoute =
+  ProtectedReportsUptimeReportsRouteImport.update({
+    id: '/reports/uptime-reports',
+    path: '/reports/uptime-reports',
+    getParentRoute: () => ProtectedRoute,
+  } as any)
+const ProtectedReportsSslReportsRoute =
+  ProtectedReportsSslReportsRouteImport.update({
+    id: '/reports/ssl-reports',
+    path: '/reports/ssl-reports',
+    getParentRoute: () => ProtectedRoute,
+  } as any)
 const ProtectedGroupsUuidRoute = ProtectedGroupsUuidRouteImport.update({
   id: '/groups/$uuid',
   path: '/groups/$uuid',
@@ -123,8 +125,8 @@ const ProtectedGroupsUuidRoute = ProtectedGroupsUuidRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/groups/$uuid': typeof ProtectedGroupsUuidRoute
-  '/logs/ssllogs': typeof ProtectedLogsSsllogsRoute
-  '/logs/uptimelogs': typeof ProtectedLogsUptimelogsRoute
+  '/reports/ssl-reports': typeof ProtectedReportsSslReportsRoute
+  '/reports/uptime-reports': typeof ProtectedReportsUptimeReportsRoute
   '/services/$uuid': typeof ProtectedServicesUuidRoute
   '/services/create': typeof ProtectedServicesCreateRoute
   '/auth/login': typeof PublicAuthLoginRoute
@@ -142,8 +144,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/groups/$uuid': typeof ProtectedGroupsUuidRoute
-  '/logs/ssllogs': typeof ProtectedLogsSsllogsRoute
-  '/logs/uptimelogs': typeof ProtectedLogsUptimelogsRoute
+  '/reports/ssl-reports': typeof ProtectedReportsSslReportsRoute
+  '/reports/uptime-reports': typeof ProtectedReportsUptimeReportsRoute
   '/services/$uuid': typeof ProtectedServicesUuidRoute
   '/services/create': typeof ProtectedServicesCreateRoute
   '/auth/login': typeof PublicAuthLoginRoute
@@ -163,8 +165,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_protected': typeof ProtectedRouteWithChildren
   '/_protected/groups/$uuid': typeof ProtectedGroupsUuidRoute
-  '/_protected/logs/ssllogs': typeof ProtectedLogsSsllogsRoute
-  '/_protected/logs/uptimelogs': typeof ProtectedLogsUptimelogsRoute
+  '/_protected/reports/ssl-reports': typeof ProtectedReportsSslReportsRoute
+  '/_protected/reports/uptime-reports': typeof ProtectedReportsUptimeReportsRoute
   '/_protected/services/$uuid': typeof ProtectedServicesUuidRoute
   '/_protected/services/create': typeof ProtectedServicesCreateRoute
   '/_public/auth/login': typeof PublicAuthLoginRoute
@@ -184,8 +186,8 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/groups/$uuid'
-    | '/logs/ssllogs'
-    | '/logs/uptimelogs'
+    | '/reports/ssl-reports'
+    | '/reports/uptime-reports'
     | '/services/$uuid'
     | '/services/create'
     | '/auth/login'
@@ -203,8 +205,8 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/groups/$uuid'
-    | '/logs/ssllogs'
-    | '/logs/uptimelogs'
+    | '/reports/ssl-reports'
+    | '/reports/uptime-reports'
     | '/services/$uuid'
     | '/services/create'
     | '/auth/login'
@@ -223,8 +225,8 @@ export interface FileRouteTypes {
     | '/'
     | '/_protected'
     | '/_protected/groups/$uuid'
-    | '/_protected/logs/ssllogs'
-    | '/_protected/logs/uptimelogs'
+    | '/_protected/reports/ssl-reports'
+    | '/_protected/reports/uptime-reports'
     | '/_protected/services/$uuid'
     | '/_protected/services/create'
     | '/_public/auth/login'
@@ -356,18 +358,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedServicesUuidRouteImport
       parentRoute: typeof ProtectedRoute
     }
-    '/_protected/logs/uptimelogs': {
-      id: '/_protected/logs/uptimelogs'
-      path: '/logs/uptimelogs'
-      fullPath: '/logs/uptimelogs'
-      preLoaderRoute: typeof ProtectedLogsUptimelogsRouteImport
+    '/_protected/reports/uptime-reports': {
+      id: '/_protected/reports/uptime-reports'
+      path: '/reports/uptime-reports'
+      fullPath: '/reports/uptime-reports'
+      preLoaderRoute: typeof ProtectedReportsUptimeReportsRouteImport
       parentRoute: typeof ProtectedRoute
     }
-    '/_protected/logs/ssllogs': {
-      id: '/_protected/logs/ssllogs'
-      path: '/logs/ssllogs'
-      fullPath: '/logs/ssllogs'
-      preLoaderRoute: typeof ProtectedLogsSsllogsRouteImport
+    '/_protected/reports/ssl-reports': {
+      id: '/_protected/reports/ssl-reports'
+      path: '/reports/ssl-reports'
+      fullPath: '/reports/ssl-reports'
+      preLoaderRoute: typeof ProtectedReportsSslReportsRouteImport
       parentRoute: typeof ProtectedRoute
     }
     '/_protected/groups/$uuid': {
@@ -382,8 +384,8 @@ declare module '@tanstack/react-router' {
 
 interface ProtectedRouteChildren {
   ProtectedGroupsUuidRoute: typeof ProtectedGroupsUuidRoute
-  ProtectedLogsSsllogsRoute: typeof ProtectedLogsSsllogsRoute
-  ProtectedLogsUptimelogsRoute: typeof ProtectedLogsUptimelogsRoute
+  ProtectedReportsSslReportsRoute: typeof ProtectedReportsSslReportsRoute
+  ProtectedReportsUptimeReportsRoute: typeof ProtectedReportsUptimeReportsRoute
   ProtectedServicesUuidRoute: typeof ProtectedServicesUuidRoute
   ProtectedServicesCreateRoute: typeof ProtectedServicesCreateRoute
   ProtectedDashboardIndexRoute: typeof ProtectedDashboardIndexRoute
@@ -397,8 +399,8 @@ interface ProtectedRouteChildren {
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
   ProtectedGroupsUuidRoute: ProtectedGroupsUuidRoute,
-  ProtectedLogsSsllogsRoute: ProtectedLogsSsllogsRoute,
-  ProtectedLogsUptimelogsRoute: ProtectedLogsUptimelogsRoute,
+  ProtectedReportsSslReportsRoute: ProtectedReportsSslReportsRoute,
+  ProtectedReportsUptimeReportsRoute: ProtectedReportsUptimeReportsRoute,
   ProtectedServicesUuidRoute: ProtectedServicesUuidRoute,
   ProtectedServicesCreateRoute: ProtectedServicesCreateRoute,
   ProtectedDashboardIndexRoute: ProtectedDashboardIndexRoute,

@@ -123,6 +123,24 @@ export const Close: React.FC<IconBaseProps> = ({ className }) => (
 
 );
 
+export const CloseMobile: React.FC<IconBaseProps> = () => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-8 h-8 right-6 absolute top-6 "
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        strokeWidth="2"
+    >
+        <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M6 18L18 6M6 6l12 12"
+        />
+    </svg>
+);
+
+
 export const Menu: React.FC<IconBaseProps> = ({ className }) => (
     <svg className={className} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M7.22 14.47L9.69 12L7.22 9.53003C7.12128 9.43835 7.0491 9.32175 7.01109 9.1925C6.97308 9.06325 6.97063 8.92615 7.004 8.79562C7.03737 8.6651 7.10533 8.54599 7.20072 8.45085C7.29611 8.35571 7.41539 8.28806 7.546 8.25503C7.67638 8.22172 7.81332 8.2241 7.94247 8.26193C8.07161 8.29976 8.1882 8.37164 8.28 8.47003L11.28 11.47C11.4205 11.6107 11.4993 11.8013 11.4993 12C11.4993 12.1988 11.4205 12.3894 11.28 12.53L8.28 15.53C8.13785 15.6627 7.94976 15.7349 7.75536 15.7316C7.56097 15.7282 7.37548 15.6495 7.238 15.512C7.10053 15.3745 7.02181 15.1891 7.01846 14.9947C7.0151 14.8003 7.08736 14.6122 7.22 14.47Z" fill="white" />
@@ -410,6 +428,7 @@ export const Icons = {
     bold: Bold,
     building: Building,
     close: Close,
+    closeMobile: CloseMobile,
     code: Code,
     dangerIcon: DangerIcon,
     delete: Delete,
