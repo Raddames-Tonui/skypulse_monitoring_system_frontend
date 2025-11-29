@@ -2,18 +2,18 @@ import { useState } from "react";
 import Icon from "@/utils/Icon";
 import { useAuth } from "@/hooks/hooks";
 import { useNavigate } from "@tanstack/react-router";
+import { useTheme } from "@/context/ThemeProvider";
 
-interface NavbarProps {
-  isSidebarOpen: boolean;
-  toggleSidebar: () => void;
-}
-
-const Navbar: React.FC<NavbarProps> = ({ isSidebarOpen, toggleSidebar }) => {
-  const [selectedValue, setSelectedValue] = useState("default");
+const Navbar: React.FC = () => {
   const [showDropdown, setShowDropdown] = useState(false);
-
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+
+  const {
+    isSidebarOpen,
+    isMobileSidebarOpen,
+    toggleMobileSidebar,
+  } = useTheme();
 
   const role = user?.roleName?.toLowerCase() || "";
 
@@ -27,9 +27,9 @@ const Navbar: React.FC<NavbarProps> = ({ isSidebarOpen, toggleSidebar }) => {
   const roleColor = (() => {
     switch (role) {
       case "operator":
-        return "var(--text-blue)";
-      case "admin":
         return "#FD7E14";
+      case "admin":
+        return "#fd1414ff";
       case "viewer":
         return "#28A745";
       default:
@@ -46,8 +46,6 @@ const Navbar: React.FC<NavbarProps> = ({ isSidebarOpen, toggleSidebar }) => {
           transition: "width 0.3s ease",
         }}
       >
-  
-
         <div>
           <svg width="100%" height="40" viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg">
             <polyline
@@ -57,8 +55,6 @@ const Navbar: React.FC<NavbarProps> = ({ isSidebarOpen, toggleSidebar }) => {
               strokeWidth="4"
               strokeLinecap="round"
               strokeLinejoin="round"
-              strokeDasharray="0"
-              strokeDashoffset="0"
             >
               <animate
                 attributeName="stroke-dashoffset"
@@ -76,12 +72,11 @@ const Navbar: React.FC<NavbarProps> = ({ isSidebarOpen, toggleSidebar }) => {
         <div className="logo">
           <h1 className="responsive-hide">{user?.companyName || "Company Name"}</h1>
           <h2 style={{ color: roleColor }} className="responsive-hide">
-            {user?.roleName.toLowerCase() || ""}
+            {user?.roleName?.toLowerCase() || ""}
           </h2>
         </div>
 
         <div className="icon-search">
-      
           <div className={iconClass}>
             <Icon iconName="notification" />
           </div>
@@ -112,12 +107,11 @@ const Navbar: React.FC<NavbarProps> = ({ isSidebarOpen, toggleSidebar }) => {
             )}
           </div>
 
-          {/* Hamburger for mobile screens */}
           <button
             className="navbar-hamburger mobile-only"
-            onClick={toggleSidebar} // toggles Sidebar visibility
+            onClick={toggleMobileSidebar} 
           >
-            <Icon iconName="hamburger" />
+            <Icon iconName={isMobileSidebarOpen ? "closeMobile" : "hamburger"} />
           </button>
         </div>
       </div>

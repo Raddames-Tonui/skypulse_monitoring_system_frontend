@@ -1,28 +1,30 @@
-import { useAuth } from "@/hooks/hooks";
-import { useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { Outlet, redirect } from '@tanstack/react-router';
+import { useAuth } from '@/hooks/hooks';
+import { hasRole } from '@/pages/auth/roles';
+import Loader from '@/components/Loader';
+import UnauthorizedPage from '@/pages/auth/UnauthorizedPage';
 
-interface ProtectedProps {
-  requiredRole?: string;
-  children: JSX.Element;
+export function ProtectedRoute({ allowed }: { allowed: string[] }) {
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="loader">
+        <Loader size={80} speed={1.8} />
+      </div>
+    );
+  }
+
+  if (!user) {
+    throw redirect({
+      to: '/auth/login',
+      search: { returnTo: window.location.pathname },
+    });
+  }
+
+  if (!hasRole(user, allowed)) {
+    return <UnauthorizedPage />;
+  }
+
+  return <Outlet />;
 }
-
-export const ProtectedRoute: React.FC<ProtectedProps> = ({ requiredRole, children }) => {
-  const { user } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!user) {
-      navigate({ to: "/auth/login" });
-      return;
-    }
-
-    if (requiredRole && user.roleName !== requiredRole) {
-      navigate({ to: "/auth/unauthorized" });
-    }
-  }, [user, requiredRole, navigate]);
-
-  if (!user || (requiredRole && user.roleName !== requiredRole)) return null;
-
-  return children;
-};

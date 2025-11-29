@@ -5,6 +5,7 @@ interface LoaderProps {
   speed?: number;
   className?: string;
   ariaLabel?: string;
+  showText?: boolean;
 }
 
 export default function Loader({
@@ -12,10 +13,20 @@ export default function Loader({
   speed = 1.4,
   className = "",
   ariaLabel = "Loading",
+  showText = true,
 }: LoaderProps) {
-  const width = typeof size === "number" ? `${size}px` : size;
-  const height = typeof size === "number" ? `${(size * 0.75).toFixed(2)}px` : `0.75em`;
-  const strokeWidth = typeof size === "number" ? Math.max(size * 0.0469, 2) : 3;
+  const width =
+    typeof size === "number" ? `${size}px` : size;
+
+  const height =
+    typeof size === "number"
+      ? `${(size * 0.75).toFixed(2)}px`
+      : `calc(${size} * 0.75)`; // smarter handling for string sizes
+
+  const strokeWidth =
+    typeof size === "number"
+      ? Math.max(size * 0.0469, 2)
+      : 3;
 
   return (
     <div
@@ -28,15 +39,18 @@ export default function Loader({
         <polyline
           points="0.157 23.954, 14 23.954, 21.843 48, 43 0, 50 24, 64 24"
           id="back"
+          stroke="currentColor"      
           strokeWidth={strokeWidth}
         />
         <polyline
           points="0.157 23.954, 14 23.954, 21.843 48, 43 0, 50 24, 64 24"
           id="front"
+          stroke="currentColor"      
           strokeWidth={strokeWidth}
         />
       </svg>
-      <p className="loader-p">Loading...</p>
+
+      {showText && <p className="loader-p">Loading...</p>}
     </div>
   );
 }
