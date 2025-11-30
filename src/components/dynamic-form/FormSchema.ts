@@ -69,7 +69,7 @@ export const systemSettingsFormSchema: any = {
   id: "system-settings-form",
   meta: {
     title: "System Settings",
-    subtitle: "Configure default values for monitored services"
+    subtitle: "Configure System defaults"
   },
   fields: {
     //  UPTIME 

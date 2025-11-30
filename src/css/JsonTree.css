@@ -1,0 +1,42 @@
+.json-tree {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.json-tree .node {
+  margin-left: 16px;
+  position: relative;
+}
+
+.json-tree .node::before {
+  content: "";
+  position: absolute;
+  left: -8px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: #ddd;
+}
+
+.json-tree .node-label {
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+}
+
+.json-tree .node-label strong {
+  margin-right: 4px;
+}
+
+.json-tree .node-label span {
+  white-space: pre-wrap;
+}
+
+.json-tree .collapsed > .children {
+  display: none;
+}
+
+.json-tree .children {
+  margin-left: 16px;
+}

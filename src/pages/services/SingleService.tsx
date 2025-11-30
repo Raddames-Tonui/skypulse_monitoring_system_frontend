@@ -41,7 +41,7 @@ export default function SingleServicePage() {
     name: `Check #${log.id}`,
     status: log.status,
     response_time_ms: log.response_time_ms,
-    ssl_warning: service.ssl_logs?.[0]?.days_remaining !== undefined && service.ssl_logs[0].days_remaining < 30,
+    ssl_warning: service.ssl_logs?.[0]?.days_remaining !== undefined && service?.ssl_logs[0].days_remaining < 30,
   }));
 
   const uptimeColumns: ColumnProps<typeof uptimeTableRows[number]>[] = [
@@ -119,13 +119,13 @@ export default function SingleServicePage() {
 
       <section className="service-section">
         <h3>Service Details</h3>
+        <div className="service-grid" style={{ margin: "10px 0" }}>
+          <strong> Service URL:</strong>{" "}
+          <a href={service.url} target="_blank" rel="noopener noreferrer">
+            {service.url}
+          </a>
+        </div>
         <div className="service-grid">
-          <div>
-            <strong>URL:</strong>{" "}
-            <a href={service.url} target="_blank" rel="noopener noreferrer">
-              {service.url}
-            </a>
-          </div>
           <div><strong>Expected Status:</strong> {service.expected_status_code}</div>
           <div><strong>Check Interval:</strong> {service.check_interval}s</div>
           <div><strong>Retry Count:</strong> {service.retry_count}</div>

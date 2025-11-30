@@ -8,6 +8,14 @@ interface ModalFilterProps {
   onClose: () => void;
 }
 
+const relations = [
+  { value: "eq", label: "Equals" },
+  // { value: "ne", label: "Not equals" },
+  // { value: "contains", label: "Contains" },
+  // { value: "startswith", label: "Starts with" },
+  // { value: "endswith", label: "Ends with" },
+];
+
 function getDropdownOptions<T>(data: T[], columnId: string): string[] {
   const unique = new Set<string>();
   data.forEach((row: any) => {

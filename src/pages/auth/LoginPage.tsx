@@ -7,7 +7,6 @@ import * as z from "zod";
 import styles from "@/css/login.module.css";
 import { useAuth } from "@/hooks/hooks";
 
-// ----- Zod schema -----
 const loginSchema = z.object({
   email: z.string().email("Invalid email").nonempty("Email is required"),
   password: z.string().min(6, "Password must be at least 6 characters"),
@@ -18,8 +17,7 @@ type FormData = z.infer<typeof loginSchema>;
 export default function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const redirectTo = "/dashboard"; 
-
+  const redirectTo = "/dashboard";
   const [authError, setAuthError] = useState(false);
 
   const {
@@ -42,20 +40,20 @@ export default function LoginPage() {
 
     try {
       await login(data.email, data.password);
-      // Navigate after successful login
       navigate({ to: redirectTo });
     } catch (err) {
-      // Error toast is already handled inside AuthContext.login
       setAuthError(true);
     }
   };
 
   return (
     <div className={styles.loginContainer}>
-      <form onSubmit={handleSubmit(onSubmit)} className={styles.loginForm}>
-        <h2 className={styles.formTitle}>Login</h2>
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.loginCard}>
+        <h2 className={styles.title}>
+          Welcome back <span className={styles.green}>!</span>
+        </h2>
 
-        <label className={styles.formLabel} htmlFor="email">Email:</label>
+        <label className={styles.label} htmlFor="email">Email</label>
         <input
           id="email"
           type="email"
@@ -64,10 +62,10 @@ export default function LoginPage() {
           placeholder="Enter email"
         />
         <p className={`${styles.errorMessage} ${errors.email ? styles.active : ""}`}>
-          {errors.email?.message && `${errors.email.message} ❌`}
+          {errors.email?.message}
         </p>
 
-        <label className={styles.formLabel} htmlFor="password">Password:</label>
+        <label className={styles.label} htmlFor="password">Password</label>
         <input
           id="password"
           type="password"
@@ -76,20 +74,26 @@ export default function LoginPage() {
           placeholder="Enter password"
         />
         <p className={`${styles.errorMessage} ${errors.password ? styles.active : ""}`}>
-          {errors.password?.message && `${errors.password.message} ❌`}
+          {errors.password?.message}
         </p>
 
-                              <p>StrongPassword123!</p>
-
-        <a href="/auth/resetpassword" className={styles.formLink}>
+        <a href="/auth/resetpassword" className={styles.link}>
           Forgot your password?
         </a>
 
-        <button type="submit" className={styles.formSubmit}>Login</button>
+                                      <p>StrongPassword123!</p>
 
-        <div className={styles.formLinks}>
-          <a href="/auth/register" className={styles.formLink}>Create account</a>
-        </div>
+
+        {authError && (
+          <p className={styles.authError}>Incorrect email or password</p>
+        )}
+
+        <button type="submit" className={styles.button}>Login</button>
+
+        <p className={styles.footerText}>
+          Don't have an account?{" "}
+          <a href="/auth/register" className={styles.greenLink}>Create one</a>
+        </p>
       </form>
     </div>
   );

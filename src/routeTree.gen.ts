@@ -11,22 +11,27 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ProtectedRouteImport } from './routes/_protected'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProtectedSharedRouteImport } from './routes/_protected/_shared'
+import { Route as ProtectedOperatorRouteImport } from './routes/_protected/_operator'
+import { Route as ProtectedAdminRouteImport } from './routes/_protected/_admin'
 import { Route as ProtectedUsersIndexRouteImport } from './routes/_protected/users/index'
-import { Route as ProtectedSettingsIndexRouteImport } from './routes/_protected/settings/index'
-import { Route as ProtectedServicesIndexRouteImport } from './routes/_protected/services/index'
 import { Route as ProtectedReportsIndexRouteImport } from './routes/_protected/reports/index'
 import { Route as ProtectedNotificationsIndexRouteImport } from './routes/_protected/notifications/index'
 import { Route as ProtectedGroupsIndexRouteImport } from './routes/_protected/groups/index'
 import { Route as ProtectedDashboardIndexRouteImport } from './routes/_protected/dashboard/index'
 import { Route as PublicAuthUnderdevelopmentRouteImport } from './routes/_public/auth/underdevelopment'
 import { Route as PublicAuthUnauthorizedRouteImport } from './routes/_public/auth/unauthorized'
+import { Route as PublicAuthSetPasswordRouteImport } from './routes/_public/auth/set-password'
 import { Route as PublicAuthResetpasswordRouteImport } from './routes/_public/auth/resetpassword'
 import { Route as PublicAuthLoginRouteImport } from './routes/_public/auth/login'
-import { Route as ProtectedServicesCreateRouteImport } from './routes/_protected/services/create'
 import { Route as ProtectedServicesUuidRouteImport } from './routes/_protected/services/$uuid'
 import { Route as ProtectedReportsUptimeReportsRouteImport } from './routes/_protected/reports/uptime-reports'
 import { Route as ProtectedReportsSslReportsRouteImport } from './routes/_protected/reports/ssl-reports'
 import { Route as ProtectedGroupsUuidRouteImport } from './routes/_protected/groups/$uuid'
+import { Route as ProtectedSharedServicesRouteImport } from './routes/_protected/_shared/services'
+import { Route as ProtectedAdminAuditLogsRouteImport } from './routes/_protected/_admin/audit-logs'
+import { Route as ProtectedAdminSettingsIndexRouteImport } from './routes/_protected/_admin/settings/index'
+import { Route as ProtectedSharedServicesCreateRouteImport } from './routes/_protected/_shared/services/create'
 
 const ProtectedRoute = ProtectedRouteImport.update({
   id: '/_protected',
@@ -37,19 +42,21 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProtectedSharedRoute = ProtectedSharedRouteImport.update({
+  id: '/_shared',
+  getParentRoute: () => ProtectedRoute,
+} as any)
+const ProtectedOperatorRoute = ProtectedOperatorRouteImport.update({
+  id: '/_operator',
+  getParentRoute: () => ProtectedRoute,
+} as any)
+const ProtectedAdminRoute = ProtectedAdminRouteImport.update({
+  id: '/_admin',
+  getParentRoute: () => ProtectedRoute,
+} as any)
 const ProtectedUsersIndexRoute = ProtectedUsersIndexRouteImport.update({
   id: '/users/',
   path: '/users/',
-  getParentRoute: () => ProtectedRoute,
-} as any)
-const ProtectedSettingsIndexRoute = ProtectedSettingsIndexRouteImport.update({
-  id: '/settings/',
-  path: '/settings/',
-  getParentRoute: () => ProtectedRoute,
-} as any)
-const ProtectedServicesIndexRoute = ProtectedServicesIndexRouteImport.update({
-  id: '/services/',
-  path: '/services/',
   getParentRoute: () => ProtectedRoute,
 } as any)
 const ProtectedReportsIndexRoute = ProtectedReportsIndexRouteImport.update({
@@ -84,6 +91,11 @@ const PublicAuthUnauthorizedRoute = PublicAuthUnauthorizedRouteImport.update({
   path: '/auth/unauthorized',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PublicAuthSetPasswordRoute = PublicAuthSetPasswordRouteImport.update({
+  id: '/_public/auth/set-password',
+  path: '/auth/set-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PublicAuthResetpasswordRoute = PublicAuthResetpasswordRouteImport.update({
   id: '/_public/auth/resetpassword',
   path: '/auth/resetpassword',
@@ -93,11 +105,6 @@ const PublicAuthLoginRoute = PublicAuthLoginRouteImport.update({
   id: '/_public/auth/login',
   path: '/auth/login',
   getParentRoute: () => rootRouteImport,
-} as any)
-const ProtectedServicesCreateRoute = ProtectedServicesCreateRouteImport.update({
-  id: '/services/create',
-  path: '/services/create',
-  getParentRoute: () => ProtectedRoute,
 } as any)
 const ProtectedServicesUuidRoute = ProtectedServicesUuidRouteImport.update({
   id: '/services/$uuid',
@@ -121,125 +128,165 @@ const ProtectedGroupsUuidRoute = ProtectedGroupsUuidRouteImport.update({
   path: '/groups/$uuid',
   getParentRoute: () => ProtectedRoute,
 } as any)
+const ProtectedSharedServicesRoute = ProtectedSharedServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => ProtectedSharedRoute,
+} as any)
+const ProtectedAdminAuditLogsRoute = ProtectedAdminAuditLogsRouteImport.update({
+  id: '/audit-logs',
+  path: '/audit-logs',
+  getParentRoute: () => ProtectedAdminRoute,
+} as any)
+const ProtectedAdminSettingsIndexRoute =
+  ProtectedAdminSettingsIndexRouteImport.update({
+    id: '/settings/',
+    path: '/settings/',
+    getParentRoute: () => ProtectedAdminRoute,
+  } as any)
+const ProtectedSharedServicesCreateRoute =
+  ProtectedSharedServicesCreateRouteImport.update({
+    id: '/create',
+    path: '/create',
+    getParentRoute: () => ProtectedSharedServicesRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/audit-logs': typeof ProtectedAdminAuditLogsRoute
+  '/services': typeof ProtectedSharedServicesRouteWithChildren
   '/groups/$uuid': typeof ProtectedGroupsUuidRoute
   '/reports/ssl-reports': typeof ProtectedReportsSslReportsRoute
   '/reports/uptime-reports': typeof ProtectedReportsUptimeReportsRoute
   '/services/$uuid': typeof ProtectedServicesUuidRoute
-  '/services/create': typeof ProtectedServicesCreateRoute
   '/auth/login': typeof PublicAuthLoginRoute
   '/auth/resetpassword': typeof PublicAuthResetpasswordRoute
+  '/auth/set-password': typeof PublicAuthSetPasswordRoute
   '/auth/unauthorized': typeof PublicAuthUnauthorizedRoute
   '/auth/underdevelopment': typeof PublicAuthUnderdevelopmentRoute
   '/dashboard': typeof ProtectedDashboardIndexRoute
   '/groups': typeof ProtectedGroupsIndexRoute
   '/notifications': typeof ProtectedNotificationsIndexRoute
   '/reports': typeof ProtectedReportsIndexRoute
-  '/services': typeof ProtectedServicesIndexRoute
-  '/settings': typeof ProtectedSettingsIndexRoute
   '/users': typeof ProtectedUsersIndexRoute
+  '/services/create': typeof ProtectedSharedServicesCreateRoute
+  '/settings': typeof ProtectedAdminSettingsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/audit-logs': typeof ProtectedAdminAuditLogsRoute
+  '/services': typeof ProtectedSharedServicesRouteWithChildren
   '/groups/$uuid': typeof ProtectedGroupsUuidRoute
   '/reports/ssl-reports': typeof ProtectedReportsSslReportsRoute
   '/reports/uptime-reports': typeof ProtectedReportsUptimeReportsRoute
   '/services/$uuid': typeof ProtectedServicesUuidRoute
-  '/services/create': typeof ProtectedServicesCreateRoute
   '/auth/login': typeof PublicAuthLoginRoute
   '/auth/resetpassword': typeof PublicAuthResetpasswordRoute
+  '/auth/set-password': typeof PublicAuthSetPasswordRoute
   '/auth/unauthorized': typeof PublicAuthUnauthorizedRoute
   '/auth/underdevelopment': typeof PublicAuthUnderdevelopmentRoute
   '/dashboard': typeof ProtectedDashboardIndexRoute
   '/groups': typeof ProtectedGroupsIndexRoute
   '/notifications': typeof ProtectedNotificationsIndexRoute
   '/reports': typeof ProtectedReportsIndexRoute
-  '/services': typeof ProtectedServicesIndexRoute
-  '/settings': typeof ProtectedSettingsIndexRoute
   '/users': typeof ProtectedUsersIndexRoute
+  '/services/create': typeof ProtectedSharedServicesCreateRoute
+  '/settings': typeof ProtectedAdminSettingsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_protected': typeof ProtectedRouteWithChildren
+  '/_protected/_admin': typeof ProtectedAdminRouteWithChildren
+  '/_protected/_operator': typeof ProtectedOperatorRoute
+  '/_protected/_shared': typeof ProtectedSharedRouteWithChildren
+  '/_protected/_admin/audit-logs': typeof ProtectedAdminAuditLogsRoute
+  '/_protected/_shared/services': typeof ProtectedSharedServicesRouteWithChildren
   '/_protected/groups/$uuid': typeof ProtectedGroupsUuidRoute
   '/_protected/reports/ssl-reports': typeof ProtectedReportsSslReportsRoute
   '/_protected/reports/uptime-reports': typeof ProtectedReportsUptimeReportsRoute
   '/_protected/services/$uuid': typeof ProtectedServicesUuidRoute
-  '/_protected/services/create': typeof ProtectedServicesCreateRoute
   '/_public/auth/login': typeof PublicAuthLoginRoute
   '/_public/auth/resetpassword': typeof PublicAuthResetpasswordRoute
+  '/_public/auth/set-password': typeof PublicAuthSetPasswordRoute
   '/_public/auth/unauthorized': typeof PublicAuthUnauthorizedRoute
   '/_public/auth/underdevelopment': typeof PublicAuthUnderdevelopmentRoute
   '/_protected/dashboard/': typeof ProtectedDashboardIndexRoute
   '/_protected/groups/': typeof ProtectedGroupsIndexRoute
   '/_protected/notifications/': typeof ProtectedNotificationsIndexRoute
   '/_protected/reports/': typeof ProtectedReportsIndexRoute
-  '/_protected/services/': typeof ProtectedServicesIndexRoute
-  '/_protected/settings/': typeof ProtectedSettingsIndexRoute
   '/_protected/users/': typeof ProtectedUsersIndexRoute
+  '/_protected/_shared/services/create': typeof ProtectedSharedServicesCreateRoute
+  '/_protected/_admin/settings/': typeof ProtectedAdminSettingsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/audit-logs'
+    | '/services'
     | '/groups/$uuid'
     | '/reports/ssl-reports'
     | '/reports/uptime-reports'
     | '/services/$uuid'
-    | '/services/create'
     | '/auth/login'
     | '/auth/resetpassword'
+    | '/auth/set-password'
     | '/auth/unauthorized'
     | '/auth/underdevelopment'
     | '/dashboard'
     | '/groups'
     | '/notifications'
     | '/reports'
-    | '/services'
-    | '/settings'
     | '/users'
+    | '/services/create'
+    | '/settings'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/audit-logs'
+    | '/services'
     | '/groups/$uuid'
     | '/reports/ssl-reports'
     | '/reports/uptime-reports'
     | '/services/$uuid'
-    | '/services/create'
     | '/auth/login'
     | '/auth/resetpassword'
+    | '/auth/set-password'
     | '/auth/unauthorized'
     | '/auth/underdevelopment'
     | '/dashboard'
     | '/groups'
     | '/notifications'
     | '/reports'
-    | '/services'
-    | '/settings'
     | '/users'
+    | '/services/create'
+    | '/settings'
   id:
     | '__root__'
     | '/'
     | '/_protected'
+    | '/_protected/_admin'
+    | '/_protected/_operator'
+    | '/_protected/_shared'
+    | '/_protected/_admin/audit-logs'
+    | '/_protected/_shared/services'
     | '/_protected/groups/$uuid'
     | '/_protected/reports/ssl-reports'
     | '/_protected/reports/uptime-reports'
     | '/_protected/services/$uuid'
-    | '/_protected/services/create'
     | '/_public/auth/login'
     | '/_public/auth/resetpassword'
+    | '/_public/auth/set-password'
     | '/_public/auth/unauthorized'
     | '/_public/auth/underdevelopment'
     | '/_protected/dashboard/'
     | '/_protected/groups/'
     | '/_protected/notifications/'
     | '/_protected/reports/'
-    | '/_protected/services/'
-    | '/_protected/settings/'
     | '/_protected/users/'
+    | '/_protected/_shared/services/create'
+    | '/_protected/_admin/settings/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -247,6 +294,7 @@ export interface RootRouteChildren {
   ProtectedRoute: typeof ProtectedRouteWithChildren
   PublicAuthLoginRoute: typeof PublicAuthLoginRoute
   PublicAuthResetpasswordRoute: typeof PublicAuthResetpasswordRoute
+  PublicAuthSetPasswordRoute: typeof PublicAuthSetPasswordRoute
   PublicAuthUnauthorizedRoute: typeof PublicAuthUnauthorizedRoute
   PublicAuthUnderdevelopmentRoute: typeof PublicAuthUnderdevelopmentRoute
 }
@@ -267,25 +315,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_protected/_shared': {
+      id: '/_protected/_shared'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof ProtectedSharedRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
+    '/_protected/_operator': {
+      id: '/_protected/_operator'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof ProtectedOperatorRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
+    '/_protected/_admin': {
+      id: '/_protected/_admin'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof ProtectedAdminRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
     '/_protected/users/': {
       id: '/_protected/users/'
       path: '/users'
       fullPath: '/users'
       preLoaderRoute: typeof ProtectedUsersIndexRouteImport
-      parentRoute: typeof ProtectedRoute
-    }
-    '/_protected/settings/': {
-      id: '/_protected/settings/'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof ProtectedSettingsIndexRouteImport
-      parentRoute: typeof ProtectedRoute
-    }
-    '/_protected/services/': {
-      id: '/_protected/services/'
-      path: '/services'
-      fullPath: '/services'
-      preLoaderRoute: typeof ProtectedServicesIndexRouteImport
       parentRoute: typeof ProtectedRoute
     }
     '/_protected/reports/': {
@@ -330,6 +385,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicAuthUnauthorizedRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_public/auth/set-password': {
+      id: '/_public/auth/set-password'
+      path: '/auth/set-password'
+      fullPath: '/auth/set-password'
+      preLoaderRoute: typeof PublicAuthSetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_public/auth/resetpassword': {
       id: '/_public/auth/resetpassword'
       path: '/auth/resetpassword'
@@ -343,13 +405,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth/login'
       preLoaderRoute: typeof PublicAuthLoginRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/_protected/services/create': {
-      id: '/_protected/services/create'
-      path: '/services/create'
-      fullPath: '/services/create'
-      preLoaderRoute: typeof ProtectedServicesCreateRouteImport
-      parentRoute: typeof ProtectedRoute
     }
     '/_protected/services/$uuid': {
       id: '/_protected/services/$uuid'
@@ -379,36 +434,104 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedGroupsUuidRouteImport
       parentRoute: typeof ProtectedRoute
     }
+    '/_protected/_shared/services': {
+      id: '/_protected/_shared/services'
+      path: '/services'
+      fullPath: '/services'
+      preLoaderRoute: typeof ProtectedSharedServicesRouteImport
+      parentRoute: typeof ProtectedSharedRoute
+    }
+    '/_protected/_admin/audit-logs': {
+      id: '/_protected/_admin/audit-logs'
+      path: '/audit-logs'
+      fullPath: '/audit-logs'
+      preLoaderRoute: typeof ProtectedAdminAuditLogsRouteImport
+      parentRoute: typeof ProtectedAdminRoute
+    }
+    '/_protected/_admin/settings/': {
+      id: '/_protected/_admin/settings/'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof ProtectedAdminSettingsIndexRouteImport
+      parentRoute: typeof ProtectedAdminRoute
+    }
+    '/_protected/_shared/services/create': {
+      id: '/_protected/_shared/services/create'
+      path: '/create'
+      fullPath: '/services/create'
+      preLoaderRoute: typeof ProtectedSharedServicesCreateRouteImport
+      parentRoute: typeof ProtectedSharedServicesRoute
+    }
   }
 }
 
+interface ProtectedAdminRouteChildren {
+  ProtectedAdminAuditLogsRoute: typeof ProtectedAdminAuditLogsRoute
+  ProtectedAdminSettingsIndexRoute: typeof ProtectedAdminSettingsIndexRoute
+}
+
+const ProtectedAdminRouteChildren: ProtectedAdminRouteChildren = {
+  ProtectedAdminAuditLogsRoute: ProtectedAdminAuditLogsRoute,
+  ProtectedAdminSettingsIndexRoute: ProtectedAdminSettingsIndexRoute,
+}
+
+const ProtectedAdminRouteWithChildren = ProtectedAdminRoute._addFileChildren(
+  ProtectedAdminRouteChildren,
+)
+
+interface ProtectedSharedServicesRouteChildren {
+  ProtectedSharedServicesCreateRoute: typeof ProtectedSharedServicesCreateRoute
+}
+
+const ProtectedSharedServicesRouteChildren: ProtectedSharedServicesRouteChildren =
+  {
+    ProtectedSharedServicesCreateRoute: ProtectedSharedServicesCreateRoute,
+  }
+
+const ProtectedSharedServicesRouteWithChildren =
+  ProtectedSharedServicesRoute._addFileChildren(
+    ProtectedSharedServicesRouteChildren,
+  )
+
+interface ProtectedSharedRouteChildren {
+  ProtectedSharedServicesRoute: typeof ProtectedSharedServicesRouteWithChildren
+}
+
+const ProtectedSharedRouteChildren: ProtectedSharedRouteChildren = {
+  ProtectedSharedServicesRoute: ProtectedSharedServicesRouteWithChildren,
+}
+
+const ProtectedSharedRouteWithChildren = ProtectedSharedRoute._addFileChildren(
+  ProtectedSharedRouteChildren,
+)
+
 interface ProtectedRouteChildren {
+  ProtectedAdminRoute: typeof ProtectedAdminRouteWithChildren
+  ProtectedOperatorRoute: typeof ProtectedOperatorRoute
+  ProtectedSharedRoute: typeof ProtectedSharedRouteWithChildren
   ProtectedGroupsUuidRoute: typeof ProtectedGroupsUuidRoute
   ProtectedReportsSslReportsRoute: typeof ProtectedReportsSslReportsRoute
   ProtectedReportsUptimeReportsRoute: typeof ProtectedReportsUptimeReportsRoute
   ProtectedServicesUuidRoute: typeof ProtectedServicesUuidRoute
-  ProtectedServicesCreateRoute: typeof ProtectedServicesCreateRoute
   ProtectedDashboardIndexRoute: typeof ProtectedDashboardIndexRoute
   ProtectedGroupsIndexRoute: typeof ProtectedGroupsIndexRoute
   ProtectedNotificationsIndexRoute: typeof ProtectedNotificationsIndexRoute
   ProtectedReportsIndexRoute: typeof ProtectedReportsIndexRoute
-  ProtectedServicesIndexRoute: typeof ProtectedServicesIndexRoute
-  ProtectedSettingsIndexRoute: typeof ProtectedSettingsIndexRoute
   ProtectedUsersIndexRoute: typeof ProtectedUsersIndexRoute
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
+  ProtectedAdminRoute: ProtectedAdminRouteWithChildren,
+  ProtectedOperatorRoute: ProtectedOperatorRoute,
+  ProtectedSharedRoute: ProtectedSharedRouteWithChildren,
   ProtectedGroupsUuidRoute: ProtectedGroupsUuidRoute,
   ProtectedReportsSslReportsRoute: ProtectedReportsSslReportsRoute,
   ProtectedReportsUptimeReportsRoute: ProtectedReportsUptimeReportsRoute,
   ProtectedServicesUuidRoute: ProtectedServicesUuidRoute,
-  ProtectedServicesCreateRoute: ProtectedServicesCreateRoute,
   ProtectedDashboardIndexRoute: ProtectedDashboardIndexRoute,
   ProtectedGroupsIndexRoute: ProtectedGroupsIndexRoute,
   ProtectedNotificationsIndexRoute: ProtectedNotificationsIndexRoute,
   ProtectedReportsIndexRoute: ProtectedReportsIndexRoute,
-  ProtectedServicesIndexRoute: ProtectedServicesIndexRoute,
-  ProtectedSettingsIndexRoute: ProtectedSettingsIndexRoute,
   ProtectedUsersIndexRoute: ProtectedUsersIndexRoute,
 }
 
@@ -421,6 +544,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProtectedRoute: ProtectedRouteWithChildren,
   PublicAuthLoginRoute: PublicAuthLoginRoute,
   PublicAuthResetpasswordRoute: PublicAuthResetpasswordRoute,
+  PublicAuthSetPasswordRoute: PublicAuthSetPasswordRoute,
   PublicAuthUnauthorizedRoute: PublicAuthUnauthorizedRoute,
   PublicAuthUnderdevelopmentRoute: PublicAuthUnderdevelopmentRoute,
 }

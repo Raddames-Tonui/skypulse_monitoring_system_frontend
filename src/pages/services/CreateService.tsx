@@ -13,6 +13,7 @@ function CreateService() {
   return (
     <div className="page-wrapper">
       <div className="page-header">
+        <h1>Create Service</h1>
         <NavigationBar links={links} />
       </div>
       <DynamicForm

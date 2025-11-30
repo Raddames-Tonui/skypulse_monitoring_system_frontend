@@ -25,10 +25,10 @@ export default function UnauthorizedPage() {
             <h1 style={styles.title}>Oops... Access Denied! 🚫</h1>
             <p style={styles.caption}>
                 Looks like you tried sneaking in without the right role... <br />
-                Maybe bribe the admin with 🍕?
+                {/* Maybe bribe the admin with 🍕? */}
             </p>
-            <a href="/auth/login" style={styles.button}>
-                🔑 Back to Login
+            <a href="/dashboard" style={styles.button}>
+                 Back to Dashboard
             </a>
         </div>
     );

@@ -1,154 +1,167 @@
 import { useState } from "react";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { Route } from "@/routes/_protected/services";
-
+import { useNavigate } from "@tanstack/react-router";
 import { DataTable } from "@/components/table/DataTable";
 import Modal from "@/components/Modal";
-import DynamicForm from "@/components/dynamic-form/DynamicForm";
-import { monitoredServiceFormSchema } from "@/components/dynamic-form/FormSchema";
+import axiosClient from "@/utils/constants/axiosClient";
 
+type FilterRule = { column: string; operator?: string; value: string };
+type SortRule = { column: string; direction: "asc" | "desc" };
 
-import type { MonitoredService } from "@/utils/types";
-import Loader from "@/components/Loader";
-import { useMonitoredServices, useUpdateService } from "@/hooks/hooks";
-import NavigationBar from "@/components/NavigationBar";
+const FILTER_MAP: Record<string, string> = {
+  entity: "a.entity",
+  action: "a.action",
+};
 
-export default function MonitoredServicesPage() {
+const SORT_MAP: Record<string, string> = {
+  date: "a.date_created",
+  entity: "a.entity",
+  user: "u.first_name",
+  action: "a.action",
+};
+
+const fetchAuditLogs = async (params: Record<string, string | number>) => {
+  const { data } = await axiosClient.get("/services/logs/audit", { params });
+  return data;
+};
+
+export default function AuditLogsPage() {
   const navigate = useNavigate();
-  const searchParams = Route.useSearch();
-
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(15);
+  const [sortBy, setSortBy] = useState<SortRule[]>([]);
+  const [filters, setFilters] = useState<FilterRule[]>([]);
   const [isModalOpen, setModalOpen] = useState(false);
-  const [editData, setEditData] = useState<Record<string, any> | null>(null);
+  const [modalData, setModalData] = useState<{ before_data?: any; after_data?: any } | null>(null);
 
-  const page = Number(searchParams.page) || 1;
-  const pageSize = Number(searchParams.pageSize) || 10;
+  const queryParams: Record<string, string | number> = { page, pageSize };
+  filters.forEach((f) => {
+    if (f.value) queryParams[FILTER_MAP[f.column] ?? f.column] = f.value;
+  });
+  if (sortBy.length) {
+    queryParams.sort = sortBy
+      .map((r) => `${SORT_MAP[r.column] ?? r.column}:${r.direction}`)
+      .join(",");
+  }
 
-  const { data, isLoading, refetch } = useMonitoredServices({
-    page,
-    pageSize,
+  const { data, isLoading, isError, error, refetch } = useQuery({
+    queryKey: ["audit-logs", queryParams],
+    queryFn: () => fetchAuditLogs(queryParams),
   });
 
-  const updateService = useUpdateService();
-
-  const normalizeRow = (row: MonitoredService) => ({
-    monitored_service_name: row.monitored_service_name || "",
-    monitored_service_url: row.monitored_service_url || "",
-    monitored_service_region: row.monitored_service_region || "",
-    check_interval: row.check_interval ?? "",
-    retry_count: row.retry_count ?? "",
-    retry_delay: row.retry_delay ?? "",
-    expected_status_code: row.expected_status_code ?? "",
-    ssl_enabled: row.ssl_enabled ?? true,
-    uuid: row.uuid,
-  });
-
-
-  const openEditModal = (row: MonitoredService) => {
-    if (!row) return;
-    setEditData(normalizeRow(row));
-    setModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalOpen(false);
-    setEditData(null);
-  };
-
-  const renderCell = (cellData: any) => {
-    const row: MonitoredService = cellData?.row || cellData;
-    return (
-      <button className="button-secondary" onClick={() => openEditModal(row)}>
-        Edit
-      </button>
-    );
-  };
-
+  const logs = data?.data || [];
 
   const columns = [
-    { id: "monitored_service_name", caption: "Name", size: 150 },
-    { id: "monitored_service_url", caption: "URL", size: 250 },
-    { id: "monitored_service_region", caption: "Region", size: 100 },
-    { id: "check_interval", caption: "Interval", size: 80 },
     {
-      id: "is_active",
-      caption: "Active",
-      size: 80,
-      renderCell: (v: boolean) => (v ? "Yes" : "No"),
+      id: "user_email",
+      caption: "User Email",
+      size: 200,
+      filterable: true,
+      sortable: false,
     },
     {
-      id: "last_uptime_status",
-      caption: "Status",
-      size: 100,
-      renderCell: (v: string) => {
-        const color = v === "UP" ? "green" : v === "DOWN" ? "red" : "gray";
-        return <span style={{ color, fontWeight: "bold" }}>{v}</span>;
-      },
+      id: "user_full_name",
+      caption: "Full Name",
+      size: 180,
+      filterable: true,
+      sortable: true,
+    },
+    {
+      id: "entity",
+      caption: "Entity",
+      size: 150,
+      filterable: true,
+      sortable: true,
+    },
+    {
+      id: "action",
+      caption: "Action",
+      size: 120,
+      filterable: true,
+      sortable: true,
     },
     {
       id: "date_created",
-      caption: "Created",
-      size: 120,
-      renderCell: (v: string) => new Date(v).toLocaleDateString(),
+      caption: "Date",
+      size: 160,
+      filterable: false,
+      sortable: true,
+      renderCell: (v: string) => new Date(v).toLocaleString(),
     },
     {
       id: "actions",
       caption: "Actions",
-      size: 80,
-      renderCell,
+      size: 100,
+      filterable: false,
+      sortable: false,
+      renderCell: (_: any, row: any) => (
+        <button
+          className="btn btn-sm btn-primary"
+          onClick={() => {
+            setModalData({ before_data: row.before_data, after_data: row.after_data });
+            setModalOpen(true);
+          }}
+        >
+          View Changes
+        </button>
+      ),
     },
   ];
 
-  const links = [
-    { label: "Create Service", to: "/services/create", match: (p) => p.includes("uptime-reports") },
-  ];
+  const tableActionsRight = (
+    <select value={pageSize} onChange={(e) => setPageSize(Number(e.target.value))}>
+      {[10, 15, 20, 50].map((v) => (
+        <option key={v} value={v}>
+          {v}
+        </option>
+      ))}
+    </select>
+  );
 
   return (
     <div className="page-wrapper">
-      <div className="page-header">
-        <h1>Monitored Services</h1>
-        <NavigationBar links={links} />
-
+      <div className="page-header flex justify-between items-center mb-4">
+        <h1>Audit Logs</h1>
       </div>
 
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <DataTable<MonitoredService>
-          columns={columns}
-          data={data?.data || []}
-          pagination={{
-            page,
-            pageSize,
-            total: data?.total_count || 0,
-            onPageChange: (newPage) =>
-              navigate({ search: { ...searchParams, page: newPage } }),
-          }}
-          onRefresh={refetch}
-        />
-      )}
-
+      <DataTable
+        columns={columns}
+        data={logs}
+        isLoading={isLoading}
+        error={isError ? (error as any)?.message : undefined}
+        onRefresh={refetch}
+        initialSort={sortBy}
+        initialFilter={filters}
+        onSortApply={setSortBy}
+        onFilterApply={(rules) => {
+          setFilters(rules.filter((f) => f.value));
+          setPage(1);
+        }}
+        pagination={{
+          page,
+          pageSize,
+          total: data?.total_count || 0,
+          onPageChange: setPage,
+        }}
+        tableActionsRight={tableActionsRight}
+      />
 
       <Modal
         isOpen={isModalOpen}
-        title="Update Monitored Service"
-        onClose={closeModal}
+        title="Audit Log Details"
+        onClose={() => setModalOpen(false)}
         body={
-          <DynamicForm
-            schema={monitoredServiceFormSchema}
-            initialData={editData || {}}
-            onSubmit={(values) => {
-              if (editData?.uuid) {
-                updateService.mutate(
-                  { ...values, uuid: editData.uuid },
-                  { onSuccess: closeModal }
-                );
-              }
-            }}
-            className="dynamic-form-wrapper"
-            fieldClassName="form-field-wrapper"
-            buttonClassName="form-buttons-wrapper"
-            style={{ maxWidth: "800px", margin: "0 auto" }}
-          />
+          modalData ? (
+            <div className="flex flex-col gap-4">
+              <div>
+                <h3>Before:</h3>
+                <pre className="p-2 bg-gray-100 rounded">{JSON.stringify(modalData.before_data, null, 2)}</pre>
+              </div>
+              <div>
+                <h3>After:</h3>
+                <pre className="p-2 bg-gray-100 rounded">{JSON.stringify(modalData.after_data, null, 2)}</pre>
+              </div>
+            </div>
+          ) : null
         }
       />
     </div>

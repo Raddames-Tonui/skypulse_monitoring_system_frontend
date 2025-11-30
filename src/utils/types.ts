@@ -189,6 +189,28 @@ export interface SystemHealth {
 }
 
 
+
+// --------------AUDIT LOGS -----------------------
+export interface AuditLogEntry {
+  audit_log_id: number;
+  user_id: number | null;
+  user_full_name: string | null;
+  user_email: string | null;
+
+  entity: string;
+  entity_id: number | null;
+  action: string;
+
+  before_data: Record<string, any> | null;
+  after_data: Record<string, any> | null;
+
+  ip_address: string | null;
+  date_created: string; 
+}
+
+
+
+
 // -----------SIDEBAR PROPS ----------------------
 export interface MenuItem {
   icon: IconName;
@@ -203,6 +225,7 @@ export const menuConfig: Record<string, MenuItem[]> = {
     { icon: "users", label: "Groups", path: "/groups" },
     { icon: "notes", label: "Services", path: "/services" },
     { icon: "notepad", label: "Reports", path: "/reports/uptime-reports" },
+    { icon: "list", label: "Reports", path: "/audit-logs" },
     { icon: "settings", label: "Settings", path: "/settings" },
   ],
   operator: [

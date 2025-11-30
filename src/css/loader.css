@@ -1,5 +1,10 @@
 @import url(./variables.css);
 
+.loading  {
+  display : flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
 .loading svg polyline {
   fill: none;
   stroke-linecap: round;

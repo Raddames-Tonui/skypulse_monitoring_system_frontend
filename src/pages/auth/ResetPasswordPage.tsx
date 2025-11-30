@@ -9,117 +9,145 @@ import * as yup from "yup";
 import styles from "@/css/login.module.css";
 
 const schema = yup.object({
-    email: yup.string().email("Invalid email").required("Email is required"),
-    newPassword: yup
-        .string()
-        .required("New password is required")
-        .min(6, "Password must be at least 6 characters"),
-    confirmPassword: yup
-        .string()
-        .oneOf([yup.ref("newPassword")], "Passwords must match")
-        .required("Confirm Password is required"),
+  email: yup.string().email("Invalid email").required("Email is required"),
+  newPassword: yup
+    .string()
+    .required("New password is required")
+    .min(6, "Password must be at least 6 characters"),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("newPassword")], "Passwords must match")
+    .required("Confirm Password is required"),
 });
 
 type FormData = yup.InferType<typeof schema>;
 
 export default function ResetPasswordPage() {
-    const navigate = useNavigate();
-    const [authError, setAuthError] = useState(false);
+  const navigate = useNavigate();
+  const [authError, setAuthError] = useState(false);
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors, touchedFields, isSubmitted },
-    } = useForm<FormData>({
-        resolver: yupResolver(schema),
-    });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, touchedFields, isSubmitted },
+  } = useForm<FormData>({
+    resolver: yupResolver(schema),
+  });
 
-    const onSubmit = (data: FormData) => {
-        setAuthError(false);
+  const onSubmit = (data: FormData) => {
+    setAuthError(false);
 
-        const users = JSON.parse(localStorage.getItem("users") || "[]") as {
-            email: string;
-            password: string;
-            role: "client" | "vendor";
-        }[];
+    const users = JSON.parse(localStorage.getItem("users") || "[]") as {
+      email: string;
+      password: string;
+      role: "client" | "vendor";
+    }[];
 
-        const userIndex = users.findIndex((user) => user.email === data.email);
+    const userIndex = users.findIndex((user) => user.email === data.email);
 
-        if (userIndex === -1) {
-            setAuthError(true);
-            return toast.error("User not found");
-        }
+    if (userIndex === -1) {
+      setAuthError(true);
+      return toast.error("User not found");
+    }
 
-        users[userIndex].password = data.newPassword;
-        localStorage.setItem("users", JSON.stringify(users));
+    users[userIndex].password = data.newPassword;
+    localStorage.setItem("users", JSON.stringify(users));
 
-        toast.success("Password reset successful!", { duration: 1500 });
+    toast.success("Password reset successful!", { duration: 1500 });
 
-        setTimeout(() => {
-            navigate({ to: "/auth/login" });
-        }, 1500);
-    };
+    setTimeout(() => {
+      navigate({ to: "/auth/login" });
+    }, 1500);
+  };
 
-    const getInputClass = (field: keyof FormData) => {
-        if (errors[field]) return `${styles.formInput} ${styles.error}`;
-        if (authError && isSubmitted) return `${styles.formInput} ${styles.neutral}`;
-        if (touchedFields[field]) return `${styles.formInput} ${styles.success}`;
-        return styles.formInput;
-    };
+  const getInputClass = (field: keyof FormData) => {
+    if (errors[field]) return `${styles.formInput} ${styles.error}`;
+    if (authError && isSubmitted) return `${styles.formInput} ${styles.neutral}`;
+    if (touchedFields[field]) return `${styles.formInput} ${styles.success}`;
+    return styles.formInput;
+  };
 
-    return (
-        <div className={styles.loginContainer}>
-            <form onSubmit={handleSubmit(onSubmit)} className={styles.loginForm}>
-                <h2 className={styles.formTitle}>Reset Password</h2>
+  return (
+    <div className={styles.loginContainer}>
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.loginCard}>
+        <h2 className={styles.title}>
+          Reset Password <span className={styles.green}>!</span>
+        </h2>
 
-                <label className={styles.formLabel} htmlFor="email">Email:</label>
-                <input
-                    id="email"
-                    type="email"
-                    {...register("email")}
-                    className={getInputClass("email")}
-                    placeholder="Enter email"
-                />
-                <p className={`${styles.errorMessage} ${errors.email ? styles.active : ""}`}>
-                    {errors.email?.message ? `${errors.email.message} ❌` : ""}
-                </p>
+        {/* Email */}
+        <label className={styles.label} htmlFor="email">
+          Email
+        </label>
+        <input
+          id="email"
+          type="email"
+          {...register("email")}
+          className={getInputClass("email")}
+          placeholder="Enter email"
+        />
+        <p
+          className={`${styles.errorMessage} ${
+            errors.email ? styles.active : ""
+          }`}
+        >
+          {errors.email?.message}
+        </p>
 
-                {/* New Password */}
-                <label className={styles.formLabel} htmlFor="newPassword">New Password:</label>
-                <input
-                    id="newPassword"
-                    type="password"
-                    {...register("newPassword")}
-                    className={getInputClass("newPassword")}
-                    placeholder="Enter new password"
-                />
-                <p className={`${styles.errorMessage} ${errors.newPassword ? styles.active : ""}`}>
-                    {errors.newPassword?.message ? `${errors.newPassword.message} ❌` : ""}
-                </p>
+        {/* New Password */}
+        <label className={styles.label} htmlFor="newPassword">
+          New Password
+        </label>
+        <input
+          id="newPassword"
+          type="password"
+          {...register("newPassword")}
+          className={getInputClass("newPassword")}
+          placeholder="Enter new password"
+        />
+        <p
+          className={`${styles.errorMessage} ${
+            errors.newPassword ? styles.active : ""
+          }`}
+        >
+          {errors.newPassword?.message}
+        </p>
 
-                {/* Confirm Password */}
-                <label className={styles.formLabel} htmlFor="confirmPassword">Confirm Password:</label>
-                <input
-                    id="confirmPassword"
-                    type="password"
-                    {...register("confirmPassword")}
-                    className={getInputClass("confirmPassword")}
-                    placeholder="Confirm new password"
-                />
-                <p className={`${styles.errorMessage} ${errors.confirmPassword ? styles.active : ""}`}>
-                    {errors.confirmPassword?.message ? `${errors.confirmPassword.message} ❌` : ""}
-                </p>
+        {/* Confirm Password */}
+        <label className={styles.label} htmlFor="confirmPassword">
+          Confirm Password
+        </label>
+        <input
+          id="confirmPassword"
+          type="password"
+          {...register("confirmPassword")}
+          className={getInputClass("confirmPassword")}
+          placeholder="Confirm new password"
+        />
+        <p
+          className={`${styles.errorMessage} ${
+            errors.confirmPassword ? styles.active : ""
+          }`}
+        >
+          {errors.confirmPassword?.message}
+        </p>
 
-                <button type="submit" className={styles.formSubmit}>
-                    Reset Password
-                </button>
+        {authError && (
+          <p className={styles.authError}>
+            Could not reset password. Check details.
+          </p>
+        )}
 
-                <div className={styles.formLinks}>
-                    <a href="/auth/login" className={styles.formLink}>
-                        Remembered password? Login
-                    </a>
-                </div>
-            </form>
-        </div>
-    );
+        <button type="submit" className={styles.button}>
+          Reset Password
+        </button>
+
+        <p className={styles.footerText}>
+          Remembered your password?{" "}
+          <a href="/auth/login" className={styles.greenLink}>
+            Login
+          </a>
+        </p>
+      </form>
+    </div>
+  );
 }
