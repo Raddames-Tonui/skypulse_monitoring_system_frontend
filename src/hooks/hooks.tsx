@@ -82,7 +82,7 @@ export const useUpdateService = () => {
 
   return useMutation({
     mutationFn: async (values: Record<string, any>) => {
-      return axiosClient.put("/services", values);
+      return axiosClient.put("/services/update", values);
     },
     onSuccess: (res) => {
       toast.success(res.data?.message || "Service updated successfully");

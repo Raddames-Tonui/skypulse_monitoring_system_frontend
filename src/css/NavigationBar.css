@@ -42,8 +42,7 @@
     text-decoration: none;
     color: var(--primary-700);
     padding: 0.25rem 0.5rem;
-    font-weight: 500;
-    border-radius: 4px;
+    font-weight: 400;
     transition: all 0.2s ease;
     font-weight: 600;
 }
@@ -55,7 +54,6 @@
   color: var(--bg-default);
   border: none;
   padding: 8px 18px;
-  border-radius: 6px;
   cursor: pointer;
   font-weight: 600;
   transition: background 0.2s ease;
@@ -70,7 +68,6 @@
   background: var(--bg-default);
   color: var(--primary-800);
   font-weight: 600;
-  border-radius: 6px;
   padding: 8px 16px;
   cursor: pointer;
   transition: all 0.2s ease;

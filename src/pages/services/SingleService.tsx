@@ -11,9 +11,13 @@ import { DataTable } from "@/components/table/DataTable";
 import type { ColumnProps } from "@/components/table/DataTable";
 import "@/css/singleService.css";
 import Loader from "@/components/Loader";
+import UpdateServiceModal from "./UpdateServiceModalProps";
+import { useState } from "react";
 
 export default function SingleServicePage() {
   const { uuid } = useParams({ from: SingleServiceRoute.id });
+  const [modalOpen, setModalOpen] = useState(false);
+
 
   const { data, isLoading, isError, error } = useQuery<MonitoredService, Error>({
     queryKey: ["monitoredService", uuid],
@@ -102,20 +106,36 @@ export default function SingleServicePage() {
     uv: log.response_time_ms ?? 0,
   }));
 
+
   return (
     <>
       <div className="page-header">
         <h1>{service.name}</h1>
-        <span
-          className={
-            service.last_uptime_status === "UP"
-              ? "status-badge status-up"
-              : "status-badge status-down"
-          }
-        >
-          {service.last_uptime_status}
-        </span>
+        <div style={{ display: "flex", gap: "1rem" }}>
+          <span
+            className={
+              service.last_uptime_status === "UP"
+                ? "status-badge status-up"
+                : "status-badge status-down"
+            }
+          >
+            {service.last_uptime_status}
+          </span>
+          <button
+            className="view-button"
+            onClick={() => setModalOpen(true)}
+          >
+            Edit
+          </button>
+        </div>
       </div>
+
+      <UpdateServiceModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        initialData={service} 
+      />
+
 
       <section className="service-section">
         <h3>Service Details</h3>

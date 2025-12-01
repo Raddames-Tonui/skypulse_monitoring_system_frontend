@@ -543,3 +543,107 @@ export const createUserSchema: any = {
     },
   ],
 };
+
+
+
+export const updateServiceSchema: any = {
+  id: "update-monitored-service",
+  meta: {
+    title: "Update Monitored Service",
+    subtitle: "Modify details for the selected service"
+  },
+  fields: {
+    monitored_service_name: {
+      id: "monitored_service_name",
+      label: "Service Name",
+      renderer: "text",
+      rules: { required: "Service Name is required" }
+    },
+    monitored_service_url: {
+      id: "monitored_service_url",
+      label: "Service URL",
+      renderer: "text",
+      inputType: "url",
+      rules: {
+        required: "Service URL is required",
+        pattern: {
+          value: /^https?:\/\/.+/,
+          message: "Must be a valid URL"
+        }
+      }
+    },
+    monitored_service_region: {
+      id: "monitored_service_region",
+      label: "Region",
+      renderer: "text"
+    },
+    check_interval: {
+      id: "check_interval",
+      label: "Check Interval (seconds)",
+      renderer: "number",
+      props: { min: 1 }
+    },
+    retry_count: {
+      id: "retry_count",
+      label: "Retry Count",
+      renderer: "number",
+      props: { min: 0 }
+    },
+    retry_delay: {
+      id: "retry_delay",
+      label: "Retry Delay (seconds)",
+      renderer: "number",
+      props: { min: 0 }
+    },
+    expected_status_code: {
+      id: "expected_status_code",
+      label: "Expected Status Code",
+      renderer: "number",
+      props: { min: 100, max: 599 }
+    },
+    ssl_enabled: {
+      id: "ssl_enabled",
+      label: "SSL Enabled",
+      renderer: "switch",
+      defaultValue: true
+    }
+  },
+  layout: [
+    {
+      kind: "section",
+      title: "Service Details",
+      withDivider: true,
+      children: [
+        {
+          kind: "grid",
+          cols: 2,
+          spacing: "md",
+          children: [
+            { kind: "field", fieldId: "monitored_service_name" },
+            { kind: "field", fieldId: "monitored_service_url" },
+            { kind: "field", fieldId: "monitored_service_region" },
+            { kind: "field", fieldId: "ssl_enabled" }
+          ]
+        }
+      ]
+    },
+    {
+      kind: "section",
+      title: "Monitoring Configuration",
+      withDivider: true,
+      children: [
+        {
+          kind: "grid",
+          cols: 3,
+          spacing: "md",
+          children: [
+            { kind: "field", fieldId: "check_interval" },
+            { kind: "field", fieldId: "retry_count" },
+            { kind: "field", fieldId: "retry_delay" },
+            { kind: "field", fieldId: "expected_status_code" }
+          ]
+        }
+      ]
+    }
+  ]
+};
