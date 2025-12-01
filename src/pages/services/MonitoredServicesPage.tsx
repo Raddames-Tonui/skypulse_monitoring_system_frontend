@@ -73,7 +73,7 @@ export default function MonitoredServicesPage() {
     { id: "monitored_service_region", caption: "Region", size: 120, filterable: true, sortable: true },
     { id: "ssl_enabled", caption: "SSL Enabled", size: 120, filterable: true, sortable: true, renderCell: (v: boolean) => (v ? "Yes" : "No") },
     { id: "last_uptime_status", caption: "Status", size: 100, filterable: true, sortable: true, renderCell: (v: string) => <span style={{ color: v === "UP" ? "#27ae60" : "#e74c3c", fontWeight: 600 }}>{v}</span> },
-    { id: "date_created", caption: "Created At", size: 160, sortable: true, renderCell: (v: string) => new Date(v).toLocaleString() },
+    { id: "date_created", caption: "Created At", size: 160, sortable: true, renderCell: (v: string) => new Date(v).toISOString().split("T")[0] },
     {
       id: "actions",
       caption: "Actions",
@@ -92,48 +92,53 @@ export default function MonitoredServicesPage() {
         >
           View
         </button>
-        
+
       ),
-},
+    },
   ];
 
-const tableActionsRight = (
-  <select value={pageSize} onChange={(e) => setPageSize(Number(e.target.value))}>
-    {[10, 20, 50, 100].map((v) => (
-      <option key={v} value={v}>
-        {v}
-      </option>
-    ))}
-  </select>
-);
+  const tableActionsRight = (
+    <select value={pageSize} onChange={(e) => setPageSize(Number(e.target.value))}>
+      {[10, 20, 50, 100].map((v) => (
+        <option key={v} value={v}>
+          {v}
+        </option>
+      ))}
+    </select>
+  );
 
-return (
-  <div className="page-wrapper">
-    <div className="page-header flex justify-between items-center mb-4">
-      <h1>Monitored Services</h1>
+  return (
+    <div className="page-wrapper">
+      <div className="page-header flex justify-between items-center mb-4">
+        <h1>Monitored Services</h1>
+        <button className="btn btn-secondary"
+          onClick={() => navigate({ to: "/services/create" })}
+        >
+          New Service
+        </button>
+      </div>
+
+      <DataTable
+        columns={columns}
+        data={services}
+        isLoading={isLoading}
+        error={isError ? (error as any)?.message : undefined}
+        onRefresh={refetch}
+        initialSort={sortBy}
+        initialFilter={filters}
+        onSortApply={setSortBy}
+        onFilterApply={(rules) => {
+          setFilters(rules.filter((f) => f.value));
+          setPage(1);
+        }}
+        pagination={{
+          page,
+          pageSize,
+          total: data?.total_count ?? 0,
+          onPageChange: setPage,
+        }}
+        tableActionsRight={tableActionsRight}
+      />
     </div>
-
-    <DataTable
-      columns={columns}
-      data={services}
-      isLoading={isLoading}
-      error={isError ? (error as any)?.message : undefined}
-      onRefresh={refetch}
-      initialSort={sortBy}
-      initialFilter={filters}
-      onSortApply={setSortBy}
-      onFilterApply={(rules) => {
-        setFilters(rules.filter((f) => f.value));
-        setPage(1);
-      }}
-      pagination={{
-        page,
-        pageSize,
-        total: data?.total_count ?? 0,
-        onPageChange: setPage,
-      }}
-      tableActionsRight={tableActionsRight}
-    />
-  </div>
-);
+  );
 }

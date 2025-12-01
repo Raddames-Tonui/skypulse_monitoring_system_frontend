@@ -51,9 +51,7 @@ interface PaginationProps {
   onPageChange: (page: number) => void;
 }
 
-/**
- * Props accepted by the DataTable component
- */
+
 export interface DataTableProps<T> {
   columns: ColumnProps<T, any>[];
   data: T[];

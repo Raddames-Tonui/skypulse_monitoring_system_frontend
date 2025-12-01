@@ -5,7 +5,6 @@ import { DataTable } from "@/components/table/DataTable";
 import type { SortRule, FilterRule } from "@/context/types";
 import type { ApiResponse, Users } from "@/utils/types";
 import { Route } from "@/routes/_protected/_admin/users";
-import NavigationBar from "@/components/NavigationBar";
 
 
 const FILTER_MAP: Record<string, string> = {
@@ -48,6 +47,7 @@ const columns = [
     isSortable: true,
     renderCell: (v: string) => new Date(v).toLocaleString(),
     size: 180,
+    hide: true,
   },
   {
     id: "date_modified",
@@ -55,6 +55,8 @@ const columns = [
     isSortable: true,
     renderCell: (v: string) => new Date(v).toLocaleString(),
     size: 180,
+    hide: true,
+
   },
 ];
 
@@ -107,14 +109,16 @@ export default function GetUsers() {
   };
   const handlePageChange = (p: number) => setPage(p);
 
-  const links = [
-    { label: "Create User", to: "/users/create-user", match: (p) => p.includes("uptime-reports") },
-  ];
+
   return (
     <>
       <div className="page-header">
         <h1>Users</h1>
-        <NavigationBar links={ links} />
+        <button className="btn btn-secondary"
+          onClick={() => navigate({ to: "/users/create-user" })}
+        >
+          New User
+        </button>
       </div>
 
       <DataTable

@@ -29,7 +29,7 @@ export const Route = createFileRoute('/_protected')({
 
 function ProtectedRouteComponent() {
   const { user, isLoading, fetchProfile } = useAuth();
-  const { isSidebarOpen, toggleSidebar } = useTheme();
+  const { isSidebarOpen } = useTheme();
 
   useEffect(() => {
     if (!user && !isLoading) {

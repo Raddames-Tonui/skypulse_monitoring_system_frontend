@@ -85,15 +85,16 @@ export default function ContactGroupsPage() {
       id: "date_modified",
       caption: "Modified",
       size: 180,
+      hide: true,
       isSortable: true,
       renderCell: (v: string) => new Date(v).toLocaleString(),
     },
     {
       id: "is_deleted",
-      caption: "Deleted",
+      caption: "Status",
       size: 100,
       isSortable: true,
-      renderCell: (v: boolean) => (v ? "Yes" : "No"),
+      renderCell: (v: boolean) => (v ? "Inactive" : "Active"),
       isFilterable: true,
       filterType: "dropdown",
     },
@@ -144,8 +145,10 @@ export default function ContactGroupsPage() {
     <>
       <div className="page-header flex justify-between items-center mb-4">
         <h1>Contact Groups</h1>
-        <button className="btn btn-secondary" onClick={() => setModalOpen(true)}>
-          New Contact Group
+        <button className="btn btn-secondary"
+          onClick={() => navigate({ to: "/groups/create" })}
+        >
+          New Group
         </button>
       </div>
 

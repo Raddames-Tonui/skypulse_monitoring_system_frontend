@@ -34,6 +34,7 @@ import { Route as ProtectedAdminNotificationsIndexRouteImport } from './routes/_
 import { Route as ProtectedAdminGroupsIndexRouteImport } from './routes/_protected/_admin/groups/index'
 import { Route as ProtectedSharedServicesCreateRouteImport } from './routes/_protected/_shared/services/create'
 import { Route as ProtectedAdminUsersCreateUserRouteImport } from './routes/_protected/_admin/users/create-user'
+import { Route as ProtectedAdminGroupsCreateRouteImport } from './routes/_protected/_admin/groups/create'
 import { Route as ProtectedAdminGroupsUuidRouteImport } from './routes/_protected/_admin/groups/$uuid'
 
 const PublicRoute = PublicRouteImport.update({
@@ -166,6 +167,12 @@ const ProtectedAdminUsersCreateUserRoute =
     path: '/users/create-user',
     getParentRoute: () => ProtectedAdminRoute,
   } as any)
+const ProtectedAdminGroupsCreateRoute =
+  ProtectedAdminGroupsCreateRouteImport.update({
+    id: '/groups/create',
+    path: '/groups/create',
+    getParentRoute: () => ProtectedAdminRoute,
+  } as any)
 const ProtectedAdminGroupsUuidRoute =
   ProtectedAdminGroupsUuidRouteImport.update({
     id: '/groups/$uuid',
@@ -189,6 +196,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof ProtectedDashboardIndexRoute
   '/services': typeof ProtectedServicesIndexRoute
   '/groups/$uuid': typeof ProtectedAdminGroupsUuidRoute
+  '/groups/create': typeof ProtectedAdminGroupsCreateRoute
   '/users/create-user': typeof ProtectedAdminUsersCreateUserRoute
   '/services/create': typeof ProtectedSharedServicesCreateRoute
   '/groups': typeof ProtectedAdminGroupsIndexRoute
@@ -212,6 +220,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof ProtectedDashboardIndexRoute
   '/services': typeof ProtectedServicesIndexRoute
   '/groups/$uuid': typeof ProtectedAdminGroupsUuidRoute
+  '/groups/create': typeof ProtectedAdminGroupsCreateRoute
   '/users/create-user': typeof ProtectedAdminUsersCreateUserRoute
   '/services/create': typeof ProtectedSharedServicesCreateRoute
   '/groups': typeof ProtectedAdminGroupsIndexRoute
@@ -241,6 +250,7 @@ export interface FileRoutesById {
   '/_protected/dashboard/': typeof ProtectedDashboardIndexRoute
   '/_protected/services/': typeof ProtectedServicesIndexRoute
   '/_protected/_admin/groups/$uuid': typeof ProtectedAdminGroupsUuidRoute
+  '/_protected/_admin/groups/create': typeof ProtectedAdminGroupsCreateRoute
   '/_protected/_admin/users/create-user': typeof ProtectedAdminUsersCreateUserRoute
   '/_protected/_shared/services/create': typeof ProtectedSharedServicesCreateRoute
   '/_protected/_admin/groups/': typeof ProtectedAdminGroupsIndexRoute
@@ -266,6 +276,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/services'
     | '/groups/$uuid'
+    | '/groups/create'
     | '/users/create-user'
     | '/services/create'
     | '/groups'
@@ -289,6 +300,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/services'
     | '/groups/$uuid'
+    | '/groups/create'
     | '/users/create-user'
     | '/services/create'
     | '/groups'
@@ -317,6 +329,7 @@ export interface FileRouteTypes {
     | '/_protected/dashboard/'
     | '/_protected/services/'
     | '/_protected/_admin/groups/$uuid'
+    | '/_protected/_admin/groups/create'
     | '/_protected/_admin/users/create-user'
     | '/_protected/_shared/services/create'
     | '/_protected/_admin/groups/'
@@ -508,6 +521,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedAdminUsersCreateUserRouteImport
       parentRoute: typeof ProtectedAdminRoute
     }
+    '/_protected/_admin/groups/create': {
+      id: '/_protected/_admin/groups/create'
+      path: '/groups/create'
+      fullPath: '/groups/create'
+      preLoaderRoute: typeof ProtectedAdminGroupsCreateRouteImport
+      parentRoute: typeof ProtectedAdminRoute
+    }
     '/_protected/_admin/groups/$uuid': {
       id: '/_protected/_admin/groups/$uuid'
       path: '/groups/$uuid'
@@ -521,6 +541,7 @@ declare module '@tanstack/react-router' {
 interface ProtectedAdminRouteChildren {
   ProtectedAdminAuditLogsRoute: typeof ProtectedAdminAuditLogsRoute
   ProtectedAdminGroupsUuidRoute: typeof ProtectedAdminGroupsUuidRoute
+  ProtectedAdminGroupsCreateRoute: typeof ProtectedAdminGroupsCreateRoute
   ProtectedAdminUsersCreateUserRoute: typeof ProtectedAdminUsersCreateUserRoute
   ProtectedAdminGroupsIndexRoute: typeof ProtectedAdminGroupsIndexRoute
   ProtectedAdminNotificationsIndexRoute: typeof ProtectedAdminNotificationsIndexRoute
@@ -531,6 +552,7 @@ interface ProtectedAdminRouteChildren {
 const ProtectedAdminRouteChildren: ProtectedAdminRouteChildren = {
   ProtectedAdminAuditLogsRoute: ProtectedAdminAuditLogsRoute,
   ProtectedAdminGroupsUuidRoute: ProtectedAdminGroupsUuidRoute,
+  ProtectedAdminGroupsCreateRoute: ProtectedAdminGroupsCreateRoute,
   ProtectedAdminUsersCreateUserRoute: ProtectedAdminUsersCreateUserRoute,
   ProtectedAdminGroupsIndexRoute: ProtectedAdminGroupsIndexRoute,
   ProtectedAdminNotificationsIndexRoute: ProtectedAdminNotificationsIndexRoute,

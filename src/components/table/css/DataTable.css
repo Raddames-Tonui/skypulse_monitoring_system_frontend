@@ -100,7 +100,7 @@ tr {
     font-weight: bold;
     background-color: var(--primary-700);
     color: #ffffff;
-    border-radius: 3px;
+    /* border-radius: 3px; */
     border: none;
 }
 
