@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
 import { DataTable } from "@/components/table/DataTable";
 import Modal from "@/components/Modal";
 import axiosClient from "@/utils/constants/axiosClient";
+import { useQuery } from "@tanstack/react-query";
 
 type FilterRule = { column: string; operator?: string; value: string };
 type SortRule = { column: string; direction: "asc" | "desc" };
@@ -25,7 +25,6 @@ const fetchAuditLogs = async (params: Record<string, string | number>) => {
 };
 
 export default function AuditLogsPage() {
-  const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(15);
   const [sortBy, setSortBy] = useState<SortRule[]>([]);

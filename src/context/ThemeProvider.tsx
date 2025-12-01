@@ -1,12 +1,9 @@
 import { createContext, useContext, useState } from "react";
 import type { ReactNode } from "react";
 
-type ThemeType = "light" | "dark";
 
 export interface ThemeContextType {
-    theme: ThemeType;
-    toggleTheme: () => void;
-    isSidebarOpen: boolean;
+      isSidebarOpen: boolean;
     toggleSidebar: () => void;
     isMobileSidebarOpen: boolean;
     toggleMobileSidebar: () => void;
@@ -15,9 +12,6 @@ export interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-    const [theme, setTheme] = useState<ThemeType>(() => {
-        return (localStorage.getItem("theme") as ThemeType) || "light";
-    });
 
     const [isSidebarOpen, setSidebarOpen] = useState<boolean>(() => {
         const saved = localStorage.getItem("isSidebarOpen");
@@ -25,16 +19,6 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     });
 
     const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-
-    const toggleTheme = () => {
-        setTheme(prev => {
-            const newTheme = prev === "light" ? "dark" : "light";
-            localStorage.setItem("theme", newTheme);
-            document.documentElement.classList.remove(prev);
-            document.documentElement.classList.add(newTheme);
-            return newTheme;
-        });
-    };
 
     const toggleSidebar = () => {
         setSidebarOpen(prev => {
@@ -50,8 +34,6 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
     return (
         <ThemeContext.Provider value={{
-            theme,
-            toggleTheme,
             isSidebarOpen,
             toggleSidebar,
             isMobileSidebarOpen,

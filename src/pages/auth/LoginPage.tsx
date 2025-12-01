@@ -15,7 +15,7 @@ const loginSchema = z.object({
 type FormData = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const navigate = useNavigate();
   const redirectTo = "/dashboard";
   const [authError, setAuthError] = useState(false);
@@ -40,11 +40,29 @@ export default function LoginPage() {
 
     try {
       await login(data.email, data.password);
+
+      const waitForUser = () =>
+        new Promise<void>((resolve, reject) => {
+          const interval = setInterval(() => {
+            if (user) {
+              clearInterval(interval);
+              resolve();
+            }
+          }, 50);
+          setTimeout(() => {
+            clearInterval(interval);
+            reject(new Error("User not set in time"));
+          }, 3000);
+        });
+
+      await waitForUser();
+
       navigate({ to: redirectTo });
     } catch (err) {
       setAuthError(true);
     }
   };
+
 
   return (
     <div className={styles.loginContainer}>
@@ -52,6 +70,10 @@ export default function LoginPage() {
         <h2 className={styles.title}>
           Welcome back <span className={styles.green}>!</span>
         </h2>
+
+        {authError && (
+          <p className={styles.authError}>Incorrect email or password</p>
+        )}
 
         <label className={styles.label} htmlFor="email">Email</label>
         <input
@@ -77,16 +99,10 @@ export default function LoginPage() {
           {errors.password?.message}
         </p>
 
-        <a href="/auth/resetpassword" className={styles.link}>
+        <a href="/auth/request-password" className={styles.link}>
           Forgot your password?
         </a>
 
-                                      <p>StrongPassword123!</p>
-
-
-        {authError && (
-          <p className={styles.authError}>Incorrect email or password</p>
-        )}
 
         <button type="submit" className={styles.button}>Login</button>
 

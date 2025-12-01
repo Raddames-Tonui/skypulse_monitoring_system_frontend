@@ -459,3 +459,87 @@ export const addMembersSchema: any = {
     }
   ]
 };
+
+
+
+
+
+// =----------------- CREATE NEW USER -------------------
+export const createUserSchema: any = {
+  id: "create-user-form",
+  meta: {
+    title: "Create New User",
+    subtitle: "Add a new user to the organization",
+  },
+  fields: {
+    first_name: {
+      id: "first_name",
+      label: "First Name",
+      renderer: "text",
+      rules: { required: "First name is required" },
+    },
+    last_name: {
+      id: "last_name",
+      label: "Last Name",
+      renderer: "text",
+      rules: { required: "Last name is required" },
+    },
+    user_email: {
+      id: "user_email",
+      label: "Email",
+      renderer: "text",
+      inputType: "email",
+      rules: {
+        required: "Email is required",
+        pattern: {
+          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+          message: "Invalid email",
+        },
+      },
+    },
+    role_name: {
+      id: "role_name",
+      label: "Role",
+      renderer: "select",
+      props: {
+        data: [
+          { label: "Viewer", value: "VIEWER" },
+          { label: "Admin", value: "ADMIN" },
+          { label: "Operator", value: "MANAGER" },
+        ],
+      },
+      rules: { required: "Role is required" },
+    },
+    company_id: {
+      id: "company_id",
+      label: "Company",
+      renderer: "select",
+      props: {
+        data: [], // will be populated from API
+        searchable: true,
+      },
+      rules: { required: "Company is required" },
+    },
+  },
+  layout: [
+    {
+      kind: "section",
+      title: "User Information",
+      withDivider: true,
+      children: [
+        {
+          kind: "grid",
+          cols: 2,
+          spacing: "md",
+          children: [
+            { kind: "field", fieldId: "first_name" },
+            { kind: "field", fieldId: "last_name" },
+            { kind: "field", fieldId: "user_email", colSpan: 2 },
+            { kind: "field", fieldId: "role_name" },
+            { kind: "field", fieldId: "company_id" },
+          ],
+        },
+      ],
+    },
+  ],
+};

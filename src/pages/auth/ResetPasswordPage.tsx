@@ -1,152 +1,134 @@
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { toast } from "react-hot-toast";
-
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import { useMutation } from "@tanstack/react-query";
+import axiosClient from "@/utils/constants/axiosClient";
+import toast from "react-hot-toast";
+import { Route } from "@/routes/_public/auth/reset-password";
 
 import styles from "@/css/login.module.css";
 
-const schema = yup.object({
-  email: yup.string().email("Invalid email").required("Email is required"),
-  newPassword: yup
-    .string()
-    .required("New password is required")
-    .min(6, "Password must be at least 6 characters"),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref("newPassword")], "Passwords must match")
-    .required("Confirm Password is required"),
-});
-
-type FormData = yup.InferType<typeof schema>;
-
 export default function ResetPasswordPage() {
-  const navigate = useNavigate();
-  const [authError, setAuthError] = useState(false);
+  const searchParams = Route.useSearch();
+  const token = (searchParams as any).token as string | undefined;
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, touchedFields, isSubmitted },
-  } = useForm<FormData>({
-    resolver: yupResolver(schema),
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [touched, setTouched] = useState({
+    password: false,
+    confirmPassword: false,
+  });
+  const navigate = useNavigate();
+
+  const mutation = useMutation({
+    mutationFn: ({ token, password }: { token: string; password: string }) =>
+      axiosClient.post("/auth/reset-password", { token, password }),
+    onSuccess: (res: any) => {
+      toast.success(res?.data?.message || "Password reset successful!");
+      setTimeout(() => navigate({ to: "/auth/login" }), 1500);
+    },
+    onError: (err: any) => {
+      const msg = err.response?.data?.message || "Password reset failed";
+      toast.error(msg);
+    },
   });
 
-  const onSubmit = (data: FormData) => {
-    setAuthError(false);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
 
-    const users = JSON.parse(localStorage.getItem("users") || "[]") as {
-      email: string;
-      password: string;
-      role: "client" | "vendor";
-    }[];
+    setTouched({ password: true, confirmPassword: true });
 
-    const userIndex = users.findIndex((user) => user.email === data.email);
-
-    if (userIndex === -1) {
-      setAuthError(true);
-      return toast.error("User not found");
+    if (!password || password.length < 6) {
+      return;
     }
 
-    users[userIndex].password = data.newPassword;
-    localStorage.setItem("users", JSON.stringify(users));
+    if (password !== confirmPassword) {
+      return;
+    }
 
-    toast.success("Password reset successful!", { duration: 1500 });
+    if (!token) {
+      toast.error("Missing reset token");
+      return;
+    }
 
-    setTimeout(() => {
-      navigate({ to: "/auth/login" });
-    }, 1500);
+    mutation.mutate({ token, password });
   };
 
-  const getInputClass = (field: keyof FormData) => {
-    if (errors[field]) return `${styles.formInput} ${styles.error}`;
-    if (authError && isSubmitted) return `${styles.formInput} ${styles.neutral}`;
-    if (touchedFields[field]) return `${styles.formInput} ${styles.success}`;
+  const getInputClass = (field: "password" | "confirmPassword") => {
+    if (!touched[field]) return styles.formInput;
+    if (field === "password" && password.length < 6)
+      return `${styles.formInput} ${styles.error}`;
+    if (field === "confirmPassword" && password !== confirmPassword)
+      return `${styles.formInput} ${styles.error}`;
+    if (
+      (field === "password" && password.length >= 6) ||
+      (field === "confirmPassword" && password === confirmPassword)
+    )
+      return `${styles.formInput} ${styles.success}`;
     return styles.formInput;
   };
 
+  if (!token) return <p>Invalid or missing reset token.</p>;
+
   return (
     <div className={styles.loginContainer}>
-      <form onSubmit={handleSubmit(onSubmit)} className={styles.loginCard}>
+      <form className={styles.loginCard} onSubmit={handleSubmit}>
         <h2 className={styles.title}>
-          Reset Password <span className={styles.green}>!</span>
+          Reset your <span className={styles.green}>password</span>
         </h2>
 
-        {/* Email */}
-        <label className={styles.label} htmlFor="email">
-          Email
-        </label>
-        <input
-          id="email"
-          type="email"
-          {...register("email")}
-          className={getInputClass("email")}
-          placeholder="Enter email"
-        />
-        <p
-          className={`${styles.errorMessage} ${
-            errors.email ? styles.active : ""
-          }`}
-        >
-          {errors.email?.message}
-        </p>
-
-        {/* New Password */}
-        <label className={styles.label} htmlFor="newPassword">
+        <label className={styles.label} htmlFor="password">
           New Password
         </label>
         <input
-          id="newPassword"
+          id="password"
           type="password"
-          {...register("newPassword")}
-          className={getInputClass("newPassword")}
+          className={getInputClass("password")}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          onBlur={() =>
+            setTouched((prev) => ({ ...prev, password: true }))
+          }
           placeholder="Enter new password"
         />
         <p
           className={`${styles.errorMessage} ${
-            errors.newPassword ? styles.active : ""
+            touched.password && password.length < 6 ? styles.active : ""
           }`}
         >
-          {errors.newPassword?.message}
+          Password must be at least 6 characters
         </p>
 
-        {/* Confirm Password */}
         <label className={styles.label} htmlFor="confirmPassword">
           Confirm Password
         </label>
         <input
           id="confirmPassword"
           type="password"
-          {...register("confirmPassword")}
           className={getInputClass("confirmPassword")}
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          onBlur={() =>
+            setTouched((prev) => ({ ...prev, confirmPassword: true }))
+          }
           placeholder="Confirm new password"
         />
         <p
           className={`${styles.errorMessage} ${
-            errors.confirmPassword ? styles.active : ""
+            touched.confirmPassword && password !== confirmPassword
+              ? styles.active
+              : ""
           }`}
         >
-          {errors.confirmPassword?.message}
+          Passwords do not match
         </p>
 
-        {authError && (
-          <p className={styles.authError}>
-            Could not reset password. Check details.
-          </p>
-        )}
-
-        <button type="submit" className={styles.button}>
-          Reset Password
+        <button
+          type="submit"
+          className={styles.button}
+          disabled={mutation.isLoading}
+        >
+          {mutation.isLoading ? "Resetting..." : "Reset Password"}
         </button>
-
-        <p className={styles.footerText}>
-          Remembered your password?{" "}
-          <a href="/auth/login" className={styles.greenLink}>
-            Login
-          </a>
-        </p>
       </form>
     </div>
   );

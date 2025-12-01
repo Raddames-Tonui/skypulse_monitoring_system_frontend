@@ -1,10 +1,11 @@
 import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { Route } from "@/routes/_protected/users";
 import { useUsers } from "@/hooks/hooks";
 import { DataTable } from "@/components/table/DataTable";
 import type { SortRule, FilterRule } from "@/context/types";
 import type { ApiResponse, Users } from "@/utils/types";
+import { Route } from "@/routes/_protected/_admin/users";
+import NavigationBar from "@/components/NavigationBar";
 
 
 const FILTER_MAP: Record<string, string> = {
@@ -99,7 +100,6 @@ export default function GetUsers() {
 
   const { data, isLoading, isError, error, refetch } = useUsers<ApiResponse<Users>>(queryParams);
 
-  // Handlers
   const handleSortApply = (rules: SortRule[]) => setSortBy(rules);
   const handleFilterApply = (rules: FilterRule[]) => {
     setFilters(rules.filter((r) => r.value));
@@ -107,10 +107,14 @@ export default function GetUsers() {
   };
   const handlePageChange = (p: number) => setPage(p);
 
+  const links = [
+    { label: "Create User", to: "/users/create-user", match: (p) => p.includes("uptime-reports") },
+  ];
   return (
     <>
       <div className="page-header">
         <h1>Users</h1>
+        <NavigationBar links={ links} />
       </div>
 
       <DataTable

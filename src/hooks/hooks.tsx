@@ -3,7 +3,7 @@ import type { AuthContextType } from "@/context/types";
 import { useContext } from "react";
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axiosClient from '@/utils/constants/axiosClient';
-import type { ApiError, ApiResponse, Users } from "@/utils/types";
+import type { ApiError, ApiResponse, CreateUserPayload, CreateUserResponse, Users } from "@/utils/types";
 import type { MonitoredService } from "@/utils/types";
 import toast from "react-hot-toast";
 
@@ -17,6 +17,16 @@ export const useUsers = (params: Record<string, string | number | boolean>) => {
     },
   });
 };
+
+
+export function useCreateUser() {
+  return useMutation<CreateUserResponse, any, CreateUserPayload>({
+    mutationFn: async (payload) => {
+      const res = await axiosClient.post("/users/user/create", payload);
+      return res.data;
+    },
+  });
+}
 
 export const useMonitoredServices = (
   params: Record<string, string | number | boolean>

@@ -1,100 +1,91 @@
 @import url(./variables.css);
-/* Background container */
+
 .loginContainer {
   min-height: 100vh;
-  background: #0d1117;
+  background: #f1f1f1;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 1.25rem;
   font-family: Arial, sans-serif;
-  color: white;
+  color: var(--primary-800);
 }
 
-/* Card */
 .loginCard {
-  background: #161b22;
+  background: var(--bg-secondary);
   width: 100%;
-  max-width: 420px;
-  border-radius: 14px;
-  padding: 32px;
-  border: 1px solid #30363d;
-  box-shadow: 0 0 18px rgba(0, 0, 0, 0.45);
+  max-width: 26.25rem;
+  border-radius: 0.875rem;
+  padding: 2rem;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 0 5rem rgba(0, 0, 0, 0.1);
 }
 
-/* Title */
 .title {
   text-align: center;
-  font-size: 26px;
+  font-size: 1.625rem;
   font-weight: bold;
-  margin-bottom: 24px;
+  margin-bottom: 1.5rem;
 }
 
 .green {
-  color: #2ecc71;
+  color: var(--primary-800);
 }
 
-/* Labels */
 .label {
   display: block;
-  margin-bottom: 6px;
-  margin-top: 18px;
-  font-size: 14px;
+  margin-bottom: 0.375rem;
+  margin-top: 1.125rem;
+  font-size: 0.875rem;
+  color: var(--primary-700);
 }
 
-/* Inputs */
 .formInput {
   width: 100%;
-  padding: 12px;
-  background: #0d1117;
-  border: 1px solid #30363d;
-  border-radius: 6px;
-  color: white;
+  padding: 0.75rem;
+  background: var(--bg-default);
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
+  color: var(--primary-700);
   outline: none;
   transition: border 0.2s ease;
 }
 
 .formInput:focus {
-  border-color: #2ecc71;
+  border-color: var(--primary-500);
 }
 
-/* Validation states */
 .error {
   border-color: #e74c3c !important;
 }
 
 .success {
-  border-color: #2ecc71 !important;
+  border-color: var(--primary-500) !important;
 }
 
 .neutral {
-  border-color: #30363d !important;
+  border-color: var(--border-color) !important;
 }
 
-/* Error message */
 .errorMessage {
-  height: 16px;
-  font-size: 13px;
+  height: 1rem;
+  font-size: 0.8125rem;
   color: #e74c3c;
   opacity: 0;
   transition: opacity 0.2s ease;
 }
+
 .errorMessage.active {
   opacity: 1;
 }
 
-/* Link */
-.link {
-  font-size: 14px;
-  color: #2ecc71;
+.link,
+.greenLink {
+  font-size: 0.875rem;
+  color: var(--primary-500);
   text-decoration: none;
   display: inline-block;
-  margin-top: 6px;
-}
-
-.greenLink {
-  color: #2ecc71;
-  text-decoration: none;
+  margin-top: 0.375rem;
 }
 
 .greenLink:hover,
@@ -102,36 +93,33 @@
   text-decoration: underline;
 }
 
-/* Auth error */
 .authError {
-  margin-top: 12px;
+  margin-top: 0.75rem;
   color: #e74c3c;
-  font-size: 14px;
+  font-size: 0.875rem;
   text-align: center;
 }
 
-/* Button */
 .button {
   width: 100%;
-  background: #2ecc71;
+  background: var(--primary-800);
   border: none;
-  padding: 12px;
-  border-radius: 6px;
+  padding: 0.75rem;
+  border-radius: 0.375rem;
   font-weight: bold;
-  color: black;
-  margin-top: 24px;
+  color: var(--bg-default);
+  margin-top: 1.5rem;
   cursor: pointer;
   transition: background 0.2s ease;
 }
 
 .button:hover {
-  background: #27c165;
+  background: var(--primary-900);
 }
 
-/* Footer */
 .footerText {
   text-align: center;
-  margin-top: 24px;
-  color: #b3b3b3;
-  font-size: 14px;
+  margin-top: 1.5rem;
+  color: var(--primary-700);
+  font-size: 0.875rem;
 }

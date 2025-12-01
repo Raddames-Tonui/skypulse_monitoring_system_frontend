@@ -80,6 +80,42 @@ export interface User {
 export type UsersResponse = ApiResponse<User>;
 
 
+// ----------CREATE USER -----------
+export interface CreateUserPayload {
+  first_name: string;
+  last_name: string;
+  user_email: string;
+  role_name: string;
+  company_id: number;
+}
+
+export interface CreateUserSuccessResponse {
+  data: {
+    userCreationStatus: "QUEUED";
+    userId: number;
+    uuid: string;
+    emailStatus: "QUEUED";
+    tokenGenerationStatus: "QUEUED";
+  };
+  message: string;
+  status: "success";
+}
+
+
+export interface CreateUserErrorResponse {
+  message: string;
+  status: "error";
+}
+
+
+export type CreateUserResponse =
+  | CreateUserSuccessResponse
+  | CreateUserErrorResponse;
+
+
+
+
+
 
 
 
@@ -210,6 +246,8 @@ export interface AuditLogEntry {
 
 
 
+//
+
 
 // -----------SIDEBAR PROPS ----------------------
 export interface MenuItem {
@@ -223,9 +261,9 @@ export const menuConfig: Record<string, MenuItem[]> = {
     { icon: "pie", label: "Odata Dashboard", path: "/dashboard" },
     { icon: "user", label: "Users", path: "/users" },
     { icon: "users", label: "Groups", path: "/groups" },
-    { icon: "notes", label: "Services", path: "/services" },
+    { icon: "services", label: "Services", path: "/services" },
     { icon: "notepad", label: "Reports", path: "/reports/uptime-reports" },
-    { icon: "list", label: "Reports", path: "/audit-logs" },
+    { icon: "notes", label: "Audit Logs", path: "/audit-logs" },
     { icon: "settings", label: "Settings", path: "/settings" },
   ],
   operator: [

@@ -6,11 +6,14 @@ import { Route } from '@/routes/_public/auth/set-password'
 import toast from 'react-hot-toast'
 import { AuthContext } from '@/context/AuthContext'
 
+import styles from '@/css/login.module.css' 
+
 export default function ActivateUser() {
   const searchParams = Route.useSearch()
   const token = (searchParams as any).token as string | undefined
 
   const [password, setPassword] = useState('')
+  const [touched, setTouched] = useState(false)
   const navigate = useNavigate()
   const auth = useContext(AuthContext)
 
@@ -18,7 +21,7 @@ export default function ActivateUser() {
     mutationFn: ({ token, password }: { token: string; password: string }) =>
       axiosClient.post('/auth/activate', { token, password }),
     onSuccess: async (res: any) => {
-      toast.success(res?.message || 'Account activated successfully')
+      toast.success(res?.data?.message || 'Account activated successfully')
 
       try {
         await auth?.fetchProfile()
@@ -36,41 +39,49 @@ export default function ActivateUser() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!password || password.length < 6) {
-      toast.error('Password must be at least 6 characters')
-      return
-    }
-    if (token) {
-      mutation.mutate({ token, password })
-    }
+    setTouched(true)
+
+    if (!password || password.length < 6) return
+
+    if (token) mutation.mutate({ token, password })
+  }
+
+  const getInputClass = () => {
+    if (!touched) return styles.formInput
+    return password.length >= 6 ? `${styles.formInput} ${styles.success}` : `${styles.formInput} ${styles.error}`
   }
 
   if (!token) return <p>Invalid or missing activation token.</p>
 
   return (
-    <div className="sp-container">
-      <div className="sp-card">
-        <h2 className="sp-title">
-          Just enter your <span className="highlight">password!</span>
+    <div className={styles.loginContainer}>
+      <form className={styles.loginCard} onSubmit={handleSubmit}>
+        <h2 className={styles.title}>
+          Just enter your <span className={styles.green}>password!</span>
         </h2>
 
-        <form onSubmit={handleSubmit}>
-          <label className="sp-label" htmlFor="password">
-            Your password
-          </label>
-          <input
-            id="password"
-            type="password"
-            className="sp-input"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+        <label className={styles.label} htmlFor="password">
+          Your password
+        </label>
+        <input
+          id="password"
+          type="password"
+          className={getInputClass()}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          onBlur={() => setTouched(true)}
+          placeholder="Enter password"
+        />
+        {touched && password.length < 6 && (
+          <p className={`${styles.errorMessage} ${styles.active}`}>
+            Password must be at least 6 characters
+          </p>
+        )}
 
-          <button className="sp-button" type="submit" disabled={mutation.isLoading}>
-            {mutation.isLoading ? 'Activating...' : 'Activate Account'}
-          </button>
-        </form>
-      </div>
+        <button className={styles.button} type="submit" disabled={mutation.isLoading}>
+          {mutation.isLoading ? 'Activating...' : 'Activate Account'}
+        </button>
+      </form>
     </div>
   )
 }

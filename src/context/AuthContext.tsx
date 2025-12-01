@@ -15,6 +15,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+
+  console.log(user?.fullName);
+
   useEffect(() => {
     const initProfile = async () => {
       setIsLoading(true);
