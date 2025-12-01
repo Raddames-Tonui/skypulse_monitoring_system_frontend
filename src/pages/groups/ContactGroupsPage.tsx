@@ -55,7 +55,7 @@ export default function ContactGroupsPage() {
 
   const columns = [
     { id: "uuid", caption: "UUID", size: 240, hide: true },
-    { id: "contact_group_id", caption: "ID", size: 40,  },
+    { id: "contact_group_id", caption: "ID", size: 40, },
     {
       id: "contact_group_name",
       caption: "Group Name",
@@ -104,7 +104,7 @@ export default function ContactGroupsPage() {
       renderCell: (_: any, row: any) => (
         <div className="flex gap-2">
           <button
-            className="btn btn-sm btn-primary"
+            className="view-button"
             onClick={() =>
               navigate({
                 to: "/groups/$uuid",

@@ -3,7 +3,7 @@ import { DataTable } from "@/components/table/DataTable";
 import type { ColumnProps } from "@/components/table/DataTable";
 import StatusSidebar from "../components/StatusSidebar";
 import "@/css/dashboard.css";
-import { useServiceStatusSSE} from "@/hooks/useSSE";
+import { useServiceStatusSSE } from "@/hooks/useSSE";
 import type { Service } from "@/utils/types";
 
 export default function Dashboard() {
@@ -37,7 +37,7 @@ export default function Dashboard() {
       size: 200,
       renderCell: (_, row) => (
         <button
-          className="btn btn-primary"
+          className="view-button"
           onClick={() =>
             navigate({
               to: "/services/$uuid",

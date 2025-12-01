@@ -7,6 +7,7 @@ import axiosClient from "@/utils/constants/axiosClient";
 import NavigationBar from "@/components/NavigationBar";
 import type { SSLLogsResponse } from "@/context/types";
 import { Route } from "@/routes/_protected/reports/ssl-reports";
+import { useSslReportDownload } from "@/hooks/hooks";
 
 
 
@@ -157,6 +158,19 @@ export default function SSLLogsPage() {
         </select>
     );
 
+    const { isProcessing, downloadReport, previewReport } = useSslReportDownload();
+
+    const tableActionsLeft = (
+        <div style={{ display: "flex", gap: "0.5rem" }}>
+            <button onClick={previewReport} disabled={isProcessing}>
+                Preview PDF
+            </button>
+            <button onClick={downloadReport} disabled={isProcessing}>
+                {isProcessing ? "Processing..." : "Download PDF"}
+            </button>
+        </div>
+    );
+
     const links = [
         { label: "Uptime Reports", to: "/reports/uptime-reports", match: (p) => p.includes("uptime-reports") },
         { label: "SSL Reports", to: "/reports/ssl-reports", match: (p) => p.includes("ssl-reports") },
@@ -185,6 +199,7 @@ export default function SSLLogsPage() {
                     onPageChange: handlePage,
                 }}
                 tableActionsRight={tableActionsRight}
+                tableActionsLeft={tableActionsLeft}
                 enableRefresh={false}
             />
         </div>

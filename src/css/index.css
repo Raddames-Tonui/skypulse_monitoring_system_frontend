@@ -43,3 +43,23 @@ body {
 .loader > p {
   font-weight: 600;
 }
+
+
+.view-button {
+  padding: 0.5rem 1rem;
+  background-color: var(--primary-700);
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.view-button:hover {
+  background-color: var(--primary-600);
+  transform: translateY(-1px);
+}
+
+.view-button:active {
+  transform: translateY(0);
+}

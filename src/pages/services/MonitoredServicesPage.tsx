@@ -1,36 +1,37 @@
-import { useState } from "react";
-import { DataTable } from "@/components/table/DataTable";
-import Modal from "@/components/Modal";
-import axiosClient from "@/utils/constants/axiosClient";
+import { useState, useMemo } from "react";
+import { useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { DataTable } from "@/components/table/DataTable";
+import axiosClient from "@/utils/constants/axiosClient";
 
 type FilterRule = { column: string; operator?: string; value: string };
 type SortRule = { column: string; direction: "asc" | "desc" };
 
 const FILTER_MAP: Record<string, string> = {
-  entity: "a.entity",
-  action: "a.action",
+  name: "monitored_service_name",
+  region: "monitored_service_region",
+  active: "is_active",
 };
 
 const SORT_MAP: Record<string, string> = {
-  date: "a.date_created",
-  entity: "a.entity",
-  user: "u.first_name",
-  action: "a.action",
+  name: "monitored_service_name",
+  date_created: "date_created",
+  ssl: "ssl_enabled",
+  status: "last_uptime_status",
 };
 
-const fetchAuditLogs = async (params: Record<string, string | number>) => {
-  const { data } = await axiosClient.get("/services/logs/audit", { params });
+const fetchServices = async (params: Record<string, string | number>) => {
+  const { data } = await axiosClient.get("/services", { params });
   return data;
 };
 
-export default function AuditLogsPage() {
+export default function MonitoredServicesPage() {
+  const navigate = useNavigate();
+
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(15);
+  const [pageSize, setPageSize] = useState(10);
   const [sortBy, setSortBy] = useState<SortRule[]>([]);
   const [filters, setFilters] = useState<FilterRule[]>([]);
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [modalData, setModalData] = useState<{ before_data?: any; after_data?: any } | null>(null);
 
   const queryParams: Record<string, string | number> = { page, pageSize };
   filters.forEach((f) => {
@@ -43,49 +44,36 @@ export default function AuditLogsPage() {
   }
 
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ["audit-logs", queryParams],
-    queryFn: () => fetchAuditLogs(queryParams),
+    queryKey: ["services", queryParams],
+    queryFn: () => fetchServices(queryParams),
   });
 
-  const logs = data?.data || [];
+  const services = useMemo(() => data?.data ?? [], [data?.data]);
 
   const columns = [
+    { id: "monitored_service_id", caption: "Id", size: 50, filterable: true, sortable: true },
+    { id: "monitored_service_name", caption: "Name", size: 200, filterable: true, sortable: true },
     {
-      id: "user_email",
-      caption: "User Email",
-      size: 200,
-      filterable: true,
-      sortable: false,
-    },
-    {
-      id: "user_full_name",
-      caption: "Full Name",
-      size: 180,
-      filterable: true,
-      sortable: true,
-    },
-    {
-      id: "entity",
-      caption: "Entity",
-      size: 150,
-      filterable: true,
-      sortable: true,
-    },
-    {
-      id: "action",
-      caption: "Action",
-      size: 120,
-      filterable: true,
-      sortable: true,
-    },
-    {
-      id: "date_created",
-      caption: "Date",
-      size: 160,
+      id: "monitored_service_url",
+      caption: "URL",
+      size: 250,
       filterable: false,
-      sortable: true,
-      renderCell: (v: string) => new Date(v).toLocaleString(),
+      sortable: false,
+      renderCell: (value: string) => (
+        <a
+          href={value}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "#135a8aff", textDecoration: "underline" }}
+        >
+          {value}
+        </a>
+      ),
     },
+    { id: "monitored_service_region", caption: "Region", size: 120, filterable: true, sortable: true },
+    { id: "ssl_enabled", caption: "SSL Enabled", size: 120, filterable: true, sortable: true, renderCell: (v: boolean) => (v ? "Yes" : "No") },
+    { id: "last_uptime_status", caption: "Status", size: 100, filterable: true, sortable: true, renderCell: (v: string) => <span style={{ color: v === "UP" ? "#27ae60" : "#e74c3c", fontWeight: 600 }}>{v}</span> },
+    { id: "date_created", caption: "Created At", size: 160, sortable: true, renderCell: (v: string) => new Date(v).toLocaleString() },
     {
       id: "actions",
       caption: "Actions",
@@ -94,13 +82,15 @@ export default function AuditLogsPage() {
       sortable: false,
       renderCell: (_: any, row: any) => (
         <button
-          className="btn btn-sm btn-primary"
-          onClick={() => {
-            setModalData({ before_data: row.before_data, after_data: row.after_data });
-            setModalOpen(true);
-          }}
+          className="view-button"
+          onClick={() =>
+            navigate({
+              to: "/services/$uuid",
+              params: { uuid: row.uuid },
+            })
+          }
         >
-          View Changes
+          View
         </button>
       ),
     },
@@ -108,7 +98,7 @@ export default function AuditLogsPage() {
 
   const tableActionsRight = (
     <select value={pageSize} onChange={(e) => setPageSize(Number(e.target.value))}>
-      {[10, 15, 20, 50].map((v) => (
+      {[10, 20, 50, 100].map((v) => (
         <option key={v} value={v}>
           {v}
         </option>
@@ -119,12 +109,12 @@ export default function AuditLogsPage() {
   return (
     <div className="page-wrapper">
       <div className="page-header flex justify-between items-center mb-4">
-        <h1>Audit Logs</h1>
+        <h1>Monitored Services</h1>
       </div>
 
       <DataTable
         columns={columns}
-        data={logs}
+        data={services}
         isLoading={isLoading}
         error={isError ? (error as any)?.message : undefined}
         onRefresh={refetch}
@@ -138,30 +128,10 @@ export default function AuditLogsPage() {
         pagination={{
           page,
           pageSize,
-          total: data?.total_count || 0,
+          total: data?.total_count ?? 0,
           onPageChange: setPage,
         }}
         tableActionsRight={tableActionsRight}
-      />
-
-      <Modal
-        isOpen={isModalOpen}
-        title="Audit Log Details"
-        onClose={() => setModalOpen(false)}
-        body={
-          modalData ? (
-            <div className="flex flex-col gap-4">
-              <div>
-                <h3>Before:</h3>
-                <pre className="p-2 bg-gray-100 rounded">{JSON.stringify(modalData.before_data, null, 2)}</pre>
-              </div>
-              <div>
-                <h3>After:</h3>
-                <pre className="p-2 bg-gray-100 rounded">{JSON.stringify(modalData.after_data, null, 2)}</pre>
-              </div>
-            </div>
-          ) : null
-        }
       />
     </div>
   );

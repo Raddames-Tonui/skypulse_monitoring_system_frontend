@@ -7,6 +7,7 @@ import axiosClient from "@/utils/constants/axiosClient";
 import NavigationBar from "@/components/NavigationBar";
 import type { UptimeLogsResponse } from "@/context/types";
 import { Route } from "@/routes/_protected/reports/uptime-reports";
+import { useUptimeReportDownload } from "@/hooks/hooks";
 
 
 const SORT_MAP: Record<string, string> = {
@@ -138,6 +139,19 @@ export default function UptimeLogsPage() {
         </select>
     );
 
+    const { isProcessing, downloadReport, previewReport } = useUptimeReportDownload();
+
+    const tableActionsLeft = (
+        <div style={{ display: "flex", gap: "0.5rem" }}>
+            <button onClick={previewReport} disabled={isProcessing}>
+                Preview PDF
+            </button>
+            <button onClick={downloadReport} disabled={isProcessing}>
+                {isProcessing ? "Processing..." : "Download PDF"}
+            </button>
+        </div>
+    );
+
     const links = [
         { label: "Uptime Reports", to: "/reports/uptime-reports", match: (p) => p.includes("uptime-reports") },
         { label: "SSL Reports", to: "/reports/ssl-reports", match: (p) => p.includes("ssl-reports") },
@@ -162,6 +176,7 @@ export default function UptimeLogsPage() {
                 onFilterApply={handleFilterApply}
                 pagination={{ page, pageSize, total: data?.total_count ?? 0, onPageChange: handlePageChange }}
                 tableActionsRight={tableActionsRight}
+                tableActionsLeft={tableActionsLeft}
             />
         </>
     );
