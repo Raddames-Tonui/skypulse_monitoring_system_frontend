@@ -15,54 +15,35 @@ const loginSchema = z.object({
 type FormData = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
-  const { login, user } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
   const redirectTo = "/dashboard";
-  const [authError, setAuthError] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitted, touchedFields },
+    formState: { errors, touchedFields },
   } = useForm<FormData>({
     resolver: zodResolver(loginSchema),
   });
 
   const getInputClass = (field: keyof FormData) => {
     if (errors[field]) return `${styles.formInput} ${styles.error}`;
-    if (authError && isSubmitted) return `${styles.formInput} ${styles.neutral}`;
     if (touchedFields[field]) return `${styles.formInput} ${styles.success}`;
     return styles.formInput;
   };
 
   const onSubmit = async (data: FormData) => {
-    setAuthError(false);
+    setAuthError(null);
 
     try {
-      await login(data.email, data.password);
-
-      const waitForUser = () =>
-        new Promise<void>((resolve, reject) => {
-          const interval = setInterval(() => {
-            if (user) {
-              clearInterval(interval);
-              resolve();
-            }
-          }, 50);
-          setTimeout(() => {
-            clearInterval(interval);
-            reject(new Error("User not set in time"));
-          }, 3000);
-        });
-
-      await waitForUser();
-
+      await login(data.email, data.password); // login sets user internally
       navigate({ to: redirectTo });
-    } catch (err) {
-      setAuthError(true);
+    } catch (err: any) {
+      setAuthError(err?.message || "Incorrect email or password");
     }
   };
-
 
   return (
     <div className={styles.loginContainer}>
@@ -72,7 +53,7 @@ export default function LoginPage() {
         </h2>
 
         {authError && (
-          <p className={styles.authError}>Incorrect email or password</p>
+          <p className={styles.authError}>{authError}</p>
         )}
 
         <label className={styles.label} htmlFor="email">Email</label>
@@ -102,7 +83,6 @@ export default function LoginPage() {
         <a href="/auth/request-password" className={styles.link}>
           Forgot your password?
         </a>
-
 
         <button type="submit" className={styles.button}>Login</button>
 

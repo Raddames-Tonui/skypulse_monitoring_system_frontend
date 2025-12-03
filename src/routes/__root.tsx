@@ -1,4 +1,4 @@
-import { createRootRoute, Outlet } from '@tanstack/react-router'
+import { createRootRoute, Link, Outlet } from '@tanstack/react-router'
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 // import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 // import { TanStackRouterDevtools } from '@tanstack/router-devtools'
@@ -23,7 +23,7 @@ const RootLayout = () => (
       <ThemeProvider>
         <Outlet />
         {/* <ReactQueryDevtools initialIsOpen={false} /> */}
-          {/* <TanStackRouterDevtools /> */}
+        {/* <TanStackRouterDevtools /> */}
       </ThemeProvider>
     </AuthProvider>
   </QueryClientProvider>
@@ -52,9 +52,9 @@ export const Route = createRootRoute({
     </svg>
     <h1 className="auth-title">404: Page Not Found</h1>
     <p className="auth-message">
-      Looks like this page ran away... 🏃💨 <br />
-      Or maybe it never existed 🤔
+      The page you are looking for cannot be found. <br />
+      It may have been moved, deleted, or the URL is incorrect.
     </p>
-    <button className='bg-secondary'>Back</button>
+    <Link to="/auth/login" className='btn-primary'>Go Back</Link>
   </section>
 })

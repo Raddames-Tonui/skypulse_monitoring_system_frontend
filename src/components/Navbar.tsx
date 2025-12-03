@@ -1,13 +1,11 @@
 import { useState } from "react";
 import Icon from "@/utils/Icon";
 import { useAuth } from "@/hooks/hooks";
-import { useNavigate } from "@tanstack/react-router";
 import { useTheme } from "@/context/ThemeProvider";
 
 const Navbar: React.FC = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
 
   const {
     isSidebarOpen,
@@ -17,10 +15,6 @@ const Navbar: React.FC = () => {
 
   const role = user?.roleName?.toLowerCase() || "";
 
-  const handleLogout = async () => {
-    await logout();
-    navigate({ to: "/auth/login" });
-  };
 
   const iconClass = `navbar-icon ${isSidebarOpen ? "open" : "collapsed"}`;
 
@@ -91,25 +85,32 @@ const Navbar: React.FC = () => {
 
             {user && showDropdown && (
               <div className="dropdown-menu show">
-                <p className="dropdown-user">{user?.fullName}</p>
+                <p className="dropdown-user">{user.fullName}</p>
+
                 <div className="dropdown-info">
-                  <p>
-                    <strong>Email:</strong> {user?.email}
-                  </p>
-                  <p>
-                    <strong>Role:</strong> {user?.roleName || "N/A"}
-                  </p>
+                  <p><strong>Role:</strong> {user.roleName || "N/A"}</p>
+                  <p><strong>Email:</strong> {user.email}</p>
+                  {user.companyName && <p><strong>Company:</strong> {user.companyName}</p>}
+
+                  <hr />
+
+                  <p><strong>Alert Channel:</strong> {user.userPreferences.alertChannel}</p>
+                  <p><strong>Weekly Reports:</strong> {user.userPreferences.receiveWeeklyReports ? "Yes" : "No"}</p>
+                  <p><strong>Language:</strong> {user.userPreferences.language}</p>
+                  <p><strong>Timezone:</strong> {user.userPreferences.timezone}</p>
                 </div>
-                <button className="dropdown-item" onClick={handleLogout}>
+
+                <button className="dropdown-item" onClick={logout}>
                   Logout
                 </button>
               </div>
             )}
+
           </div>
 
           <button
             className="navbar-hamburger mobile-only"
-            onClick={toggleMobileSidebar} 
+            onClick={toggleMobileSidebar}
           >
             <Icon iconName={isMobileSidebarOpen ? "closeMobile" : "hamburger"} />
           </button>

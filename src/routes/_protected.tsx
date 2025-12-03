@@ -7,7 +7,7 @@ import Navbar from '@/components/Navbar';
 import Sidebar from '@/components/Sidebar';
 import Loader from '@/components/Loader';
 import axiosClient from '@/utils/constants/axiosClient';
-import { useTheme } from '@/context/ThemeProvider'; 
+import { useTheme } from '@/context/ThemeProvider';
 import MobileSidebar from '@/components/MobileSidebar';
 import "@css/layout.css";
 
@@ -15,7 +15,7 @@ export const Route = createFileRoute('/_protected')({
   beforeLoad: async () => {
     try {
       await axiosClient.get('/auth/profile');
-      return null; 
+      return null;
     } catch (err: any) {
       return redirect({
         to: '/auth/login',
@@ -62,3 +62,4 @@ function ProtectedRouteComponent() {
     </section>
   );
 }
+

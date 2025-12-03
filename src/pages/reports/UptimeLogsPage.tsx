@@ -5,10 +5,9 @@ import { DataTable } from "@/components/table/DataTable";
 import type { SortRule, FilterRule } from "@/components/table/DataTable";
 import axiosClient from "@/utils/constants/axiosClient";
 import NavigationBar from "@/components/NavigationBar";
-import type { UptimeLogsResponse } from "@/context/types";
 import { Route } from "@/routes/_protected/reports/uptime-reports";
 import { useUptimeReportDownload } from "@/hooks/hooks";
-
+import type { UptimeLogsResponse } from "@/utils/types-authContext";
 
 const SORT_MAP: Record<string, string> = {
     monitored_service_name: "service",
@@ -42,10 +41,7 @@ export default function UptimeLogsPage() {
         ? searchParams.sort.split(",").filter(Boolean).map((s) => {
             const [key, dir = "asc"] = s.split(":");
             const col = Object.keys(SORT_MAP).find((k) => SORT_MAP[k] === key);
-            return {
-                column: (col ?? key) as keyof UptimeLog,
-                direction: dir as "asc" | "desc",
-            };
+            return { column: (col ?? key) as keyof UptimeLog, direction: dir as "asc" | "desc" };
         })
         : [];
 
@@ -56,8 +52,6 @@ export default function UptimeLogsPage() {
     const [filters, setFilters] = useState<FilterRule[]>([]);
     const [page, setPage] = useState(initialPage);
     const [pageSize, setPageSize] = useState(initialPageSize);
-
-
 
     const queryParams: Record<string, string | number> = { page, pageSize };
     filters.forEach((f) => {
@@ -117,7 +111,6 @@ export default function UptimeLogsPage() {
 
     useEffect(() => updateUrl(), [updateUrl]);
 
-    // --- Handlers
     const handleSortApply = (rules: SortRule[]) => setSortBy(rules);
     const handleFilterApply = (rules: FilterRule[]) => {
         setFilters(rules.filter((f) => f.value));
@@ -141,12 +134,20 @@ export default function UptimeLogsPage() {
 
     const { isProcessing, downloadReport, previewReport } = useUptimeReportDownload();
 
+    const pdfFilters = useMemo(() => {
+        const obj: Record<string, string | number | (string | number)[]> = {};
+        filters.forEach(f => {
+            if (f.value) obj[FILTER_MAP[f.column] ?? f.column] = f.value;
+        });
+        return obj;
+    }, [filters]);
+
     const tableActionsLeft = (
         <div style={{ display: "flex", gap: "0.5rem" }}>
-            <button  className="action-btn-sec" onClick={previewReport} disabled={isProcessing}>
+            <button className="action-btn-sec" onClick={() => previewReport(pdfFilters)} disabled={isProcessing}>
                 Preview PDF
             </button>
-            <button  className="action-btn-sec" onClick={downloadReport} disabled={isProcessing}>
+            <button className="action-btn-sec" onClick={() => downloadReport(pdfFilters)} disabled={isProcessing}>
                 {isProcessing ? "Processing..." : "Download PDF"}
             </button>
         </div>

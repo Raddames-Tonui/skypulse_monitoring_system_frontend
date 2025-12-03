@@ -52,17 +52,17 @@ export default function StatusSidebar({ data, system }) {
           </div>
         </div>
 
-        <p className="dashboard-status-subtext">
-          Using {data?.total_services ?? 0} of 50 monitors.
-        </p>
-
-
-        <div className="dashboard-status-item">
+          <div className="dashboard-status-item">
           <span className="dashboard-status-number gray">
             {formatUptime(system?.uptime_seconds ?? 0)}
           </span>
           <span className="dashboard-status-label">Uptime</span>
         </div>
+
+        <p className="dashboard-status-subtext ">
+          Using {data?.total_services ?? 0} of 50 monitors.
+        </p>
+      
       </div>
 
       {/* LAST 24 HOURS */}
@@ -70,14 +70,16 @@ export default function StatusSidebar({ data, system }) {
         <h3 className="dashboard-status-title">Last 24 Hours</h3>
 
         <div className="dashboard-status-grid">
-          <div className="dashboard-status-item">
-            <span className="dashboard-status-number red-bold">{uptimePercent}%</span>
-            <span className="dashboard-status-label">Overall Uptime</span>
-          </div>
+
 
           <div className="dashboard-status-item">
             <span className="dashboard-status-number gray">0</span>
             <span className="dashboard-status-label">Incidents</span>
+          </div>
+
+          <div className="dashboard-status-item">
+            <span className="dashboard-status-number red-bold">{uptimePercent}%</span>
+            <span className="dashboard-status-label">Overall Uptime</span>
           </div>
 
           <div className="dashboard-status-item">

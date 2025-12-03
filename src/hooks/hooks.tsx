@@ -1,6 +1,6 @@
 import { AuthContext } from "@/context/AuthContext";
 import type { AuthContextType } from "@/context/types";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useState , createContext} from "react";
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axiosClient from '@/utils/constants/axiosClient';
 import type { ApiError, ApiResponse, CreateUserPayload, CreateUserResponse, Users } from "@/utils/types";
@@ -8,6 +8,20 @@ import type { MonitoredService } from "@/utils/types";
 import toast from "react-hot-toast";
 import { saveAs } from "file-saver";
 
+
+interface LastRouteContextType {
+  lastRoute: string;
+  setLastRoute: (path: string) => void;
+}
+
+export const LastRouteContext = createContext<LastRouteContextType | undefined>(undefined);
+
+
+export const useLastRoute = () => {
+  const context = useContext(LastRouteContext);
+  if (!context) throw new Error("useLastRoute must be used within LastRouteProvider");
+  return context;
+};
 
 export const useUsers = (params: Record<string, string | number | boolean>) => {
   return useQuery<ApiResponse<Users>, ApiError>({
@@ -143,16 +157,15 @@ export function useSslReportDownload() {
     return { isProcessing, downloadReport, previewReport };
 }
 
-
 export function useUptimeReportDownload() {
     const [isProcessing, setIsProcessing] = useState(false);
 
-    const downloadReport = useCallback(async () => {
+    const downloadReport = useCallback(async (filters?: Record<string, string | number | (string | number)[]>) => {
         try {
             setIsProcessing(true);
 
             const response = await axiosClient.get("/reports/pdf/uptime", {
-                params: { period: 14, status: ["UP", "DOWN"] },
+                params: filters || {}, 
                 responseType: "blob",
             });
 
@@ -165,12 +178,12 @@ export function useUptimeReportDownload() {
         }
     }, []);
 
-    const previewReport = useCallback(async () => {
+    const previewReport = useCallback(async (filters?: Record<string, string | number | (string | number)[]>) => {
         try {
             setIsProcessing(true);
 
             const response = await axiosClient.get("/reports/pdf/uptime", {
-                params: { period: 14, status: ["UP", "DOWN"] },
+                params: filters || {},
                 responseType: "blob",
             });
 

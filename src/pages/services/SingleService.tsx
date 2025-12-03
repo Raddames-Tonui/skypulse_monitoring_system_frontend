@@ -4,7 +4,6 @@ import axiosClient from "@/utils/constants/axiosClient";
 import type { MonitoredService } from "@/utils/types-single-service";
 import { Route as SingleServiceRoute } from "@/routes/_protected/services/$uuid";
 
-import SimpleAreaChart from "@/components/charts/SimpleAreaChart";
 import PieChartWithCustomizedLabel from "@/components/charts/PieChartWithCustomizedLabel";
 
 import { DataTable } from "@/components/table/DataTable";
@@ -13,6 +12,7 @@ import "@/css/singleService.css";
 import Loader from "@/components/Loader";
 import UpdateServiceModal from "./UpdateServiceModalProps";
 import { useState } from "react";
+import SimpleAreaChart from "@/components/charts/SimpleAreaChart";
 
 export default function SingleServicePage() {
   const { uuid } = useParams({ from: SingleServiceRoute.id });
@@ -49,7 +49,7 @@ export default function SingleServicePage() {
   }));
 
   const uptimeColumns: ColumnProps<typeof uptimeTableRows[number]>[] = [
-    { id: "name", caption: "Service Name", size: 200 },
+    { id: "name", caption: "Check Number", size: 200 },
     { id: "status", caption: "Status", size: 100 },
     { id: "response_time_ms", caption: "Response Time (ms)", size: 150 },
     {
