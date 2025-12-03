@@ -3,6 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { DataTable } from "@/components/table/DataTable";
 import axiosClient from "@/utils/constants/axiosClient";
+import { useAuth } from "@/hooks/hooks";
 
 type FilterRule = { column: string; operator?: string; value: string };
 type SortRule = { column: string; direction: "asc" | "desc" };
@@ -27,6 +28,7 @@ const fetchServices = async (params: Record<string, string | number>) => {
 
 export default function MonitoredServicesPage() {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -111,11 +113,14 @@ export default function MonitoredServicesPage() {
     <div className="page-wrapper">
       <div className="page-header flex justify-between items-center mb-4">
         <h1>Monitored Services</h1>
-        <button className="btn btn-secondary"
-          onClick={() => navigate({ to: "/services/create" })}
-        >
-          New Service
-        </button>
+        {user?.roleName === "Viewer" ? <> </> :
+          <button className="btn btn-secondary"
+            onClick={() => navigate({ to: "/services/create" })}
+          >
+            New Service
+          </button>
+        }
+
       </div>
 
       <DataTable
