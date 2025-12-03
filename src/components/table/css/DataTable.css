@@ -101,8 +101,40 @@ tr {
     background-color: var(--primary-700);
     color: #ffffff;
     /* border-radius: 3px; */
-    border: none;
+    border: 1px solid var(--primary-700);
 }
+.action-btn:hover {
+    padding: 5px 10px;
+    cursor: pointer;
+    font-weight: bold;
+    background-color: #ffffff;
+    color: var(--primary-700) ;
+    /* border-radius: 3px; */
+    border: 1px solid var(--primary-700);
+}
+
+.action-btn-sec {
+    border: 1px solid var(--primary-900);
+    background: var(--bg-default);
+    color: var(--primary-800);
+    font-weight: 600;
+    padding: 5px 10px;
+    font-weight: bold;
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-right: 0.5rem;
+    text-decoration: none;
+}
+
+.action-btn-sec:hover {
+    padding: 5px 10px;
+    cursor: pointer;
+    font-weight: bold;
+    background: var(--primary-800);
+    color: var(--bg-default);
+}
+
 
 /* Active chip */
 .open-action {

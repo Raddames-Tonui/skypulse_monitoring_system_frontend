@@ -303,6 +303,7 @@ main {
     overflow:auto ;
     height: 100%;
     transition: width 0.3s ease;    
+    gap: 5rem;
 }
 
 .page-header {
@@ -382,9 +383,9 @@ footer {
 
 
 
-/* ==========================================================
+/*
    NAVBAR RESPONSIVE + ANIMATIONS
-   ========================================================== */
+ */
 
 /* ---------------------------------------------
    1. Base transitions for collapsing layout

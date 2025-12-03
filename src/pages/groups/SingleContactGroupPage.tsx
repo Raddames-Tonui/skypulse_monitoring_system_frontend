@@ -71,9 +71,9 @@ export default function SingleContactGroupPage() {
       </section>
 
       <section className="service-section">
-        <div>
+        <div className="header-group">
           <h3>Members</h3>
-          <button onClick={() => setOpenMembersModal(true)}>Add Members</button>
+          <button className="btn-primary" onClick={() => setOpenMembersModal(true)}>Add Members</button>
         </div>
 
         <DataTable
@@ -87,9 +87,9 @@ export default function SingleContactGroupPage() {
       </section>
 
       <section className="service-section">
-        <div>
+        <div className="header-group">
           <h3>Monitored Services</h3>
-          <button onClick={() => setServicesModal(true)}>Add Services</button>
+          <button className="btn-primary" onClick={() => setServicesModal(true)}>Add Services</button>
         </div>
 
         <DataTable

@@ -114,11 +114,6 @@ export type CreateUserResponse =
 
 
 
-
-
-
-
-
 // -------- SINGLE SERVICE --------------
 export interface ServiceDataResponse {
   data: ServiceData;
@@ -243,11 +238,6 @@ export interface AuditLogEntry {
   ip_address: string | null;
   date_created: string; 
 }
-
-
-
-//
-
 
 // -----------SIDEBAR PROPS ----------------------
 export interface MenuItem {

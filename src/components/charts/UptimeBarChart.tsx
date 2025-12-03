@@ -22,7 +22,7 @@ export default function UptimeBarChart({ data }: { data: UptimeLog[] }) {
         <XAxis dataKey="name" />
         <YAxis hide={true} /> 
         <Tooltip
-          formatter={(value: string, name: string, props) => {
+          formatter={(value: string) => {
             return [value, "Status"];
           }}
         />

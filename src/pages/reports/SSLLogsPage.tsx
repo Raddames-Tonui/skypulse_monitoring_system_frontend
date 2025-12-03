@@ -162,10 +162,10 @@ export default function SSLLogsPage() {
 
     const tableActionsLeft = (
         <div style={{ display: "flex", gap: "0.5rem" }}>
-            <button onClick={previewReport} disabled={isProcessing}>
+            <button className="action-btn-sec" onClick={previewReport} disabled={isProcessing}>
                 Preview PDF
             </button>
-            <button onClick={downloadReport} disabled={isProcessing}>
+            <button className="action-btn-sec" onClick={downloadReport} disabled={isProcessing}>
                 {isProcessing ? "Processing..." : "Download PDF"}
             </button>
         </div>

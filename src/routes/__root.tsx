@@ -55,5 +55,6 @@ export const Route = createRootRoute({
       Looks like this page ran away... 🏃💨 <br />
       Or maybe it never existed 🤔
     </p>
+    <button className='bg-secondary'>Back</button>
   </section>
 })

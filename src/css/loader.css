@@ -1,10 +1,22 @@
 @import url(./variables.css);
 
+
+.server-error, .loader {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+
 .loading  {
   display : flex;
   flex-direction: column;
   gap: 0.8rem;
 }
+
 .loading svg polyline {
   fill: none;
   stroke-linecap: round;

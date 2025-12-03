@@ -10,9 +10,6 @@ function Index() {
     <div className="home-container">
       <nav className="navbar">
         <div className="logo">
-          {/* <svg width="25" height="25" viewBox="0 0 18 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M9 0C4 0 0 4 0 9V16C0 16.7956 0.316071 17.5587 0.87868 18.1213C1.44129 18.6839 2.20435 19 3 19H6V11H2V9C2 7.14348 2.7375 5.36301 4.05025 4.05025C5.36301 2.7375 7.14348 2 9 2C10.8565 2 12.637 2.7375 13.9497 4.05025C15.2625 5.36301 16 7.14348 16 9V11H12V19H16V20H9V22H15C15.7956 22 16.5587 21.6839 17.1213 21.1213C17.6839 20.5587 18 19.7956 18 19V9C18 4 13.97 0 9 0Z" fill="#257d9e" />
-          </svg> */}
           <img src="/skypulse_flavicon.png" alt="" style={{ height: 60 }} />
         </div>
         <div className="nav-actions">
@@ -28,7 +25,7 @@ function Index() {
             in mind.
           </p>
           <div className="hero-actions">
-            <Link to="/auth/login" className="btn btn-outline">Learn More</Link>
+            {/* <Link to="/auth/login" className="btn btn-outline">Login</Link> */}
           </div>
         </div>
       </main>
@@ -63,7 +60,6 @@ function Index() {
 
         body, html, .home-container {
           height: 100vh;
-          font-family: system-ui, sans-serif;
           background: var(--bg-default);
           color: var(--primary-800);
         }
@@ -125,7 +121,6 @@ function Index() {
           justify-content: center;
         }
 
-        /* Buttons */
         .btn {
           padding: 0.6rem 1.4rem;
           border-radius: 8px;

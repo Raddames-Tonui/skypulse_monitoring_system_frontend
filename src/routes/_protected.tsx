@@ -3,14 +3,13 @@ import { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { useAuth } from '@/hooks/hooks';
 
-import "@css/layout.css";
-import "@css/Form.css";
 import Navbar from '@/components/Navbar';
 import Sidebar from '@/components/Sidebar';
 import Loader from '@/components/Loader';
 import axiosClient from '@/utils/constants/axiosClient';
 import { useTheme } from '@/context/ThemeProvider'; 
 import MobileSidebar from '@/components/MobileSidebar';
+import "@css/layout.css";
 
 export const Route = createFileRoute('/_protected')({
   beforeLoad: async () => {

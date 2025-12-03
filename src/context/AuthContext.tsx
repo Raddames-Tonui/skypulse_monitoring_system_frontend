@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
-import type { AuthContextType, UserProfile } from "./types";
+import type { AuthContextType, UserProfile } from "@/utils/types-authContext";
 import axiosClient from "@/utils/constants/axiosClient";
 import { toast } from "react-hot-toast";
 
@@ -15,9 +15,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-
-  console.log(user?.fullName);
-
   useEffect(() => {
     const initProfile = async () => {
       setIsLoading(true);
@@ -25,7 +22,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       try {
         await fetchProfile();
       } catch (err: any) {
-        console.error("Failed to fetch profile:", err);
         setError(err.response?.data?.message || err.message || "Failed to load profile");
       } finally {
         setIsLoading(false);

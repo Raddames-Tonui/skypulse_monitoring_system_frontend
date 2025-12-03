@@ -2,9 +2,9 @@ import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import "@/css/index.css"
+import "@/css/NavigationBar.css"
 
 import { routeTree } from './routeTree.gen'
-
 
 const router = createRouter({ routeTree })
 

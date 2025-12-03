@@ -334,8 +334,8 @@ export default function DynamicForm({ schema, onSubmit, initialData, className, 
       <form id={id} onSubmit={handleSubmit}>
         {layout?.map((node, i) => renderLayoutNode(node))}
         <div className={`form-buttons ${buttonClassName || ""}`}>
-          <button type="submit">Submit</button>
-          <button type="reset" onClick={handleReset}>Reset</button>
+          <button className="dynamic-form-submit-button" type="submit">Submit</button>
+          <button className="dynamic-form-reset-button" type="reset" onClick={handleReset}>Reset</button>
         </div>
       </form>
     </div>

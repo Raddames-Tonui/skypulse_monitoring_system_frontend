@@ -42,7 +42,7 @@ export default function SingleServicePage() {
   // --- Uptime Table ---
   const uptimeTableRows = service.uptime_logs.map((log) => ({
     uuid: service.uuid,
-    name: `Check #${log.id}`,
+    name: `Check ${log.id}`,
     status: log.status,
     response_time_ms: log.response_time_ms,
     ssl_warning: service.ssl_logs?.[0]?.days_remaining !== undefined && service?.ssl_logs[0].days_remaining < 30,
