@@ -37,7 +37,7 @@ function ProtectedRouteComponent() {
     }
   }, [user, isLoading, fetchProfile]);
 
-  if (isLoading || !user) {
+  if (isLoading || !user.roleName) {
     return (
       <div className='loader'>
         <Loader size={80} speed={1.8} className="mx-auto" ariaLabel="Loading..." />

@@ -147,9 +147,9 @@ export default function SingleServicePage() {
         </div>
         <div className="service-grid">
           <div><strong>Expected Status:</strong> {service.expected_status_code}</div>
-          <div><strong>Check Interval:</strong> {service.check_interval}s</div>
+          <div><strong>Check Interval:</strong> {service.check_interval}sec</div>
           <div><strong>Retry Count:</strong> {service.retry_count}</div>
-          <div><strong>Retry Delay:</strong> {service.retry_delay}s</div>
+          <div><strong>Retry Delay:</strong> {service.retry_delay}sec</div>
           <div><strong>Region:</strong> {service.region}</div>
           <div><strong>SSL Enabled:</strong> {service.ssl_enabled ? "Yes" : "No"}</div>
           <div><strong>Consecutive Failures:</strong> {service.consecutive_failures}</div>

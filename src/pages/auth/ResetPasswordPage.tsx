@@ -1,15 +1,14 @@
 import { useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { useMutation } from "@tanstack/react-query";
 import axiosClient from "@/utils/constants/axiosClient";
 import toast from "react-hot-toast";
-import { Route } from "@/routes/_public/auth/reset-password";
 
 import styles from "@/css/login.module.css";
 
 export default function ResetPasswordPage() {
-  const searchParams = Route.useSearch();
-  const token = (searchParams as any).token as string | undefined;
+  const searchParams = useSearch({ from: "/_public/auth/reset-password" });
+  const token = searchParams.token;
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -91,9 +90,8 @@ export default function ResetPasswordPage() {
           placeholder="Enter new password"
         />
         <p
-          className={`${styles.errorMessage} ${
-            touched.password && password.length < 6 ? styles.active : ""
-          }`}
+          className={`${styles.errorMessage} ${touched.password && password.length < 6 ? styles.active : ""
+            }`}
         >
           Password must be at least 6 characters
         </p>
@@ -113,15 +111,13 @@ export default function ResetPasswordPage() {
           placeholder="Confirm new password"
         />
         <p
-          className={`${styles.errorMessage} ${
-            touched.confirmPassword && password !== confirmPassword
-              ? styles.active
-              : ""
-          }`}
+          className={`${styles.errorMessage} ${touched.confirmPassword && password !== confirmPassword
+            ? styles.active
+            : ""
+            }`}
         >
           Passwords do not match
         </p>
-
         <button
           type="submit"
           className={styles.button}
@@ -129,6 +125,10 @@ export default function ResetPasswordPage() {
         >
           {mutation.isLoading ? "Resetting..." : "Reset Password"}
         </button>
+        <p className={styles.footerText}>
+          Remembered Password?{" "}
+          <Link to="/auth/login" from="/auth/reset-password" className={styles.greenLink}>Back to Login</Link>
+        </p>
       </form>
     </div>
   );

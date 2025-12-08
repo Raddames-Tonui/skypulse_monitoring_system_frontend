@@ -172,8 +172,8 @@ export default function SSLLogsPage() {
     );
 
     const links = [
-        { label: "Uptime Reports", to: "/reports/uptime-reports", match: (p) => p.includes("uptime-reports") },
-        { label: "SSL Reports", to: "/reports/ssl-reports", match: (p) => p.includes("ssl-reports") },
+        { label: "Uptime Reports", to: "/reports/uptime-reports", match: (p: unknown) => (p as string).includes("uptime-reports") },
+        { label: "SSL Reports", to: "/reports/ssl-reports", match: (p: unknown) => (p as string).includes("ssl-reports") },
     ];
     return (
         <div>

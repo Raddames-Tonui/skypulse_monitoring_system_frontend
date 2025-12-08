@@ -17,7 +17,6 @@ import { Route as ProtectedOperatorRouteImport } from './routes/_protected/_oper
 import { Route as ProtectedAdminRouteImport } from './routes/_protected/_admin'
 import { Route as ProtectedServicesIndexRouteImport } from './routes/_protected/services/index'
 import { Route as ProtectedDashboardIndexRouteImport } from './routes/_protected/dashboard/index'
-import { Route as PublicAuthUnderdevelopmentRouteImport } from './routes/_public/auth/underdevelopment'
 import { Route as PublicAuthUnauthorizedRouteImport } from './routes/_public/auth/unauthorized'
 import { Route as PublicAuthSetPasswordRouteImport } from './routes/_public/auth/set-password'
 import { Route as PublicAuthResetPasswordRouteImport } from './routes/_public/auth/reset-password'
@@ -72,12 +71,6 @@ const ProtectedDashboardIndexRoute = ProtectedDashboardIndexRouteImport.update({
   path: '/dashboard/',
   getParentRoute: () => ProtectedRoute,
 } as any)
-const PublicAuthUnderdevelopmentRoute =
-  PublicAuthUnderdevelopmentRouteImport.update({
-    id: '/auth/underdevelopment',
-    path: '/auth/underdevelopment',
-    getParentRoute: () => PublicRoute,
-  } as any)
 const PublicAuthUnauthorizedRoute = PublicAuthUnauthorizedRouteImport.update({
   id: '/auth/unauthorized',
   path: '/auth/unauthorized',
@@ -192,7 +185,6 @@ export interface FileRoutesByFullPath {
   '/auth/reset-password': typeof PublicAuthResetPasswordRoute
   '/auth/set-password': typeof PublicAuthSetPasswordRoute
   '/auth/unauthorized': typeof PublicAuthUnauthorizedRoute
-  '/auth/underdevelopment': typeof PublicAuthUnderdevelopmentRoute
   '/dashboard': typeof ProtectedDashboardIndexRoute
   '/services': typeof ProtectedServicesIndexRoute
   '/groups/$uuid': typeof ProtectedAdminGroupsUuidRoute
@@ -216,7 +208,6 @@ export interface FileRoutesByTo {
   '/auth/reset-password': typeof PublicAuthResetPasswordRoute
   '/auth/set-password': typeof PublicAuthSetPasswordRoute
   '/auth/unauthorized': typeof PublicAuthUnauthorizedRoute
-  '/auth/underdevelopment': typeof PublicAuthUnderdevelopmentRoute
   '/dashboard': typeof ProtectedDashboardIndexRoute
   '/services': typeof ProtectedServicesIndexRoute
   '/groups/$uuid': typeof ProtectedAdminGroupsUuidRoute
@@ -246,7 +237,6 @@ export interface FileRoutesById {
   '/_public/auth/reset-password': typeof PublicAuthResetPasswordRoute
   '/_public/auth/set-password': typeof PublicAuthSetPasswordRoute
   '/_public/auth/unauthorized': typeof PublicAuthUnauthorizedRoute
-  '/_public/auth/underdevelopment': typeof PublicAuthUnderdevelopmentRoute
   '/_protected/dashboard/': typeof ProtectedDashboardIndexRoute
   '/_protected/services/': typeof ProtectedServicesIndexRoute
   '/_protected/_admin/groups/$uuid': typeof ProtectedAdminGroupsUuidRoute
@@ -272,7 +262,6 @@ export interface FileRouteTypes {
     | '/auth/reset-password'
     | '/auth/set-password'
     | '/auth/unauthorized'
-    | '/auth/underdevelopment'
     | '/dashboard'
     | '/services'
     | '/groups/$uuid'
@@ -296,7 +285,6 @@ export interface FileRouteTypes {
     | '/auth/reset-password'
     | '/auth/set-password'
     | '/auth/unauthorized'
-    | '/auth/underdevelopment'
     | '/dashboard'
     | '/services'
     | '/groups/$uuid'
@@ -325,7 +313,6 @@ export interface FileRouteTypes {
     | '/_public/auth/reset-password'
     | '/_public/auth/set-password'
     | '/_public/auth/unauthorized'
-    | '/_public/auth/underdevelopment'
     | '/_protected/dashboard/'
     | '/_protected/services/'
     | '/_protected/_admin/groups/$uuid'
@@ -401,13 +388,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard'
       preLoaderRoute: typeof ProtectedDashboardIndexRouteImport
       parentRoute: typeof ProtectedRoute
-    }
-    '/_public/auth/underdevelopment': {
-      id: '/_public/auth/underdevelopment'
-      path: '/auth/underdevelopment'
-      fullPath: '/auth/underdevelopment'
-      preLoaderRoute: typeof PublicAuthUnderdevelopmentRouteImport
-      parentRoute: typeof PublicRoute
     }
     '/_public/auth/unauthorized': {
       id: '/_public/auth/unauthorized'
@@ -609,7 +589,6 @@ interface PublicRouteChildren {
   PublicAuthResetPasswordRoute: typeof PublicAuthResetPasswordRoute
   PublicAuthSetPasswordRoute: typeof PublicAuthSetPasswordRoute
   PublicAuthUnauthorizedRoute: typeof PublicAuthUnauthorizedRoute
-  PublicAuthUnderdevelopmentRoute: typeof PublicAuthUnderdevelopmentRoute
 }
 
 const PublicRouteChildren: PublicRouteChildren = {
@@ -619,7 +598,6 @@ const PublicRouteChildren: PublicRouteChildren = {
   PublicAuthResetPasswordRoute: PublicAuthResetPasswordRoute,
   PublicAuthSetPasswordRoute: PublicAuthSetPasswordRoute,
   PublicAuthUnauthorizedRoute: PublicAuthUnauthorizedRoute,
-  PublicAuthUnderdevelopmentRoute: PublicAuthUnderdevelopmentRoute,
 }
 
 const PublicRouteWithChildren =
