@@ -1,18 +1,21 @@
+import { useState } from "react";
+import { Route as SingleServiceRoute } from "@/routes/_protected/services/$uuid";
 import { useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import axiosClient from "@/utils/constants/axiosClient";
+
 import type { MonitoredService } from "@/utils/types-single-service";
-import { Route as SingleServiceRoute } from "@/routes/_protected/services/$uuid";
+import axiosClient from "@/utils/constants/axiosClient";
+
 
 import PieChartWithCustomizedLabel from "@/components/charts/PieChartWithCustomizedLabel";
-
-import { DataTable } from "@/components/table/DataTable";
-import type { ColumnProps } from "@/components/table/DataTable";
-import "@/css/singleService.css";
-import Loader from "@/components/Loader";
-import UpdateServiceModal from "./UpdateServiceModalProps";
-import { useState } from "react";
 import SimpleAreaChart from "@/components/charts/SimpleAreaChart";
+import type { ColumnProps } from "@/components/table/DataTable";
+import UpdateServiceModal from "./UpdateServiceModalProps";
+import { DataTable } from "@/components/table/DataTable";
+import Loader from "@/components/Loader";
+
+import "@/css/singleService.css";
+
 
 export default function SingleServicePage() {
   const { uuid } = useParams({ from: SingleServiceRoute.id });
@@ -133,7 +136,7 @@ export default function SingleServicePage() {
       <UpdateServiceModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        initialData={service} 
+        initialData={service}
       />
 
 

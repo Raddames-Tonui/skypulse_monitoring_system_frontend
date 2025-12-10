@@ -1,14 +1,13 @@
-import { useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { DataTable } from "@/components/table/DataTable";
 import type { ColumnProps } from "@/components/table/DataTable";
 import StatusSidebar from "../components/StatusSidebar";
-import "@/css/dashboard.css";
 import { useSystemHealthSSE, useServiceStatusSSE } from "@/hooks/useSSE";
 import type { Service } from "@/utils/types";
+import "@/css/dashboard.css";
+
 
 export default function Dashboard() {
-  const navigate = useNavigate();
-
   const sseData = useServiceStatusSSE();
   const systemHealth = useSystemHealthSSE();
 
@@ -51,17 +50,12 @@ export default function Dashboard() {
       caption: "Actions",
       size: 200,
       renderCell: (_, row) => (
-        <button
+        <Link to="/services/$uuid"
+          params={{ uuid: row.uuid }}
           className="view-button"
-          onClick={() =>
-            navigate({
-              to: "/services/$uuid",
-              params: { uuid: row.uuid },
-            })
-          }
         >
           View
-        </button>
+        </Link>
       ),
     },
   ];

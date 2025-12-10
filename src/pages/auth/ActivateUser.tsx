@@ -1,18 +1,17 @@
 import { useState, useContext } from 'react'
-import { useNavigate } from '@tanstack/react-router'
+import { useNavigate, useSearch } from '@tanstack/react-router'
 import { useMutation } from '@tanstack/react-query'
 import axiosClient from '@/utils/constants/axiosClient'
-import { Route } from '@/routes/_public/auth/set-password'
 import toast from 'react-hot-toast'
 import { AuthContext } from '@/context/AuthContext'
 
-import styles from '@/css/login.module.css' 
+import styles from '@/css/login.module.css'
 
 export default function ActivateUser() {
-  const searchParams = Route.useSearch()
-  const token = (searchParams as any).token as string | undefined
+  const searchParams = useSearch({ from: "/_public/auth/set-password" });
+  const token = searchParams.token;
 
-  const [password, setPassword] = useState('')
+  const [password, setPassword] = useState("")
   const [touched, setTouched] = useState(false)
   const navigate = useNavigate()
   const auth = useContext(AuthContext)
@@ -27,7 +26,6 @@ export default function ActivateUser() {
         await auth?.fetchProfile()
         navigate({ to: '/dashboard' })
       } catch (err) {
-        console.error(err)
         toast.error('Failed to fetch profile after activation')
       }
     },
@@ -41,13 +39,21 @@ export default function ActivateUser() {
     e.preventDefault()
     setTouched(true)
 
-    if (!password || password.length < 6) return
+    if (!password || password.length < 6) {
+      return
+    }
 
-    if (token) mutation.mutate({ token, password })
+    if (!token) {
+      toast.error("Missing reset token");
+      return;
+    }
+    mutation.mutate({ token, password })
   }
 
   const getInputClass = () => {
-    if (!touched) return styles.formInput
+    if (!touched) {
+      return styles.formInput
+    }
     return password.length >= 6 ? `${styles.formInput} ${styles.success}` : `${styles.formInput} ${styles.error}`
   }
 
@@ -78,8 +84,8 @@ export default function ActivateUser() {
           </p>
         )}
 
-        <button className={styles.button} type="submit" disabled={mutation.isLoading}>
-          {mutation.isLoading ? 'Activating...' : 'Activate Account'}
+        <button className={styles.button} type="submit" disabled={mutation.isPending}>
+          {mutation.isPending ? 'Activating...' : 'Activate Account'}
         </button>
       </form>
     </div>

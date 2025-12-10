@@ -469,7 +469,7 @@ export const createUserSchema: any = {
   id: "create-user-form",
   meta: {
     title: "Create New User",
-    subtitle: "Add a new user to the organization",
+    subtitle: "Add a new user to the system",
   },
   fields: {
     first_name: {
@@ -504,8 +504,8 @@ export const createUserSchema: any = {
       props: {
         data: [
           { label: "Viewer", value: "VIEWER" },
-          { label: "Admin", value: "ADMIN" },
-          { label: "Operator", value: "MANAGER" },
+          { label: "Operator", value: "OPERATOR" },
+          { label: "Admin", value: "ADMIN" }
         ],
       },
       rules: { required: "Role is required" },
