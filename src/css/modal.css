@@ -3,17 +3,17 @@
 .custom-modal-overlay {
   position: fixed;
   inset: 0;
-  background: hsla(0, 0%, 42%, 0.45);
+  background: hsla(0, 0%, 5%, 0.5);
   display: none;
   align-items: center;
   justify-content: center;
-  z-index: 500;
+  z-index: 700;
   padding: 20px;
 }
 
 .custom-modal-box {
   background: var(--bg-default);
-  min-width: 50vw;
+  min-width: 80vw;
   max-width: 95vw;
   max-height: 90vh;           
   min-height: 80vh;
@@ -29,13 +29,12 @@
   align-items: center;
   background: var(--primary-700);
   color: var(--bg-default);
-  padding: 5px 20px;
+  padding: 0.8em;
 }
 
 .custom-modal-header h2 {
-  font-size: 16px;
+  font-size: 1rem;
   margin: 0;
-  color: var(--primary-100);
 }
 
 .custom-modal-close-icon {
@@ -118,10 +117,17 @@
   color: var(--primary-700);
 }
 
-@media (max-width: 480px) {
+@media (max-width: 760px) {
+  .custom-modal-overlay {
+    padding: 0;
+    align-items: flex-start; 
+    justify-content: center;
+  }
+
   .custom-modal-box {
     width: 100%;
     height: 100%;
+    min-height: 100vh;
     max-height: 100vh;
     border-radius: 0;
   }
@@ -133,5 +139,6 @@
 
   .custom-modal-body {
     padding: 16px;
+    overflow-y: auto;
   }
 }

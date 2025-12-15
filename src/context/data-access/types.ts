@@ -1,4 +1,11 @@
 
+// ----------- GENERIC API RESPONSE  -----------
+export type ApiSingleResponse<T> = {
+    data: T;
+    message: string;
+}
+
+
 // ----------- GENERIC API RESPONSE -----------
 export type ApiResponse<T> = {
     domain: string;
@@ -135,16 +142,17 @@ export interface AuthContextType {
 
 
 export type UserRecord = {
-    user_email: string;
-    is_active: boolean;
-    date_created: string; 
-    last_name: string;
-    uuid: string;
-    role_name: 'Admin' | 'Operator' | 'Viewer'; 
-    date_modified: string; 
-    company_name: string;
-    id: number;
-    first_name: string;
+  user_email: string;
+  is_active: boolean;
+  date_created: string; 
+  last_name?: string;
+  uuid: string;
+  role_name: 'ADMIN' | 'OPERATOR' | 'VIEWER'; 
+  date_modified: string; 
+  company_name: string;
+  id: number;
+  first_name?: string;
+  full_name?: string;
 };
 
 export type UsersApiResponse = ApiResponse<UserRecord>;

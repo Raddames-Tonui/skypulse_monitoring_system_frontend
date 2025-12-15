@@ -1,6 +1,7 @@
 import type { IconName } from "./IconsList";
 
 // ----------- GENERIC API RESPONSE -----------
+
 export type ApiResponse<T> = {
   domain: string;
   current_page: number;

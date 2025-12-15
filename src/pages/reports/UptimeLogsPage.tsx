@@ -7,7 +7,7 @@ import axiosClient from "@/utils/constants/axiosClient";
 import NavigationBar from "@/components/NavigationBar";
 import { Route } from "@/routes/_protected/reports/uptime-reports";
 import { useUptimeReportDownload } from "@/hooks/hooks";
-import type { UptimeLogsResponse } from "@/utils/types-authContext";
+import type { UptimeLogsResponse } from "@/context/data-access/types";
 
 const SORT_MAP: Record<string, string> = {
     monitored_service_name: "service",

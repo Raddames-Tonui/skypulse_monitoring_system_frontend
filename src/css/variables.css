@@ -5,17 +5,18 @@
   --bg-tertiary: #EEF1F4;
   --bg-muted: #FAFBFC;
 
-  /* Primary (Blue) */
-  --primary-50:  #F1FAFF;
-  --primary-100: #E4F5FF;
-  --primary-200: #C8EAFE;
-  --primary-300: #A5DBF7;
-  --primary-400: #5CC6ED;
-  --primary-500: #0BA5DE;
-  --primary-600: #0885B4;
-  --primary-700: #004E6B;
-  --primary-800: #044765;
-  --primary-900: #233D7D;
+  /* Primary (Blue) */ 
+  --primary-50: #daf4ff;
+  --primary-100: #aedfff;
+  --primary-200: #81cefb;
+  --primary-300: #51c0f8;
+  --primary-400: #24b5f4;
+  --primary-500: #0ba3db;
+  --primary-600: #0073ab;
+  --primary-700: #004a7b;
+  --primary-800: #00274d;
+  --primary-900: #000c1e;
+
 
   /* Accent (Coral / Red-Orange) */
   --accent-50:  #FFF5F5;

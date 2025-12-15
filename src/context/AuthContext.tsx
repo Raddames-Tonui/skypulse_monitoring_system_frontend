@@ -1,9 +1,9 @@
 import React, { createContext, useState, useEffect, useCallback } from "react";
 import type { ReactNode } from "react";
-import type { AuthContextType, UserProfile } from "@/utils/types-authContext";
+import type { AuthContextType, UserProfile } from "@/context/data-access/types";
 import axiosClient from "@/utils/constants/axiosClient";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "@tanstack/react-router"; // or react-router-dom
+import { useNavigate } from "@tanstack/react-router";
 
 interface AuthProviderProps {
   children: ReactNode;

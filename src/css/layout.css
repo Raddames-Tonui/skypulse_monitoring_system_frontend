@@ -135,7 +135,7 @@ header {
   border-radius: 8px;
   box-shadow: 0 6px 12px rgba(0,0,0,0.15);
   min-width: 220px;
-  z-index: 1000;
+  z-index: 500;
   padding:  0;
   opacity: 0;
   transform: translateX(20px);
@@ -212,6 +212,169 @@ header {
   }
 }
 
+
+
+
+
+/*
+   NAVBAR RESPONSIVE + ANIMATIONS
+ */
+
+/* ---------------------------------------------
+   1. Base transitions for collapsing layout
+   --------------------------------------------- */
+header,
+.mic-icon,
+.header-wrapper,
+.icon-search,
+.logo h1,
+.logo h2,
+.icon-search select {
+    transition: all 0.3s ease;
+}
+
+/* ---------------------------------------------
+   2. Hide long text on tablets
+   --------------------------------------------- */
+@media (max-width: 1024px) {
+    .responsive-hide {
+        display: none !important;
+    }
+
+    .icon-search {
+        gap: 16px;
+    }
+
+    .icon-search select {
+        padding: 4px 26px 4px 8px;
+        font-size: 12px;
+    }
+}
+
+/* ---------------------------------------------
+   3. Transform into mobile navbar (≤ 768px)
+   --------------------------------------------- */
+   
+@media (max-width: 768px) {
+    header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        height: 50px;
+        animation: navbar-slide-down 0.3s ease forwards;
+    }
+
+    @keyframes navbar-slide-down {
+        from { transform: translateY(-100%); }
+        to   { transform: translateY(0); }
+    }
+
+    .mic-icon {
+        width: 48px !important;
+        border-right: none;
+    }
+
+    /* center items */
+    .header-wrapper {
+        margin: 0 0.5rem;
+        gap: 10px;
+    }
+
+    .icon-search select {
+        display: none;
+    }
+
+    /* shrink icons */
+    .navbar-icon {
+        font-size: 18px;
+        width: 28px;
+        height: 28px;
+    }
+
+    .avatar-icon {
+        padding: 3px;
+    }
+
+    .dropdown-menu {
+        right: -40px;
+        min-width: 240px;
+        transform: translateY(10px);
+    }
+}
+
+
+/* ---------------------------------------------
+   4. Ultra-small screens (≤ 480px)
+   --------------------------------------------- */
+@media (max-width: 480px) {
+    .header-wrapper {
+        justify-content: space-between;
+    }
+
+    .icon-search {
+        gap: 14px;
+    }
+
+    .avatar-icon {
+        padding: 2px;
+    }
+
+    .dropdown-menu {
+        min-width: 200px;
+    }
+}
+
+/* 
+ Add Animation Class for Notification + Avatar Icons
+
+To match the first navbar’s smooth feel:
+*/
+
+
+.navbar-icon {
+    cursor: pointer;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.navbar-icon:hover {
+    transform: scale(1.12);
+    opacity: 0.85;
+}
+
+/* 
+This makes the left mic-icon behave like a sliding block: */
+.mic-icon {
+    transition: width 0.3s ease, border-color 0.3s ease;
+}
+
+
+
+
+/* 
+  Smooth Dropdown Animation
+*/
+
+.dropdown-menu {
+    animation: dropdown-fade 0.25s ease forwards;
+}
+
+@keyframes dropdown-fade {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+
+
+/* SIDEBAR */
 
 
 aside {
@@ -381,166 +544,6 @@ footer {
 
 
 
-
-
-
-
-
-
-/*
-   NAVBAR RESPONSIVE + ANIMATIONS
- */
-
-/* ---------------------------------------------
-   1. Base transitions for collapsing layout
-   --------------------------------------------- */
-header,
-.mic-icon,
-.header-wrapper,
-.icon-search,
-.logo h1,
-.logo h2,
-.icon-search select {
-    transition: all 0.3s ease;
-}
-
-/* ---------------------------------------------
-   2. Hide long text on tablets
-   --------------------------------------------- */
-@media (max-width: 1024px) {
-    .responsive-hide {
-        display: none !important;
-    }
-
-    .icon-search {
-        gap: 16px;
-    }
-
-    .icon-search select {
-        padding: 4px 26px 4px 8px;
-        font-size: 12px;
-    }
-}
-
-/* ---------------------------------------------
-   3. Transform into mobile navbar (≤ 768px)
-   --------------------------------------------- */
-   
-@media (max-width: 768px) {
-    header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        z-index: 1000;
-        height: 50px;
-        animation: navbar-slide-down 0.3s ease forwards;
-    }
-
-    @keyframes navbar-slide-down {
-        from { transform: translateY(-100%); }
-        to   { transform: translateY(0); }
-    }
-
-    .mic-icon {
-        width: 48px !important;
-        border-right: none;
-    }
-
-    /* center items */
-    .header-wrapper {
-        margin: 0 0.5rem;
-        gap: 10px;
-    }
-
-    .icon-search select {
-        display: none;
-    }
-
-    /* shrink icons */
-    .navbar-icon {
-        font-size: 18px;
-        width: 28px;
-        height: 28px;
-    }
-
-    .avatar-icon {
-        padding: 3px;
-    }
-
-    .dropdown-menu {
-        right: -40px;
-        min-width: 240px;
-        transform: translateY(10px);
-    }
-}
-
-
-/* ---------------------------------------------
-   4. Ultra-small screens (≤ 480px)
-   --------------------------------------------- */
-@media (max-width: 480px) {
-    .header-wrapper {
-        justify-content: space-between;
-    }
-
-    .icon-search {
-        gap: 14px;
-    }
-
-    .avatar-icon {
-        padding: 2px;
-    }
-
-    .dropdown-menu {
-        min-width: 200px;
-    }
-}
-
-/* 
- Add Animation Class for Notification + Avatar Icons
-
-To match the first navbar’s smooth feel:
-*/
-
-
-.navbar-icon {
-    cursor: pointer;
-    transition: transform 0.25s ease, opacity 0.25s ease;
-}
-
-.navbar-icon:hover {
-    transform: scale(1.12);
-    opacity: 0.85;
-}
-
-/* 
-This makes the left mic-icon behave like a sliding block: */
-.mic-icon {
-    transition: width 0.3s ease, border-color 0.3s ease;
-}
-
-
-
-
-/* 
-  Smooth Dropdown Animation
-*/
-
-.dropdown-menu {
-    animation: dropdown-fade 0.25s ease forwards;
-}
-
-@keyframes dropdown-fade {
-    from {
-        opacity: 0;
-        transform: translateY(10px) scale(0.98);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
 
 
 

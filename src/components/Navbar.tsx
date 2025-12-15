@@ -2,61 +2,40 @@ import { useState } from "react";
 import Icon from "@/utils/Icon";
 import { useAuth } from "@/hooks/hooks";
 import { useTheme } from "@/context/ThemeProvider";
+import GetUserProfileModal from "@/pages/users/GetUserProfileModal";
 
 const Navbar: React.FC = () => {
   const [showDropdown, setShowDropdown] = useState(false);
-  const { user, logout } = useAuth();
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
-  const {
-    isSidebarOpen,
-    isMobileSidebarOpen,
-    toggleMobileSidebar,
-  } = useTheme();
+  const { user, logout } = useAuth();
+  const { isSidebarOpen, isMobileSidebarOpen, toggleMobileSidebar } = useTheme();
 
   const role = user?.roleName?.toLowerCase() || "";
-
-
   const iconClass = `navbar-icon ${isSidebarOpen ? "open" : "collapsed"}`;
 
   const roleColor = (() => {
     switch (role) {
-      case "operator":
-        return "#FD7E14";
-      case "admin":
-        return "#fd1414ff";
-      case "viewer":
-        return "#28A745";
-      default:
-        return "black";
+      case "operator": return "#FD7E14";
+      case "admin": return "#fd1414ff";
+      case "viewer": return "#28A745";
+      default: return "black";
     }
   })();
 
   return (
     <header>
-      <div
-        className="mic-icon"
-        style={{
-          width: isSidebarOpen ? "240px" : "48px",
-          transition: "width 0.3s ease",
-        }}
-      >
+      <div className="mic-icon" style={{ width: isSidebarOpen ? "240px" : "48px", transition: "width 0.3s ease" }}>
         <div>
           <svg width="100%" height="40" viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg">
-            <polyline
-              points="0,25 10,25 20,15 30,35 40,25 50,25 60,10 70,40 80,25 90,25 100,25"
+            <polyline points="0,25 10,25 20,15 30,35 40,25 50,25 60,10 70,40 80,25 90,25 100,25"
               fill="none"
               stroke="#ffffffff"
               strokeWidth="4"
               strokeLinecap="round"
               strokeLinejoin="round"
             >
-              <animate
-                attributeName="stroke-dashoffset"
-                from="0"
-                to="20"
-                dur="0.5s"
-                repeatCount="indefinite"
-              />
+              <animate attributeName="stroke-dashoffset" from="0" to="20" dur="0.5s" repeatCount="indefinite" />
             </polyline>
           </svg>
         </div>
@@ -65,9 +44,7 @@ const Navbar: React.FC = () => {
       <div className="header-wrapper">
         <div className="logo">
           <h1 className="responsive-hide">{user?.companyName || "Company Name"}</h1>
-          <h2 style={{ color: roleColor }} className="responsive-hide">
-            {user?.roleName?.toLowerCase() || ""}
-          </h2>
+          <h2 style={{ color: roleColor }} className="responsive-hide">{user?.roleName?.toLowerCase() || ""}</h2>
         </div>
 
         <div className="icon-search">
@@ -76,10 +53,7 @@ const Navbar: React.FC = () => {
           </div>
 
           <div className="avatar-dropdown">
-            <div
-              className={`${iconClass} avatar-icon`}
-              onClick={() => setShowDropdown((prev) => !prev)}
-            >
+            <div className={`${iconClass} avatar-icon`} onClick={() => setShowDropdown((prev) => !prev)}>
               <Icon iconName="avatar" />
             </div>
 
@@ -89,15 +63,21 @@ const Navbar: React.FC = () => {
 
                 <div className="dropdown-info">
                   <p><strong>Role:</strong> {user.roleName || "N/A"}</p>
-                  <p><strong>Email:</strong> {user.email}</p>
-                  {user.companyName && <p><strong>Company:</strong> {user.companyName}</p>}
-
-                  <hr />
-
                   <p><strong>Alert Channel:</strong> {user.userPreferences.alertChannel}</p>
                   <p><strong>Weekly Reports:</strong> {user.userPreferences.receiveWeeklyReports ? "Yes" : "No"}</p>
                   <p><strong>Language:</strong> {user.userPreferences.language}</p>
                   <p><strong>Timezone:</strong> {user.userPreferences.timezone}</p>
+
+                  <div style={{ display: "flex", gap: "1rem" }}>
+                    <strong><Icon iconName="settings" style={{ color: "black" }} /></strong>
+                    <button
+                      type="button"
+                      style={{ background: "none", border: "none", cursor: "pointer", textDecoration: "none", color: "black" }}
+                      onClick={() => setIsProfileModalOpen(true)}
+                    >
+                      Settings
+                    </button>
+                  </div>
                 </div>
 
                 <button className="dropdown-item" onClick={logout}>
@@ -105,17 +85,19 @@ const Navbar: React.FC = () => {
                 </button>
               </div>
             )}
-
           </div>
 
-          <button
-            className="navbar-hamburger mobile-only"
-            onClick={toggleMobileSidebar}
-          >
+          <button className="navbar-hamburger mobile-only" onClick={toggleMobileSidebar}>
             <Icon iconName={isMobileSidebarOpen ? "closeMobile" : "hamburger"} />
           </button>
         </div>
       </div>
+
+      {/* Profile Modal */}
+      <GetUserProfileModal
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+      />
     </header>
   );
 };
