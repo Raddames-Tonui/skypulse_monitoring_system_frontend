@@ -1,4 +1,3 @@
-/* formstyle.module.css */
 @import "./variables.css";
 
 /*GLOBAL / VARIABLES*/
@@ -97,7 +96,7 @@
 :global(.form-h1) {
   font-size: 1.75rem;
   color: var(--primary-700);
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
   text-align: start;
   transition: color .2s ease;
 }

@@ -108,8 +108,8 @@
   }
 }
 
-/* 
-   AUTO-RESPONSIVE GRID (3 → 2 → 1) 
+/*
+   AUTO-RESPONSIVE GRID (3 → 2 → 1)
    */
 .grid[data-responsive="true"] {
   --min-col: 260px;
@@ -256,7 +256,7 @@ textarea {
   margin: var(--space-sm) 0 var(--space-md);
 }
 
-/* 
+/*
    BUTTONS  */
 .form-buttons {
   display: flex;
@@ -340,7 +340,7 @@ textarea {
   transform: translateX(20px);
 }
 
-/* 
+/*
    MULTISELECT  */
 .multiselect-wrapper {
   border: 1px solid #ccc;
@@ -411,7 +411,7 @@ textarea {
   color: var(--primary-700);
 }
 
-/* 
+/*
    ERROR MESSAGES  */
 .error-text {
   display: flex;
