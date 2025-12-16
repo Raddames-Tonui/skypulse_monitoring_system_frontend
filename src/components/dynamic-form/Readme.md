@@ -4,7 +4,14 @@
 
 `DynamicForm` is a fully dynamic and customizable React form component that renders fields based on a `FormSchema`. It supports all common field types (`text`, `select`, `textarea`, `checkbox`, `switch`, `radio`, `number`, `date`, `file`, `multiselect`) and integrates easily with initial data and submission logic.
 
-The form also supports custom styling through props, allowing you to override CSS classes and inline styles for the form wrapper, fields, buttons, and individual components.
+The form also supports:
+
+* Field-level **disabled state**
+* Conditional field visibility
+* Schema-driven validation
+* Per-field and per-renderer **custom styling** via schema props
+
+The design follows a **schema-first, CSS-driven** approach suitable for large applications and internal UI systems.
 
 ---
 
@@ -22,17 +29,77 @@ interface DynamicFormProps {
 }
 ```
 
+---
+
+## Field Schema
+
+Each field is defined using a `FieldNode`.
+
+```ts
+export interface FieldNode {
+  id: string;
+  label: string;
+  renderer:
+    | 'text'
+    | 'select'
+    | 'textarea'
+    | 'checkbox'
+    | 'switch'
+    | 'number'
+    | 'radio'
+    | 'file'
+    | 'date'
+    | 'multiselect';
+  inputType?: string;
+  placeholder?: string;
+  rules?: Record<string, any>;
+  props?: {
+    className?: string;        // Applied to the input element
+    wrapperClass?: string;     // Applied to the field wrapper
+    [key: string]: any;
+  };
+  defaultValue?: any;
+  visibleWhen?: any;
+  disabled?: boolean;          // Disables the field input
+}
+```
+
+---
+
 ## Example FormSchema
 
 ```ts
 const systemSettingsFormSchema: FormSchema = {
   id: 'system-settings',
-  meta: { title: 'System Settings', subtitle: 'Manage application settings' },
+  meta: {
+    title: 'System Settings',
+    subtitle: 'Manage application settings'
+  },
   fields: {
-    is_active: { id: 'is_active', label: 'Active', renderer: 'switch', defaultValue: true },
-    ssl_check_interval: { id: 'ssl_check_interval', label: 'SSL Check Interval', renderer: 'number', props: { min: 60, max: 3600, step: 10 } },
-    ssl_alert_thresholds: { id: 'ssl_alert_thresholds', label: 'SSL Alert Thresholds', renderer: 'multiselect', props: { data: ['30','15','5'], searchable: true } },
-    // ... add more fields as needed
+    is_active: {
+      id: 'is_active',
+      label: 'Active',
+      renderer: 'switch',
+      defaultValue: true,
+      props: {
+        wrapperClass: 'switch'
+      }
+    },
+    ssl_check_interval: {
+      id: 'ssl_check_interval',
+      label: 'SSL Check Interval',
+      renderer: 'number',
+      props: { min: 60, max: 3600, step: 10 }
+    },
+    ssl_alert_thresholds: {
+      id: 'ssl_alert_thresholds',
+      label: 'SSL Alert Thresholds',
+      renderer: 'multiselect',
+      props: {
+        data: ['30', '15', '5'],
+        searchable: true
+      }
+    }
   },
   layout: [
     { kind: 'field', fieldId: 'is_active' },
@@ -40,6 +107,70 @@ const systemSettingsFormSchema: FormSchema = {
     { kind: 'field', fieldId: 'ssl_alert_thresholds' }
   ]
 };
+```
+
+---
+
+## Renderer Behavior Notes
+
+### Checkbox and Switch
+
+Both `checkbox` and `switch` render using:
+
+```html
+<input type="checkbox" />
+```
+
+The difference is **purely visual** and handled via CSS. This avoids duplicated logic and keeps behavior consistent.
+
+```ts
+case 'checkbox':
+case 'switch':
+```
+
+Use `props.wrapperClass` to style a switch differently from a standard checkbox.
+
+---
+
+## Disabled Fields
+
+Any field can be disabled at schema level:
+
+```ts
+email: {
+  id: 'email',
+  label: 'Primary Email',
+  renderer: 'text',
+  inputType: 'email',
+  disabled: true
+}
+```
+
+Disabled fields:
+
+* Cannot be edited
+* Respect native browser disabled behavior
+* Are still included in submission values
+
+---
+
+## Custom Styling (Per Field)
+
+Styling is applied declaratively via `props`.
+
+### Example
+
+```ts
+receive_weekly_reports: {
+  id: 'receive_weekly_reports',
+  label: 'Receive Weekly Reports',
+  renderer: 'checkbox',
+  defaultValue: true,
+  props: {
+    className: 'checkbox-accent-primary',
+    wrapperClass: 'checkbox-row'
+  }
+}
 ```
 
 ---
@@ -69,7 +200,7 @@ function App() {
       className="dynamic-form-wrapper"
       fieldClassName="form-field-wrapper"
       buttonClassName="form-buttons-wrapper"
-      style={{ maxWidth: '700px', margin: '0 auto', backgroundColor: '#f9f9f9' }}
+      style={{ maxWidth: '700px', margin: '0 auto' }}
     />
   );
 }
@@ -111,28 +242,27 @@ function App() {
   border-color: red;
 }
 
+.checkbox-accent-primary {
+  accent-color: #2563eb;
+}
+
+.switch input[type="checkbox"] {
+  appearance: none;
+  width: 42px;
+  height: 22px;
+  background: #ccc;
+  border-radius: 999px;
+  position: relative;
+}
+
+.switch input[type="checkbox"]:checked {
+  background: #2563eb;
+}
+
 .form-buttons-wrapper {
   display: flex;
   gap: 10px;
   margin-top: 20px;
-}
-
-.form-buttons-wrapper button {
-  padding: 8px 16px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.btn-danger {
-  background-color: #e53935;
-  color: white;
-  border: none;
-  border-radius: 4px;
-}
-
-.btn-danger:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
 }
 ```
 
@@ -140,11 +270,10 @@ function App() {
 
 ## Notes
 
-* `initialData` updates the form values on load or when the prop changes.
-* `fieldClassName` applies to each field wrapper including inputs, textareas, selects, and multiselects.
-* `buttonClassName` wraps the Submit/Reset buttons for styling.
-* `style` allows inline styles for the form container.
-* `MultiSelectField` supports `searchable` prop and displays selected tags with removal buttons.
-* Validation errors are displayed automatically with the `input-error` class.
+* `initialData` updates the form values on load or when the prop changes
+* `props.className` styles the input element
+* `props.wrapperClass` styles the field wrapper
+* `disabled` is respected across all renderers, including `multiselect`
+* Validation errors are displayed automatically
 
-This setup gives full control over appearance using your raw CSS without needing Tailwind.
+This setup provides a clean separation between **schema**, **behavior**, and **presentation**, making the form system scalable and maintainable.

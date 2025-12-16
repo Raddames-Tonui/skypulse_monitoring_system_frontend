@@ -25,7 +25,6 @@ export default function UnauthorizedPage() {
             <h1 style={styles.title}>Oops... Access Denied! 🚫</h1>
             <p style={styles.caption}>
                 Looks like you tried sneaking in without the right role... <br />
-                {/* Maybe bribe the admin with 🍕? */}
             </p>
             <a href="/dashboard" style={styles.button}>
                  Back to Dashboard
@@ -38,7 +37,6 @@ const styles: { [key: string]: React.CSSProperties } = {
     container: {
         textAlign: "center",
         marginTop: "10vh",
-        fontFamily: "Arial, sans-serif",
         color: "#333",
         height: "100vh",
     },

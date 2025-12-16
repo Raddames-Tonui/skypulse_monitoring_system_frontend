@@ -1,6 +1,6 @@
 import React from "react";
 import type { ReactNode } from "react";
-import "@/css/modal.css";
+import "@/components/modal/modal.css";
 
 interface ModalProps {
   isOpen: boolean;

@@ -68,16 +68,16 @@ const Navbar: React.FC = () => {
                   <p><strong>Language:</strong> {user.userPreferences.language}</p>
                   <p><strong>Timezone:</strong> {user.userPreferences.timezone}</p>
 
-                  <div style={{ display: "flex", gap: "1rem" }}>
+
+                  <button
+                    type="button"
+                    style={{ display: "flex", gap: "0.5rem", alignContent: "center", background: "none", border: "none", cursor: "pointer", textDecoration: "none", color: "black" }}
+                    onClick={() => setIsProfileModalOpen(true)}
+                  >
                     <strong><Icon iconName="settings" style={{ color: "black" }} /></strong>
-                    <button
-                      type="button"
-                      style={{ background: "none", border: "none", cursor: "pointer", textDecoration: "none", color: "black" }}
-                      onClick={() => setIsProfileModalOpen(true)}
-                    >
-                      Settings
-                    </button>
-                  </div>
+                    Settings
+                  </button>
+
                 </div>
 
                 <button className="dropdown-item" onClick={logout}>
@@ -103,4 +103,3 @@ const Navbar: React.FC = () => {
 };
 
 export default Navbar;
- 

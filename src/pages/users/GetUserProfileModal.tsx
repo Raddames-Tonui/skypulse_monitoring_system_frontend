@@ -1,5 +1,5 @@
 import Loader from "@/components/Loader";
-import Modal from "@/components/Modal";
+import Modal from "@/components/modal/Modal";
 import DynamicForm from "@/components/dynamic-form/DynamicForm";
 import { useGetUserProfile } from "./data-access/useFetchData";
 import { useUpdateUserProfile } from "./data-access/useMutateData";
@@ -86,7 +86,27 @@ const GetUserProfileModal: React.FC<GetUserProfileModalProps> = ({
               },
             });
           }}
+          showButtons={false}  // hide internal buttons
         />
+      }
+      footer={
+        <>
+          <button
+            type="submit"
+            form={userProfileSchema.id}   // connects to the form
+            className="btn-primary"
+          >
+            Save
+          </button>
+
+          <button
+            type="reset"
+            form={userProfileSchema.id}
+            className="btn-secondary"
+          >
+            Reset
+          </button>
+        </>
       }
     />
   );

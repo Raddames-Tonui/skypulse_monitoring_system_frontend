@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { DataTable } from "@/components/table/DataTable";
 import axiosClient from "@/utils/constants/axiosClient";
-import Modal from "@/components/Modal";
+import Modal from "@/components/modal/Modal";
 import type { SortRule, FilterRule, ColumnProps } from "@/components/table/DataTable";
 import TreeView from "@/components/TreeView";
 

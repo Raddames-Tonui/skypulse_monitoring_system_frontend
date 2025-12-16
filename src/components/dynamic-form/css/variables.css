@@ -4,11 +4,26 @@
   --text-light: #64748b;
   --text-blue: #228be6;
 
-  --border-color: #d1d5db;
-  --border-radius: 0px;
+  --border-color: #ccc;
+  --border-radius-sm: 2px;
+  --border-radius-md: 5px;
+  --border-radius-lg: 7px;
 
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;
   --space-md: 1rem;
   --space-lg: 2rem;
+
+  
+  --form-gray-50: #eff2f9;
+  --form-gray-100: #d3d7e1;
+  --form-gray-200: #b7bdc7;
+  --form-gray-300: #9ca3af;
+  --form-gray-400: #818797;
+  --form-gray-500: #686d7e;
+  --form-gray-600: #505363;
+  --form-gray-700: #383a48;
+  --form-gray-800: #20212d;
+  --form-gray-900: #060616;
+
 }

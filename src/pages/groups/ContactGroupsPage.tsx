@@ -3,7 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { DataTable } from "@/components/table/DataTable";
 import axiosClient from "@/utils/constants/axiosClient";
-import Modal from "@/components/Modal";
+import Modal from "@/components/modal/Modal";
 import DynamicForm from "@/components/dynamic-form/DynamicForm";
 import { toast } from "react-hot-toast";
 import type { SortRule, FilterRule } from "@/components/table/DataTable";

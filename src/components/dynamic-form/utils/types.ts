@@ -1,14 +1,16 @@
 export interface FieldNode {
     id: string;
     label: string;
-    renderer: "text"| "select"| "textarea"| "checkbox"| "number"| "radio"| "file" | "date" | "switch" | "multiselect";
+    renderer: "text" | "select" | "textarea" | "checkbox" | "number" | "radio" | "file" | "date" | "switch" | "multiselect";
     inputType?: string;
     placeholder?: string;
     rules?: Record<string, any>;
     props?: Record<string, any>;
     defaultValue?: any;
     visibleWhen?: any;
+    disabled?: boolean; 
 }
+
 
 export interface LayoutNode {
   type: 'row' | 'column' | 'tabs' | 'group' | 'field';
@@ -44,4 +46,5 @@ export interface DynamicFormProps {
   fieldClassName?: string;    
   buttonClassName?: string;     
   style?: React.CSSProperties; 
+  showButtons?: boolean;
 }

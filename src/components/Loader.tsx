@@ -21,7 +21,7 @@ export default function Loader({
   const height =
     typeof size === "number"
       ? `${(size * 0.75).toFixed(2)}px`
-      : `calc(${size} * 0.75)`; // smarter handling for string sizes
+      : `calc(${size} * 0.75)`; 
 
   const strokeWidth =
     typeof size === "number"

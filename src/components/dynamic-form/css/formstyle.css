@@ -166,6 +166,12 @@
   color: var(--text-dark);
 }
 
+.form-field label.required::after {
+  content: " *";
+  color: #db3442;
+  font-weight: 700;
+}
+
 .form-field input,
 .form-field select,
 .form-field textarea {
@@ -550,3 +556,57 @@ textarea {
 .grid[data-responsive="true"] > * {
   min-width: 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+/* ----------DISABLED FIELD STYLING ------------------- */
+
+/* Wrapper-level disabled state */
+.form-field.is-disabled {
+  opacity: 0.65;
+}
+
+/* Native inputs */
+.form-field input:disabled,
+.form-field select:disabled,
+.form-field textarea:disabled {
+  background-color: var(--form-gray-50) ;
+  border-color: var(--border-color);
+  color: #3c3c3c;
+  cursor: not-allowed;
+}
+
+/* Prevent focus styling */
+.form-field input:disabled:focus,
+.form-field select:disabled:focus,
+.form-field textarea:disabled:focus {
+  border-color: #cbd5e1;
+  box-shadow: none;
+}
+
+/* Switch disabled */
+.form-field.is-disabled .switch {
+  cursor: not-allowed;
+}
+
+.form-field.is-disabled .slider {
+  background-color: #e5e7eb;
+}
+
+/* Multiselect disabled */
+.form-field.is-disabled .multiselect-wrapper {
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+  pointer-events: none;
+}
+
+/*--------------------------------------------------------------------*/

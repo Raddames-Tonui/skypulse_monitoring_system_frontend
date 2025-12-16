@@ -1,6 +1,6 @@
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import axiosClient from "@/utils/constants/axiosClient";
-import Modal from "@/components/Modal";
+import Modal from "@/components/modal/Modal";
 import DynamicForm from "@/components/dynamic-form/DynamicForm";
 import { useUsers } from "@/hooks/hooks";
 import type { User } from "@/utils/types";
@@ -20,7 +20,7 @@ export default function AddMembersModal({
 }: AddMembersModalProps) {
     const queryClient = useQueryClient();
 
-    const { data, isLoading } = useUsers({ page: 1, pageSize: 50 }); 
+    const { data, isLoading } = useUsers({ page: 1, pageSize: 50 });
 
     const users: User[] = data?.data ?? [];
 
@@ -80,9 +80,9 @@ export default function AddMembersModal({
                         schema={schema}
                         initialData={{
                             members: currentMembers
-                                .map((m) => m.user_id ?? m.id) 
-                                .filter((id) => id != null)  
-                                .map((id) => String(id)),      
+                                .map((m) => m.user_id ?? m.id)
+                                .filter((id) => id != null)
+                                .map((id) => String(id)),
                         }}
                         onSubmit={(values) => {
                             const membersIds = (values.members ?? [])

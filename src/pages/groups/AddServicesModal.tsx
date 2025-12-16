@@ -1,6 +1,6 @@
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import axiosClient from "@/utils/constants/axiosClient";
-import Modal from "@/components/Modal";
+import Modal from "@/components/modal/Modal";
 import DynamicForm from "@/components/dynamic-form/DynamicForm";
 import type { MonitoredService } from "@/utils/types";
 import { useMonitoredServices } from "@/hooks/hooks";
@@ -9,7 +9,7 @@ interface AddServicesModalProps {
     isOpen: boolean;
     onClose: () => void;
     groupUuid: string;
-    currentServices?: { id: number; [key: string]: any }[];
+    currentServices?: { id: number;[key: string]: any }[];
 }
 
 export default function AddServicesModal({

@@ -18,6 +18,7 @@
   --primary-900: #000c1e;
 
 
+
   /* Accent (Coral / Red-Orange) */
   --accent-50:  #FFF5F5;
   --accent-100: #FFE3E3;
@@ -54,6 +55,8 @@
   --gray-700: #383a48;
   --gray-800: #20212d;
   --gray-900: #060616;
+
+
 
   
   /* Text */
@@ -103,6 +106,19 @@
   --primary-800: #1b4309;
   --primary-900: #041700;
   
+
+  
+
+  --primary-50: #eeeffa;
+  --primary-100: #d5d6dd;
+  --primary-200: #babcc3;
+  --primary-300: #9fa2ab;
+  --primary-400: #848893;
+  --primary-500: #6a6e79;
+  --primary-600: #52565f;
+  --primary-700: #3a3e44;
+  --primary-800: #22252a;
+  --primary-900: #080b13;
 
 
   

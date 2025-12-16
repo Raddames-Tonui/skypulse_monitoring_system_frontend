@@ -1,6 +1,6 @@
 import DynamicForm from "@/components/dynamic-form/DynamicForm";
 import { updateServiceSchema } from "@/components/dynamic-form/FormSchema";
-import Modal from "@/components/Modal";
+import Modal from "@/components/modal/Modal";
 import { useUpdateService } from "@/hooks/hooks";
 import React from "react";
 

@@ -721,6 +721,7 @@ export const userProfileSchema: any = {
       id: "language",
       label: "Language",
       renderer: "select",
+      disabled: true,
       props: {
         data: [
           { label: "English", value: "en" },
@@ -735,11 +736,12 @@ export const userProfileSchema: any = {
       id: "timezone",
       label: "Timezone",
       renderer: "select",
+      disabled: true,
       props: {
         data: [
           { label: "UTC", value: "UTC" },
           { label: "Africa/Nairobi", value: "Africa/Nairobi" },
-          // { label: "Europe/London", value: "Europe/London" },
+          { label: "Europe/London", value: "Europe/London" },
         ],
       },
       rules: { required: "Required" },
@@ -788,9 +790,9 @@ export const userProfileSchema: any = {
           spacing: "md",
           children: [
             { kind: "field", fieldId: "alert_channel" },
+            { kind: "field", fieldId: "receive_weekly_reports", colSpan: 2 },
             { kind: "field", fieldId: "language" },
             { kind: "field", fieldId: "timezone" },
-            { kind: "field", fieldId: "receive_weekly_reports", colSpan: 2 },
           ],
         },
       ],

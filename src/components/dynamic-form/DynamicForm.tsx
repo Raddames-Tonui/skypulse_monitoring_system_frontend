@@ -4,7 +4,7 @@ import type { DynamicFormProps, FieldNode, LayoutNode } from "./utils/types";
 import "./css/formstyle.css";
 
 
-export default function DynamicForm({ schema, onSubmit, initialData, className, fieldClassName, buttonClassName, style, }: DynamicFormProps) {
+export default function DynamicForm({ schema, onSubmit, initialData, className, fieldClassName, buttonClassName, style, showButtons = true, }: DynamicFormProps) {
   const { id, meta, fields, layout } = schema;
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -102,6 +102,92 @@ export default function DynamicForm({ schema, onSubmit, initialData, className, 
     }
   };
 
+
+  // ---------- MultiSelect Component ----------
+  const MultiSelectField = ({
+    field,
+    value,
+    onChange,
+    wrapperClassName,
+  }: {
+    field: FieldNode;
+    value: string[];
+    onChange: (id: string, value: any) => void;
+    wrapperClassName?: string;
+  }) => {
+    const [search, setSearch] = useState("");
+    const options = field.props?.data || [];
+    const selected = value || [];
+
+    // Filter options if searchable
+    const filtered = field.props?.searchable
+      ? options.filter((o: any) =>
+        o.label.toLowerCase().includes(search.toLowerCase())
+      )
+      : options;
+
+    // Toggle item selection
+    const toggle = (optValue: string) => {
+      if (field.disabled) return;
+      const newVals = selected.includes(optValue)
+        ? selected.filter((v) => v !== optValue)
+        : [...selected, optValue];
+      onChange(field.id, newVals);
+    };
+
+    // Remove selected tag
+    const remove = (optValue: string) => {
+      if (field.disabled) return;
+      const newVals = selected.filter((v) => v !== optValue);
+      onChange(field.id, newVals);
+    };
+
+    return (
+      <div className={`multiselect-wrapper ${wrapperClassName || ""}`}>
+        {field.props?.searchable && (
+          <input
+            type="text"
+            placeholder="Search..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="search-input"
+            disabled={field.disabled}
+          />
+        )}
+        <div className="options-list">
+          {filtered.map((opt: any, i: number) => (
+            <div
+              key={i}
+              className={`option-item ${selected.includes(opt.value) ? "selected" : ""}`}
+              onClick={() => toggle(opt.value)}
+              style={{ cursor: field.disabled ? "not-allowed" : "pointer" }}
+            >
+              {opt.label}
+            </div>
+          ))}
+        </div>
+        {selected.length > 0 && (
+          <div className="selected-tags">
+            {selected.map((val, i) => {
+              const item = options.find((o: any) => o.value === val);
+              return (
+                <span key={i} className="tag">
+                  {item?.label || val}
+                  {!field.disabled && (
+                    <button type="button" onClick={() => remove(val)}>
+                      ×
+                    </button>
+                  )}
+                </span>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+
   // ---------- Render Field ----------
   const renderField = (field: FieldNode) => {
     const value = formValues[field.id] ?? field.defaultValue ?? "";
@@ -115,7 +201,13 @@ export default function DynamicForm({ schema, onSubmit, initialData, className, 
       case "select":
         return (
           <div className={fieldClassName || ""}>
-            <select id={field.id} value={value} onChange={handleInputChange} className={errorClass}>
+            <select
+              id={field.id}
+              value={value}
+              onChange={handleInputChange}
+              className={errorClass}
+              disabled={field.disabled}
+            >
               <option value="">{field.placeholder || "Select..."}</option>
               {field.props?.data?.map((opt: any, i: number) => {
                 const val = typeof opt === "object" ? opt.value : opt;
@@ -125,6 +217,7 @@ export default function DynamicForm({ schema, onSubmit, initialData, className, 
             </select>
           </div>
         );
+
 
       case "multiselect":
         return (
@@ -142,35 +235,52 @@ export default function DynamicForm({ schema, onSubmit, initialData, className, 
               rows={field.props?.minRows || 3}
               value={value}
               onChange={handleInputChange}
-              className={`${errorClass} ${field.props?.className || ""}`} 
+              className={`${errorClass} ${field.props?.className || ""}`}
+              disabled={field.disabled}
             />
           </div>
         );
 
-
       case "number": {
         const rawValue = formValues[field.id] ?? field.defaultValue;
-        const value = typeof rawValue === "number" && !isNaN(rawValue) ? rawValue : "";
+        const numValue = typeof rawValue === "number" && !isNaN(rawValue) ? rawValue : "";
 
         return (
           <div className={fieldClassName || ""}>
             <input
               id={field.id}
               type="number"
-              value={value}
+              value={numValue}
               min={field.props?.min}
               max={field.props?.max}
               step={field.props?.step || 1}
               placeholder={field.placeholder}
-              onChange={(e) => {
-                const num = e.target.valueAsNumber;
-                handleChange(field.id, isNaN(num) ? undefined : num);
-              }}
+              onChange={(e) =>
+                handleChange(field.id, isNaN(e.target.valueAsNumber) ? undefined : e.target.valueAsNumber)
+              }
               className={errorClass}
+              disabled={field.disabled}
             />
           </div>
         );
       }
+
+      case "checkbox":
+      case "switch":
+        return (
+          <label className={`switch ${fieldClassName || ""}`}>
+            <input
+              type="checkbox"
+              id={field.id}
+              checked={!!value}
+              onChange={(e) => handleChange(field.id, e.target.checked)}
+              className={errorClass}
+              disabled={field.disabled}
+            />
+            <span className="slider" />
+            {field.label}
+          </label>
+        );
 
       case "radio":
         return (
@@ -184,6 +294,7 @@ export default function DynamicForm({ schema, onSubmit, initialData, className, 
                   checked={value === opt.value}
                   onChange={() => handleChange(field.id, opt.value)}
                   className={errorClass}
+                  disabled={field.disabled}
                 />
                 {opt.label}
               </label>
@@ -191,38 +302,17 @@ export default function DynamicForm({ schema, onSubmit, initialData, className, 
           </div>
         );
 
-      case "checkbox":
-        return (
-          <label className={fieldClassName || ""}>
-            <input
-              type="checkbox"
-              id={field.id}
-              checked={!!value}
-              onChange={(e) => handleChange(field.id, e.target.checked)}
-              className={errorClass}
-            />
-            {field.label}
-          </label>
-        );
-
-      case "switch":
-        return (
-          <label className={`switch ${fieldClassName || ""}`}>
-            <input
-              type="checkbox"
-              checked={!!value}
-              onChange={(e) => handleChange(field.id, e.target.checked)}
-              className={errorClass}
-            />
-            <span className="slider" />
-            {field.label}
-          </label>
-        );
-
       case "date":
         return (
           <div className={fieldClassName || ""}>
-            <input type="date" id={field.id} value={value} onChange={handleInputChange} className={errorClass} />
+            <input
+              type="date"
+              id={field.id}
+              value={value}
+              onChange={handleInputChange}
+              className={errorClass}
+              disabled={field.disabled}
+            />
           </div>
         );
 
@@ -236,9 +326,11 @@ export default function DynamicForm({ schema, onSubmit, initialData, className, 
               multiple={field.props?.multiple || false}
               onChange={(e) => handleChange(field.id, e.target.files)}
               className={errorClass}
+              disabled={field.disabled}
             />
           </div>
         );
+
 
       default:
         return (
@@ -250,11 +342,13 @@ export default function DynamicForm({ schema, onSubmit, initialData, className, 
               value={value}
               onChange={handleInputChange}
               className={errorClass}
+              disabled={field.disabled}
             />
           </div>
         );
     }
   };
+
   // ---------- Layout Renderer ----------
   const renderLayoutNode = (node: LayoutNode, index?: number): JSX.Element | null => {
     const key = node.fieldId || node.title || `${node.kind}-${index}`;
@@ -331,83 +425,19 @@ export default function DynamicForm({ schema, onSubmit, initialData, className, 
       {meta.title && <h1 className="form-h1">{meta.title}</h1>}
       {meta.subtitle && <h2 className="form-h2">{meta.subtitle}</h2>}
 
-      <form id={id} onSubmit={handleSubmit}>
+      <form id={id} onSubmit={handleSubmit} onReset={handleReset}>
         {layout?.map((node, i) => renderLayoutNode(node))}
-        <div className={`form-buttons ${buttonClassName || ""}`}>
-          <button className="dynamic-form-submit-button" type="submit">Submit</button>
-          <button className="dynamic-form-reset-button" type="reset" onClick={handleReset}>Reset</button>
-        </div>
+
+
+        {showButtons && (
+          <div className={`form-buttons ${buttonClassName || ""}`}>
+            <button type="submit">Submit</button>
+            <button type="reset" onClick={handleReset}>Reset</button>
+          </div>
+        )}
+
       </form>
     </div>
   );
 
-  // ---------- MultiSelect Component ----------
-  function MultiSelectField({
-    field,
-    value,
-    onChange,
-    wrapperClassName,
-  }: {
-    field: FieldNode;
-    value: string[];
-    onChange: (id: string, value: any) => void;
-    wrapperClassName?: string;
-  }) {
-    const [search, setSearch] = useState("");
-    const options = field.props?.data || [];
-    const selected = value || [];
-
-    const filtered = field.props?.searchable
-      ? options.filter((o: any) =>
-        o.label.toLowerCase().includes(search.toLowerCase())
-      )
-      : options;
-
-    const toggle = (optValue: string) => {
-      const newVals = selected.includes(optValue)
-        ? selected.filter((v) => v !== optValue)
-        : [...selected, optValue];
-      onChange(field.id, newVals);
-    };
-
-    return (
-      <div className={`multiselect-wrapper ${wrapperClassName || ""}`}>
-        {field.props?.searchable && (
-          <input
-            type="text"
-            placeholder="Search..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="search-input"
-          />
-        )}
-        <div className="options-list">
-          {filtered.map((opt: any, i: number) => (
-            <div
-              key={i}
-              className={`option-item ${selected.includes(opt.value) ? "selected" : ""}`}
-              onClick={() => toggle(opt.value)}
-            >
-              {opt.label}
-            </div>
-          ))}
-        </div>
-        {selected.length > 0 && (
-          <div className="selected-tags">
-            {selected.map((val, i) => {
-              const item = options.find((o: any) => o.value === val);
-              return (
-                <span key={i} className="tag">
-                  {item?.label || val}
-                  <button onClick={() => remove(val)} type="button">
-                    ×
-                  </button>
-                </span>
-              );
-            })}
-          </div>
-        )}
-      </div>
-    )
-  }
 };
