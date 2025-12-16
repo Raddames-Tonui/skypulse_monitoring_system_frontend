@@ -647,3 +647,153 @@ export const updateServiceSchema: any = {
     }
   ]
 };
+
+
+
+
+
+
+
+
+// USER PROFILE
+export const userProfileSchema: any = {
+  id: "user-profile",
+  meta: {
+    // title: "User Profile",
+    subtitle: "Manage your personal information and preferences",
+  },
+
+  fields: {
+    first_name: {
+      id: "first_name",
+      label: "First Name",
+      renderer: "text",
+      rules: { required: "Required" },
+    },
+
+    last_name: {
+      id: "last_name",
+      label: "Last Name",
+      renderer: "text",
+      rules: { required: "Required" },
+    },
+
+    email: {
+      id: "email",
+      label: "Primary Email",
+      renderer: "text",
+      inputType: "email",
+      disabled: true, 
+    },
+
+    // CONTACTS
+    contact_email: {
+      id: "contact_email",
+      label: "Primary Contact Email",
+      renderer: "text",
+      inputType: "email",
+      rules: { required: "Required" },
+    },
+
+    // PREFERENCES
+    alert_channel: {
+      id: "alert_channel",
+      label: "Alert Channel",
+      renderer: "select",
+      props: {
+        data: [
+          { label: "Email", value: "EMAIL" },
+          { label: "Telegram", value: "TELEGRAM" },
+          { label: "SMS", value: "SMS" }
+        ],
+      },
+      rules: { required: "Required" },
+    },
+
+    receive_weekly_reports: {
+      id: "receive_weekly_reports",
+      label: "Receive Weekly Reports",
+      renderer: "switch",
+      defaultValue: true,
+    },
+
+    language: {
+      id: "language",
+      label: "Language",
+      renderer: "select",
+      props: {
+        data: [
+          { label: "English", value: "en" },
+          { label: "French", value: "fr" },
+          { label: "Swahili", value: "sw" },
+        ],
+      },
+      rules: { required: "Required" },
+    },
+
+    timezone: {
+      id: "timezone",
+      label: "Timezone",
+      renderer: "select",
+      props: {
+        data: [
+          { label: "UTC", value: "UTC" },
+          { label: "Africa/Nairobi", value: "Africa/Nairobi" },
+          // { label: "Europe/London", value: "Europe/London" },
+        ],
+      },
+      rules: { required: "Required" },
+    },
+  },
+  layout: [
+    {
+      kind: "section",
+      title: "Personal Information",
+      withDivider: true,
+      children: [
+        {
+          kind: "grid",
+          cols: 2,
+          spacing: "md",
+          children: [
+            { kind: "field", fieldId: "first_name" },
+            { kind: "field", fieldId: "last_name" },
+            { kind: "field", fieldId: "email", colSpan: 2 },
+          ],
+        },
+      ],
+    },
+
+    {
+      kind: "section",
+      title: "Contact Information",
+      withDivider: true,
+      children: [
+        {
+          kind: "stack",
+          spacing: "md",
+          children: [{ kind: "field", fieldId: "contact_email" }],
+        },
+      ],
+    },
+
+    {
+      kind: "section",
+      title: "Preferences",
+      withDivider: false,
+      children: [
+        {
+          kind: "grid",
+          cols: 2,
+          spacing: "md",
+          children: [
+            { kind: "field", fieldId: "alert_channel" },
+            { kind: "field", fieldId: "language" },
+            { kind: "field", fieldId: "timezone" },
+            { kind: "field", fieldId: "receive_weekly_reports", colSpan: 2 },
+          ],
+        },
+      ],
+    },
+  ],
+};

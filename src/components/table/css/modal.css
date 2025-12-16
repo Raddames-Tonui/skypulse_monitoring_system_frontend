@@ -6,7 +6,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(126, 122, 122, 0.45);
+  background: hsla(0, 0%, 5%, 0.5);
   display: none;
   align-items: center;
   justify-content: center;
@@ -22,6 +22,7 @@
   display: flex;
   flex-direction: column;
   min-height: 280px;
+  border-radius: var(--border-radius-sm);
 }
 
 /* Header */
@@ -29,15 +30,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--primary-800);
-  color: var(--bg-default);
-  padding: 12px 20px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color) ;
+  color: var(--primary-700);
+  padding: 0.8em;
 }
 
 .table-modal-header h2 {
   font-size: 18px;
   margin: 0;
-  color: var(--primary-100); 
 }
 
 .table-modal-close-icon {
@@ -45,7 +46,7 @@
   border: none;
   font-size: 20px;
   cursor: pointer;
-  color: var(--bg-default);
+  color: var(--primary-700);
   transition: transform 0.2s ease;
 }
 

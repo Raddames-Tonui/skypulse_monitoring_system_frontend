@@ -2,11 +2,6 @@
 @import url('./fonts.css');
 
 
-/*@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');*/
-
-/*@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');*/
-
-
 *{
   box-sizing: border-box;
   margin: 0;
@@ -24,29 +19,44 @@ body {
 }
 
 
+button {
+  border-radius: var(--border-radius-sm);
+}
 
 
 /* Global scrollbar for the whole page */
-html {
-  scrollbar-width: thin;         
-  scrollbar-color: #888 #f1f1f1;  
+/* 
+.no-scrollbar::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    display: none;
+  }
+  
+  .no-scrollbar {
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
+    overflow: auto; 
+  }
+   */
+
+/* Customize the scrollbar */
+::-webkit-scrollbar {
+  width: 10px;  /* Reduced width of the scrollbar */
 }
 
-html::-webkit-scrollbar {
-    height: 8px;
+/* Style the scrollbar track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
 }
 
-html::-webkit-scrollbar-track {
-   background: #f1f1f1;
-    border-radius: 4px;
+/* Style the scrollbar handle */
+::-webkit-scrollbar-thumb {
+  background: #cacaca;
+  border-radius: 10px;
 }
 
-html::-webkit-scrollbar-thumb {
-   background: #c1c1c1;
-    border-radius: 4px;
+/* Style the scrollbar handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #9a9a9a;
 }
-
-html::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8;
-}
-

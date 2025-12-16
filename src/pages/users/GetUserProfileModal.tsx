@@ -1,96 +1,93 @@
 import Loader from "@/components/Loader";
 import Modal from "@/components/Modal";
+import DynamicForm from "@/components/dynamic-form/DynamicForm";
 import { useGetUserProfile } from "./data-access/useFetchData";
+import { useUpdateUserProfile } from "./data-access/useMutateData";
+import { userProfileSchema } from "@/components/dynamic-form/FormSchema";
 
 interface GetUserProfileModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const GetUserProfileModal: React.FC<GetUserProfileModalProps> = ({ isOpen, onClose }) => {
+const GetUserProfileModal: React.FC<GetUserProfileModalProps> = ({
+  isOpen,
+  onClose,
+}) => {
   const { data, isPending, isError, error } = useGetUserProfile();
+  const updateMutation = useUpdateUserProfile();
 
-  const modalBody = () => {
-    if (isPending) return <Loader />;
-    if (isError) return <div>{error.message}</div>;
-    if (!data) return <div>No profile found.</div>;
-
+  if (isPending) {
     return (
-      <section className="profile-card">
-        <div className="profile-header">
-          <h2>{data.first_name} {data.last_name}</h2>
-          <span className="profile-role">{data.role_name}</span>
-        </div>
-
-        <p className="profile-company">{data.company_name}</p>
-        <p className="profile-email">{data.email}</p>
-
-        {/* CONTACTS */}
-        <div className="profile-section">
-          <h3>Contacts</h3>
-          <ul className="contact-list">
-            {data.user_contacts.map((contact) => (
-              <li key={`${contact.contact_type}-${contact.value}`}>
-                <span className="contact-type">{contact.contact_type}</span>
-                <span className="contact-value">{contact.value}</span>
-
-                {contact.is_primary && (
-                  <span className="badge primary">Primary</span>
-                )}
-
-                {!contact.verified && (
-                  <span className="badge warning">Unverified</span>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* PREFERENCES */}
-        <div className="profile-section">
-          <h3>Preferences</h3>
-          <div className="preferences-grid">
-            <div>
-              <label>Alert Channel</label>
-              <span>{data.user_preferences.alert_channel}</span>
-            </div>
-
-            <div>
-              <label>Weekly Reports</label>
-              <span>
-                {data.user_preferences.receive_weekly_reports ? "Enabled" : "Disabled"}
-              </span>
-            </div>
-
-            <div>
-              <label>Timezone</label>
-              <span>{data.user_preferences.timezone}</span>
-            </div>
-
-            <div>
-              <label>Language</label>
-              <span>{data.user_preferences.language}</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
+      <Modal
+        isOpen={isOpen}
+        title="User Profile"
+        body={<Loader />}
+        onClose={onClose}
+      />
     );
-  };
+  }
 
-  const modalFooter = (
-    <button className="btn btn-primary" onClick={onClose}>
-      Close
-    </button>
-  );
+  if (isError) {
+    return (
+      <Modal
+        isOpen={isOpen}
+        title="User Profile"
+        body={<div>{error.message}</div>}
+        onClose={onClose}
+      />
+    );
+  }
+
+  if (!data) {
+    return (
+      <Modal
+        isOpen={isOpen}
+        title="User Profile"
+        body={<div>No profile found.</div>}
+        onClose={onClose}
+      />
+    );
+  }
+
+  const initialData = {
+    first_name: data.first_name,
+    last_name: data.last_name,
+    email: data.email,
+
+    contact_email:
+      data.user_contacts?.find((c) => c.is_primary)?.value ?? "",
+
+    alert_channel: data.user_preferences.alert_channel,
+    receive_weekly_reports: data.user_preferences.receive_weekly_reports,
+    language: data.user_preferences.language,
+    timezone: data.user_preferences.timezone,
+  };
 
   return (
     <Modal
       isOpen={isOpen}
       title="User Profile"
-      body={modalBody()}
-      footer={modalFooter}
       onClose={onClose}
+      body={
+        <DynamicForm
+          schema={userProfileSchema}
+          initialData={initialData}
+          onSubmit={(values) => {
+            updateMutation.mutate({
+              user_id: data.user_id,
+              first_name: values.first_name,
+              last_name: values.last_name,
+              user_preferences: {
+                alert_channel: values.alert_channel,
+                receive_weekly_reports: values.receive_weekly_reports,
+                language: values.language,
+                timezone: values.timezone,
+              },
+            });
+          }}
+        />
+      }
     />
   );
 };

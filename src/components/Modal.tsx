@@ -30,12 +30,12 @@ const Modal: React.FC<ModalProps> = ({
       onClick={handleOverlayClick}
     >
       <div className="custom-modal-box">
-        <header className="custom-modal-header">
+        <div className="custom-modal-header">
           <h2>{title}</h2>
           <button className="custom-modal-close-icon" onClick={onClose}>
             ✖
           </button>
-        </header>
+        </div>
 
         <div className="custom-modal-body">
           {body}

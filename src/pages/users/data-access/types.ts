@@ -22,17 +22,17 @@ export interface UserContact {
 
 // ----------- USER PREFERENCES -----------
 export interface UserPreferences {
-  alert_channel: "EMAIL" | "SMS";
+  alert_channel: "EMAIL" | "SMS" | "TELEGRAM" | 'PHONE' ;
   receive_weekly_reports: boolean;
   timezone: string;
-  dashboard_layout: Record<string, unknown>;
+  dashboard_layout?: Record<string, unknown>;
   language: string;
 }
 
 // ----------- USER PROFILE -----------
 export interface UserProfile {
     uuid: string;
-    id: number;
+    user_id: number;
     email: string;
     first_name: string;
     last_name: string;

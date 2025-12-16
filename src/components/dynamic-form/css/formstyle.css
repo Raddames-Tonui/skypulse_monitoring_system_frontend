@@ -132,9 +132,9 @@
 /*  GENERAL FORM WRAPPER  */
 .dynamic-form {
   background: var(--bg-default);
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-sm);
   padding: var(--space-lg);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+  /* box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02); */
   /* max-width: 800px; */
   margin: 0.5rem auto;
 }
@@ -171,7 +171,7 @@
 .form-field textarea {
   padding: 0.4rem 0.8rem;
   border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-sm);
   font-size: 0.95rem;
   background: #fff;
   transition: border-color 0.2s, box-shadow 0.2s;
@@ -237,7 +237,7 @@ textarea {
 /* SECTIONS  */
 .form-section {
   border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-sm);
   padding: var(--space-md);
   margin-bottom: var(--space-md);
   background: var(--bg-secondary);
@@ -268,7 +268,7 @@ textarea {
 .dynamic-form-submit-button,
 .dynamic-form-reset-button {
   padding: 0.6rem 1.4rem;
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-sm);
   border: none;
   font-weight: 600;
   cursor: pointer;
@@ -344,7 +344,7 @@ textarea {
    MULTISELECT  */
 .multiselect-wrapper {
   border: 1px solid #ccc;
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-sm);
   padding: 0.5rem;
   background: #fff;
 }
