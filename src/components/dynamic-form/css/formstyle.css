@@ -66,7 +66,7 @@
    ---------------------------- */
 @media (max-width: 900px) {
   .dynamic-form {
-    max-width: 92%;
+    min-width: 70%;
   }
 
   .form-h1 {
@@ -96,6 +96,7 @@
    ---------------------------- */
 @media (min-width: 1200px) {
   .dynamic-form {
+    min-width: 60vw;
     max-width: 1000px;
   }
 

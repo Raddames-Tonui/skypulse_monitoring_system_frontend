@@ -101,9 +101,30 @@ export default function AddServicesModal({
                             if (serviceIds.length > 0) {
                                 mutation.mutate(serviceIds);
                             }
-                        }}
+                            }}
+                            showButtons={false}
                     />
                 )
+            }
+
+            footer={
+                <>
+                    <button
+                        type="submit"
+                        form={schema.id}  
+                        className="btn-primary"
+                    >
+                        Save
+                    </button>
+
+                    <button
+                        type="reset"
+                        form={schema.id}
+                        className="btn-secondary"
+                    >
+                        Reset
+                    </button>
+                </>
             }
         />
     );

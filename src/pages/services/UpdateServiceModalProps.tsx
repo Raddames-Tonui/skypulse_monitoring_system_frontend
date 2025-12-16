@@ -48,12 +48,31 @@ const UpdateServiceModal: React.FC<UpdateServiceModalProps> = ({
                             ssl_enabled: initialData.ssl_enabled,
                         }}
                         onSubmit={handleSubmit}
-                        className="update-service-form"
-                        buttonClassName="form-buttons"
+                        // className="update-service-form"
+                        // buttonClassName="form-buttons"
+                        showButtons={false} 
                     />
                 </div>
             }
-            footer={null}
+            footer={
+                <>
+                    <button
+                        type="submit"
+                        form={updateServiceSchema.id}
+                        className="btn-primary"
+                    >
+                        Save
+                    </button>
+
+                    <button
+                        type="reset"
+                        form={updateServiceSchema.id}
+                        className="btn-secondary"
+                    >
+                        Reset
+                    </button>
+                </>
+            }
         />
     );
 };

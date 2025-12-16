@@ -19,8 +19,23 @@ const MobileSidebar: React.FC = () => {
         <div className={`mobile-sidebar-overlay ${isMobileSidebarOpen ? "open" : ""}`}>
             <div className="mobile-sidebar-header">
                 <button className="close-btn" onClick={toggleMobileSidebar}>
-                    <Icon iconName="close" className="text-white w-6 h-6" />
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-6 h-6"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        strokeWidth={2}
+                        style={{ color: "white" }}
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M6 18L18 6M6 6l12 12"
+                        />
+                    </svg>
                 </button>
+
             </div>
             <div className="mobile-sidebar-menu">
                 {menuItems.map(item => (

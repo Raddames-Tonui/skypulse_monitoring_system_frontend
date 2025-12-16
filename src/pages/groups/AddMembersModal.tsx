@@ -84,6 +84,7 @@ export default function AddMembersModal({
                                 .filter((id) => id != null)
                                 .map((id) => String(id)),
                         }}
+
                         onSubmit={(values) => {
                             const membersIds = (values.members ?? [])
                                 .map((id: string) => parseInt(id, 10))
@@ -92,9 +93,30 @@ export default function AddMembersModal({
                             if (membersIds.length > 0) {
                                 mutation.mutate(membersIds);
                             }
-                        }}
+                            }}
+                            
+                            showButtons={false}
                     />
                 )
+            }
+            footer={
+                <>
+                    <button
+                        type="submit"
+                        form={schema.id}
+                        className="btn-primary"
+                    >
+                        Save
+                    </button>
+
+                    <button
+                        type="reset"
+                        form={schema.id}
+                        className="btn-secondary"
+                    >
+                        Reset
+                    </button>
+                </>
             }
         />
     );

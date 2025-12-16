@@ -18,6 +18,12 @@
     transition: grid-template-columns 0.3s ease;
 }
 
+
+
+
+/* ------------------NAVBAR---------------------------- */
+
+
 header {
     grid-area: header;
     background-color: var(--primary-700); 
@@ -216,6 +222,7 @@ header {
 
 
 
+
 /*
    NAVBAR RESPONSIVE + ANIMATIONS
  */
@@ -374,10 +381,11 @@ This makes the left mic-icon behave like a sliding block: */
     }
 }
 
+/* -------------------------------------------------- */
 
 
 
-/* SIDEBAR */
+/* ------------------ SIDEBAR---------------------------- */
 
 
 aside {
@@ -462,7 +470,10 @@ aside {
     }
 }
 
+/* -------------------------------------------------------- */
 
+
+/* ----------------- MAIN ------------------------ */
 
 
 
@@ -493,7 +504,11 @@ main {
 }
 
 
-/* FOOTER */
+/* -------------------------------------------------------- */
+
+
+
+/*------------ FOOTER ---------------- */
 
 footer {
     grid-area:footer;
@@ -525,6 +540,7 @@ footer {
     opacity: 1;
 }
 
+
 /* Hide footer on small screens */
 @media (max-width: 768px) {
     .body-wrapper {
@@ -544,6 +560,7 @@ footer {
   }
 }
 
+/* -------------------------------------------------------- */
 
 
 
@@ -551,17 +568,16 @@ footer {
 
 
 
-
-/* MOBILE SIDEBAR */
+/*--------------- MOBILE SIDEBAR----------- */
 .mobile-sidebar-overlay {
   position: fixed;
   top: 0;
   right: -100%;
-  width: 75%; /* or whatever width you want */
+  width: 70%; 
   height: 100%;
   background-color: var(--primary-700);
   color: white;
-  z-index: 2000;
+  z-index: 1000;
   transition: right 0.3s ease;
   display: flex;
   flex-direction: column;
@@ -576,15 +592,21 @@ footer {
   display: flex;
   justify-content: flex-end;
   padding: 1rem;
+  /* border-bottom: 1px solid white; */
 }
 
 .close-btn {
-  background: none;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;   
+  height: 2rem; 
+  background: transparent;
   border: none;
-  color: white;
-  font-size: 1.2rem;
   cursor: pointer;
 }
+
 
 .mobile-sidebar-menu {
   display: flex;
@@ -592,3 +614,5 @@ footer {
   gap: 1rem;
   padding: 1rem;
 }
+
+/* ------------------------------------------- */

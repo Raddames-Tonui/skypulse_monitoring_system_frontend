@@ -357,12 +357,21 @@ export default function DynamicForm({ schema, onSubmit, initialData, className, 
       case "field": {
         const field = fields[node.fieldId!];
         if (!isFieldVisible(field)) return null;
+
         return (
           <div key={field.id} className={`form-field ${fieldClassName || ""}`}>
-            {field.renderer !== "checkbox" && field.renderer !== "switch" && (
-              <label htmlFor={field.id}>{field.label}</label>
+            {/* Render label except for checkbox/switch */}
+            {field.renderer !== "checkbox" && field.renderer !== "switch" && field.label && (
+              <label
+                htmlFor={field.id}
+                className={field.rules?.required ? "required" : ""}
+              >
+                {field.label}
+              </label>
             )}
+
             {renderField(field)}
+
             {errors[field.id] && (
               <p className="error-text">
                 <svg
@@ -385,6 +394,7 @@ export default function DynamicForm({ schema, onSubmit, initialData, className, 
           </div>
         );
       }
+
 
       case "stack":
         return (
@@ -431,8 +441,8 @@ export default function DynamicForm({ schema, onSubmit, initialData, className, 
 
         {showButtons && (
           <div className={`form-buttons ${buttonClassName || ""}`}>
-            <button type="submit">Submit</button>
-            <button type="reset" onClick={handleReset}>Reset</button>
+            <button className="dynamic-form-submit-button" type="submit">Submit</button>
+            <button className="dynamic-form-reset-button" type="reset" onClick={handleReset}>Reset</button>
           </div>
         )}
 
