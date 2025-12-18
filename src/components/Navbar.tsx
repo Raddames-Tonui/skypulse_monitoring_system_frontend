@@ -24,7 +24,7 @@ const Navbar: React.FC = () => {
   })();
 
   return (
-    <header>
+    <header className="header">
       <div className="mic-icon" style={{ width: isSidebarOpen ? "240px" : "48px", transition: "width 0.3s ease" }}>
         <div>
           <svg width="100%" height="40" viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg">

@@ -62,4 +62,3 @@ function ProtectedRouteComponent() {
     </section>
   );
 }
-

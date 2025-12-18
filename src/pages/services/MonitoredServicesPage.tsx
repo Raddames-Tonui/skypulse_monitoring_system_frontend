@@ -113,7 +113,7 @@ export default function MonitoredServicesPage() {
     <div className="page-wrapper">
       <div className="page-header flex justify-between items-center mb-4">
         <h1>Monitored Services</h1>
-        {user?.roleName === "Viewer" ? <> </> :
+        {user?.role_name === "VIEWER" ? <> </> :
           <button className="btn btn-secondary"
             onClick={() => navigate({ to: "/services/create" })}
           >

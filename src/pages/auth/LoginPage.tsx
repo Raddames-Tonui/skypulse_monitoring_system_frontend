@@ -1,11 +1,11 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "@tanstack/react-router";
 import * as z from "zod";
 
 import styles from "@/css/login.module.css";
-import { useAuth } from "@/hooks/hooks";
+import { useLogin } from "@/context/data-access/useFetchData";
+
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email").nonempty("Email is required"),
@@ -15,10 +15,8 @@ const loginSchema = z.object({
 type FormData = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
-  const { login } = useAuth();
   const navigate = useNavigate();
-  const redirectTo = "/dashboard";
-  const [authError, setAuthError] = useState<string | null>(null);
+  const loginMutation = useLogin();
 
   const {
     register,
@@ -35,14 +33,12 @@ export default function LoginPage() {
   };
 
   const onSubmit = async (data: FormData) => {
-    setAuthError(null);
+    await loginMutation.mutateAsync({
+      email: data.email,
+      password: data.password,
+    });
 
-    try {
-      await login(data.email, data.password); // login sets user internally
-      navigate({ to: redirectTo });
-    } catch (err: any) {
-      setAuthError(err?.message || "Incorrect email or password");
-    }
+    navigate({ to: "/dashboard" });
   };
 
   return (
@@ -51,10 +47,6 @@ export default function LoginPage() {
         <h2 className={styles.title}>
           Welcome back <span className={styles.green}>!</span>
         </h2>
-
-        {authError && (
-          <p className={styles.authError}>{authError}</p>
-        )}
 
         <label className={styles.label} htmlFor="email">Email</label>
         <input
@@ -84,7 +76,13 @@ export default function LoginPage() {
           Forgot your password?
         </a>
 
-        <button type="submit" className={styles.button}>Login</button>
+        <button
+          type="submit"
+          className={styles.button}
+          disabled={loginMutation.isPending}
+        >
+          {loginMutation.isPending ? "Logging in..." : "Login"}
+        </button>
 
         <p className={styles.footerText}>
           Don't have an account?{" "}

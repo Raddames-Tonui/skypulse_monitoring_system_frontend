@@ -9,6 +9,15 @@ import { saveAs } from "file-saver";
 import type { AuthContextType } from "@/context/data-access/types";
 
 
+
+export const useAuth = (): AuthContextType => {
+  const context = useContext(AuthContext);
+  if (!context) throw new Error("useAuth must be used within an AuthProvider");
+  return context;
+};
+
+
+
 interface LastRouteContextType {
   lastRoute: string;
   setLastRoute: (path: string) => void;
@@ -58,14 +67,6 @@ export const useMonitoredServices = (
   });
 };
 
-
-export const useAuth = (): AuthContextType => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
-};
 
 
 

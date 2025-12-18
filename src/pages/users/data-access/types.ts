@@ -36,7 +36,7 @@ export interface UserProfile {
     email: string;
     first_name: string;
     last_name: string;
-    role_name: string;
+    role_name: 'ADMIN' | 'OPERATOR' | 'VIEWER'; 
     company_name: string;
     user_contacts: UserContact[];
     user_preferences:  UserPreferences;
