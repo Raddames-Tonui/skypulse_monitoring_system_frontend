@@ -12,7 +12,7 @@
 
 .custom-modal-box {
   background: var(--bg-default);
-  /* min-width: 70vw; */
+  min-width: 60vw;
   max-width: 95vw;
   max-height: 90vh;           
   min-height: 80vh;
@@ -159,4 +159,46 @@
     padding: 16px;
     overflow-y: auto;
   }
+}
+
+
+
+
+
+/* ----CSV DIV--- */
+.csv-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+}
+
+.csv-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.csv-div:hover {
+  border-color: var(--primary-600);
+  background-color: #f1f7ff;
+}
+
+.csv-div input[type="file"] {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.csv-div div {
+  font-size: 14px;
 }

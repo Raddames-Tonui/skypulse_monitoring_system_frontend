@@ -44,7 +44,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (!userData) throw new Error(response.data?.message || "Login failed");
 
       setUser(mapProfile(userData));
-      navigate("/"); // redirect after login
+
+      navigate({ to: "/dashboard" });
     } catch (err: any) {
       setUser(null);
       const msg = err.response?.data?.message || err.message || "Login failed";
@@ -64,7 +65,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const response = await axiosClient.get("/auth/profile");
       const profile = response.data?.data;
 
-      // If profile missing or no role, force logout
       if (!profile || !profile.role_name) {
         await logout();
         return;
@@ -74,8 +74,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setError(null);
     } catch (err: any) {
       setUser(null);
-      setError(err.response?.data?.message || err.message || "Failed to fetch profile");
-      navigate("/login"); // redirect if fetch fails
+      navigate({to:"/auth/login"}); 
     } finally {
       setIsLoading(false);
     }
@@ -95,7 +94,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       toast.error(msg);
     } finally {
       setIsLoading(false);
-      navigate("/login"); // always redirect after logout
+      navigate({to:"/auth/login"}); 
     }
   }, [navigate]);
 

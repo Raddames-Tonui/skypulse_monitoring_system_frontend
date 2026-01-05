@@ -5,7 +5,7 @@ import { DataTable } from "@/components/table/DataTable";
 import type { SortRule, FilterRule } from "@/context/types";
 import type { ApiResponse, Users } from "@/utils/types";
 import { Route } from "@/routes/_protected/_admin/users";
-
+import UploadContactsModal from "./UploadContactsModal";
 
 const FILTER_MAP: Record<string, string> = {
   first_name: "u.first_name",
@@ -56,7 +56,6 @@ const columns = [
     renderCell: (v: string) => new Date(v).toLocaleString(),
     size: 180,
     hide: true,
-
   },
 ];
 
@@ -64,12 +63,14 @@ export default function GetUsers() {
   const search = Route.useSearch();
   const navigate = useNavigate();
 
+  const [isUploadModalOpen, setUploadModalOpen] = useState(false);
+
   const initialSort: SortRule[] = search.sort
     ? search.sort.split(",").map((s) => {
-      const [key, dir = "asc"] = s.split(":");
-      const col = Object.keys(SORT_MAP).find((k) => SORT_MAP[k] === key);
-      return { column: col ?? key, direction: dir as "asc" | "desc" };
-    })
+        const [key, dir = "asc"] = s.split(":");
+        const col = Object.keys(SORT_MAP).find((k) => SORT_MAP[k] === key);
+        return { column: col ?? key, direction: dir as "asc" | "desc" };
+      })
     : [];
 
   const initialPage = Number(search.page) || 1;
@@ -82,17 +83,14 @@ export default function GetUsers() {
 
   const queryParams = useMemo(() => {
     const params: Record<string, string | number> = { page, pageSize };
-
     if (sortBy.length) {
       params.sort = sortBy
         .map((r) => `${SORT_MAP[r.column] ?? r.column}:${r.direction}`)
         .join(",");
     }
-
     filters.forEach((f) => {
       if (f.value) params[FILTER_MAP[f.column] ?? f.column] = f.value;
     });
-
     return params;
   }, [page, pageSize, sortBy, filters]);
 
@@ -109,16 +107,24 @@ export default function GetUsers() {
   };
   const handlePageChange = (p: number) => setPage(p);
 
-
   return (
     <>
       <div className="page-header">
         <h1>Users</h1>
-        <button className="btn btn-secondary"
-          onClick={() => navigate({ to: "/users/create-user" })}
-        >
-          New User
-        </button>
+        <div>
+          <button
+            className="btn btn-secondary"
+            onClick={() => navigate({ to: "/users/create-user" })}
+          >
+            New User
+          </button>
+          <button
+            className="btn btn-secondary"
+            onClick={() => setUploadModalOpen(true)}
+          >
+            Add Contacts
+          </button>
+        </div>
       </div>
 
       <DataTable
@@ -137,7 +143,13 @@ export default function GetUsers() {
           onPageChange: handlePageChange,
         }}
       />
-    </>
 
+      {isUploadModalOpen && (
+        <UploadContactsModal
+          isOpen={isUploadModalOpen}
+          onClose={() => setUploadModalOpen(false)}
+        />
+      )}
+    </>
   );
 }

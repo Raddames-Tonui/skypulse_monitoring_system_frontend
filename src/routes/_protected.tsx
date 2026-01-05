@@ -16,7 +16,7 @@ export const Route = createFileRoute('/_protected')({
     try {
       await axiosClient.get('/auth/profile');
       return null;
-    } catch (err: any) {
+    } catch  {
       return redirect({
         to: '/auth/login',
         search: { returnTo: '/_protected/pages' },
@@ -37,7 +37,7 @@ function ProtectedRouteComponent() {
     }
   }, [user, isLoading, fetchProfile]);
 
-  if (isLoading || !user.roleName) {
+  if (isLoading || !user?.roleName) {
     return (
       <div className='loader'>
         <Loader size={80} speed={1.8} className="mx-auto" ariaLabel="Loading..." />
