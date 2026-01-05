@@ -50,16 +50,23 @@ export default function UploadContactsModal({ isOpen, onClose }: UploadContactsM
             title="Upload User Contacts CSV"
             onClose={onClose}
             body={
-                <div className="csv-modal">
-                    <div
-                        className="csv-div"
-                    >
+                <div className="file-upload-wrapper">
+                    <div className="file-upload-dropzone">
+                        {/* <input
+                            className="file-upload-input"
+                            type="file"
+                            accept=".csv"
+                            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                        /> */}
                         <input
                             type="file"
                             accept=".csv"
                             onChange={(e) => setFile(e.target.files?.[0] ?? null)}
                         />
-                        {error && <div style={{ color: "red", marginTop: 8 }}>{error}</div>}
+
+                        {error && (
+                            <div className="file-upload-error">{error}</div>
+                        )}
                     </div>
                 </div>
 
