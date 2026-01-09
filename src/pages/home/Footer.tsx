@@ -11,7 +11,7 @@ function Footer() {
 
             <nav className="footer-nav">
                 <a href="https://skypuls-ms-docs.netlify.app" target="_blank">Docs</a>
-                <a href="/status">Status</a>
+                <a href="/#">Status</a>
                 <a href="/#">Privacy</a>
                 <a href="/#">Terms</a>
                 <a href="/#">Support</a>

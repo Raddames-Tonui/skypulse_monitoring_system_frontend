@@ -74,7 +74,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setError(null);
     } catch (err: any) {
       setUser(null);
-      navigate({to:"/auth/login"}); 
+      // navigate({to:"/auth/login"}); 
     } finally {
       setIsLoading(false);
     }

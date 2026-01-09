@@ -7,28 +7,28 @@ const slides = [
     description:
       "Continuously monitors websites and APIs, detects outages in real time, measures response times, and ensures teams act before users experience downtime.",
     author: "Uptime Engine",
-    image: "illustration.jpg",
+    image: "uptime-monitor.png",
   },
   {
     title: "Real-Time Incident Alerts",
     description:
       "Instant notifications via Email, Telegram, or SMS when services fail or recover, with retry logic and cooldowns to prevent alert fatigue.",
     author: "Alerting System",
-    image: "illustration.jpg",
+    image: "incident-alerts.png",
   },
   {
     title: "SSL Certificate Monitoring",
     description:
       "Tracks SSL certificates, calculates expiry timelines, and sends proactive warnings to prevent security lapses and unexpected outages.",
     author: "SSL Monitor",
-    image: "illustration.jpg",
+    image: "ssl-monitor.png",
   },
   {
     title: "Reporting & Historical Insights",
     description:
       "Detailed uptime analytics, incident timelines, and exportable reports give teams clarity and confidence in service reliability.",
     author: "Reporting Engine",
-    image: "illustration.jpg",
+    image: "reports.png",
   },
 ];
 
