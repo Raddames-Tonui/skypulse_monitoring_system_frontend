@@ -7,7 +7,6 @@ interface ModalProps {
   title?: string;
   body?: ReactNode;
   footer?: ReactNode;
-  size?: "sm" | "md" | "lg" | "fullscreen";
   onClose: () => void;
 }
 
@@ -17,7 +16,6 @@ const Modal: React.FC<ModalProps> = ({
   body,
   footer,
   onClose,
-  size = "",
 }) => {
   if (!isOpen) return null;
 
@@ -31,7 +29,7 @@ const Modal: React.FC<ModalProps> = ({
       style={{ display: isOpen ? "flex" : "none" }}
       onClick={handleOverlayClick}
     >
-      <div className={`table-modal-box-${size}`}>
+      <div className="table-modal-box">
         <header className="table-modal-header">
           <h2>{title}</h2>
           <button className="table-modal-close-icon" onClick={onClose}>

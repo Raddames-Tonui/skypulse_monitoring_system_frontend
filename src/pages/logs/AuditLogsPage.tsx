@@ -46,7 +46,7 @@ function AuditDiffTable({ diffs }: { diffs: DiffRow[] }) {
     return (
         <table className="audit-diff-table">
             <thead>
-                <tr className="audit-diff-header">
+                <tr>
                     <th>Field</th>
                     <th>Before</th>
                     <th>After</th>
@@ -55,11 +55,11 @@ function AuditDiffTable({ diffs }: { diffs: DiffRow[] }) {
             <tbody>
                 {diffs.map((d) => (
                     <tr key={d.key}>
-                        <td className="audit-diff-key">{d.key}</td>
-                        <td className="audit-diff-before">
+                        <td >{d.key}</td>
+                        <td>
                             {d.before === undefined ? "—" : String(d.before)}
                         </td>
-                        <td className="audit-diff-after">
+                        <td>
                             {d.after === undefined ? "—" : String(d.after)}
                         </td>
                     </tr>
@@ -107,7 +107,7 @@ function AuditModalBody({
                 </>
             )}
 
-            <div className={{`margin-top 10px`}}>
+            <div className="margin-top10px">
                 <button
                     className="view-button"
                     onClick={() => setShowRaw((v) => !v)}
@@ -178,7 +178,7 @@ export default function AuditLogsPage() {
         {
             id: "actions",
             caption: "Actions",
-            size: 140,
+            size: 50,
             renderCell: (_: any, row: AuditLog) => (
                 <button
                     className="view-button"
@@ -190,7 +190,7 @@ export default function AuditLogsPage() {
                         setModalOpen(true);
                     }}
                 >
-                    View Changes
+                    View
                 </button>
             ),
         },

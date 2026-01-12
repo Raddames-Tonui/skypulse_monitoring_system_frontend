@@ -44,9 +44,9 @@ export default function LoginPage() {
   return (
     <div className={styles.loginContainer}>
       <form onSubmit={handleSubmit(onSubmit)} className={styles.loginCard}>
-        <h2 className={styles.title}>
+        <h1 className={styles.title}>
           Welcome back <span className={styles.green}>!</span>
-        </h2>
+        </h1>
 
         <label className={styles.label} htmlFor="email">Email</label>
         <input
