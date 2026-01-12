@@ -23,9 +23,9 @@ export default function UnauthorizedPage() {
                 </svg>
             </div>
             <h1 style={styles.title}>Oops... Access Denied! 🚫</h1>
-            <p style={styles.caption}>
+            {/* <p style={styles.caption}>
                 Looks like you tried sneaking in without the right role... <br />
-            </p>
+            </p> */}
             <a href="/dashboard" style={styles.button}>
                  Back to Dashboard
             </a>
@@ -39,7 +39,7 @@ const styles: { [key: string]: React.CSSProperties } = {
         marginTop: "10vh",
         color: "#333",
         height: "100vh",
-    },
+    },  
     svgWrapper: {
         display: "inline-block",
         marginBottom: "1rem",
