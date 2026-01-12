@@ -33,6 +33,7 @@ const UpdateServiceModal: React.FC<UpdateServiceModalProps> = ({
             isOpen={isOpen}
             onClose={onClose}
             title="Update Monitored Service"
+              size = "lg"
             body={
                 <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
                     <DynamicForm

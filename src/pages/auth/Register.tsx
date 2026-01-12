@@ -74,7 +74,6 @@ export default function Register() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Touch all fields to show errors if not filled
     setTouchedFields({
       firstName: true,
       lastName: true,
@@ -185,9 +184,9 @@ export default function Register() {
         <button
           className={styles.button}
           type="submit"
-          disabled={mutation.isLoading}
+          disabled={mutation.isPending}
         >
-          {mutation.isLoading ? "Registering..." : "Register"}
+          {mutation.isPending ? "Registering..." : "Register"}
         </button>
       </form>
     </div>

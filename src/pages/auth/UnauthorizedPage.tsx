@@ -23,9 +23,7 @@ export default function UnauthorizedPage() {
                 </svg>
             </div>
             <h1 style={styles.title}>Oops... Access Denied! 🚫</h1>
-            {/* <p style={styles.caption}>
-                Looks like you tried sneaking in without the right role... <br />
-            </p> */}
+    
             <a href="/dashboard" style={styles.button}>
                  Back to Dashboard
             </a>

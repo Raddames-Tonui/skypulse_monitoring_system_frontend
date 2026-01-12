@@ -94,9 +94,9 @@ export default function RequestResetPassword() {
         <button
           type="submit"
           className={styles.button}
-          disabled={mutation.isLoading}
+          disabled={mutation.isPending}
         >
-          {mutation.isLoading ? "Sending..." : "Send Reset Link"}
+          {mutation.isPending ? "Sending..." : "Send Reset Link"}
         </button>
       </form>
     </div>

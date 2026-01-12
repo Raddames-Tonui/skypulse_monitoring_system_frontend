@@ -84,10 +84,6 @@ export default function LoginPage() {
           {loginMutation.isPending ? "Logging in..." : "Login"}
         </button>
 
-        <p className={styles.footerText}>
-          Don't have an account?{" "}
-          <a href="/auth/register" className={styles.greenLink}>Create one</a>
-        </p>
       </form>
     </div>
   );

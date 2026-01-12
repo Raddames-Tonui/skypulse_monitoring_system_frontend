@@ -121,9 +121,9 @@ export default function ResetPasswordPage() {
         <button
           type="submit"
           className={styles.button}
-          disabled={mutation.isLoading}
+          disabled={mutation.isPending}
         >
-          {mutation.isLoading ? "Resetting..." : "Reset Password"}
+          {mutation.isPending ? "Resetting..." : "Reset Password"}
         </button>
         <p className={styles.footerText}>
           Remembered Password?{" "}
