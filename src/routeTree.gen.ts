@@ -28,6 +28,7 @@ import { Route as ProtectedReportsUptimeReportsRouteImport } from './routes/_pro
 import { Route as ProtectedReportsSslReportsRouteImport } from './routes/_protected/reports/ssl-reports'
 import { Route as ProtectedAdminAuditLogsRouteImport } from './routes/_protected/_admin/audit-logs'
 import { Route as ProtectedAdminUsersIndexRouteImport } from './routes/_protected/_admin/users/index'
+import { Route as ProtectedAdminTemplatesIndexRouteImport } from './routes/_protected/_admin/templates/index'
 import { Route as ProtectedAdminSettingsIndexRouteImport } from './routes/_protected/_admin/settings/index'
 import { Route as ProtectedAdminNotificationsIndexRouteImport } from './routes/_protected/_admin/notifications/index'
 import { Route as ProtectedAdminGroupsIndexRouteImport } from './routes/_protected/_admin/groups/index'
@@ -130,6 +131,12 @@ const ProtectedAdminUsersIndexRoute =
     path: '/users/',
     getParentRoute: () => ProtectedAdminRoute,
   } as any)
+const ProtectedAdminTemplatesIndexRoute =
+  ProtectedAdminTemplatesIndexRouteImport.update({
+    id: '/templates/',
+    path: '/templates/',
+    getParentRoute: () => ProtectedAdminRoute,
+  } as any)
 const ProtectedAdminSettingsIndexRoute =
   ProtectedAdminSettingsIndexRouteImport.update({
     id: '/settings/',
@@ -194,6 +201,7 @@ export interface FileRoutesByFullPath {
   '/groups': typeof ProtectedAdminGroupsIndexRoute
   '/notifications': typeof ProtectedAdminNotificationsIndexRoute
   '/settings': typeof ProtectedAdminSettingsIndexRoute
+  '/templates': typeof ProtectedAdminTemplatesIndexRoute
   '/users': typeof ProtectedAdminUsersIndexRoute
 }
 export interface FileRoutesByTo {
@@ -217,6 +225,7 @@ export interface FileRoutesByTo {
   '/groups': typeof ProtectedAdminGroupsIndexRoute
   '/notifications': typeof ProtectedAdminNotificationsIndexRoute
   '/settings': typeof ProtectedAdminSettingsIndexRoute
+  '/templates': typeof ProtectedAdminTemplatesIndexRoute
   '/users': typeof ProtectedAdminUsersIndexRoute
 }
 export interface FileRoutesById {
@@ -246,6 +255,7 @@ export interface FileRoutesById {
   '/_protected/_admin/groups/': typeof ProtectedAdminGroupsIndexRoute
   '/_protected/_admin/notifications/': typeof ProtectedAdminNotificationsIndexRoute
   '/_protected/_admin/settings/': typeof ProtectedAdminSettingsIndexRoute
+  '/_protected/_admin/templates/': typeof ProtectedAdminTemplatesIndexRoute
   '/_protected/_admin/users/': typeof ProtectedAdminUsersIndexRoute
 }
 export interface FileRouteTypes {
@@ -271,6 +281,7 @@ export interface FileRouteTypes {
     | '/groups'
     | '/notifications'
     | '/settings'
+    | '/templates'
     | '/users'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -294,6 +305,7 @@ export interface FileRouteTypes {
     | '/groups'
     | '/notifications'
     | '/settings'
+    | '/templates'
     | '/users'
   id:
     | '__root__'
@@ -322,6 +334,7 @@ export interface FileRouteTypes {
     | '/_protected/_admin/groups/'
     | '/_protected/_admin/notifications/'
     | '/_protected/_admin/settings/'
+    | '/_protected/_admin/templates/'
     | '/_protected/_admin/users/'
   fileRoutesById: FileRoutesById
 }
@@ -466,6 +479,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedAdminUsersIndexRouteImport
       parentRoute: typeof ProtectedAdminRoute
     }
+    '/_protected/_admin/templates/': {
+      id: '/_protected/_admin/templates/'
+      path: '/templates'
+      fullPath: '/templates'
+      preLoaderRoute: typeof ProtectedAdminTemplatesIndexRouteImport
+      parentRoute: typeof ProtectedAdminRoute
+    }
     '/_protected/_admin/settings/': {
       id: '/_protected/_admin/settings/'
       path: '/settings'
@@ -526,6 +546,7 @@ interface ProtectedAdminRouteChildren {
   ProtectedAdminGroupsIndexRoute: typeof ProtectedAdminGroupsIndexRoute
   ProtectedAdminNotificationsIndexRoute: typeof ProtectedAdminNotificationsIndexRoute
   ProtectedAdminSettingsIndexRoute: typeof ProtectedAdminSettingsIndexRoute
+  ProtectedAdminTemplatesIndexRoute: typeof ProtectedAdminTemplatesIndexRoute
   ProtectedAdminUsersIndexRoute: typeof ProtectedAdminUsersIndexRoute
 }
 
@@ -537,6 +558,7 @@ const ProtectedAdminRouteChildren: ProtectedAdminRouteChildren = {
   ProtectedAdminGroupsIndexRoute: ProtectedAdminGroupsIndexRoute,
   ProtectedAdminNotificationsIndexRoute: ProtectedAdminNotificationsIndexRoute,
   ProtectedAdminSettingsIndexRoute: ProtectedAdminSettingsIndexRoute,
+  ProtectedAdminTemplatesIndexRoute: ProtectedAdminTemplatesIndexRoute,
   ProtectedAdminUsersIndexRoute: ProtectedAdminUsersIndexRoute,
 }
 

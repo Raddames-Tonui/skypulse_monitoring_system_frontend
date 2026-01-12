@@ -6,8 +6,8 @@ export default function UnauthorizedPage() {
             <div style={styles.svgWrapper}>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="120"
-                    height="120"
+                    width="100"
+                    height="100"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -22,9 +22,9 @@ export default function UnauthorizedPage() {
                     <path d="M10 19c.5-1 3.5-1 4 0" />
                 </svg>
             </div>
-            <h1 style={styles.title}>Oops... Access Denied! 🚫</h1>
+            <h1 style={styles.title}>Oops... Access Denied!</h1>
     
-            <a href="/dashboard" style={styles.button}>
+            <a href="/dashboard" style={styles.button} className="btn-secondary">
                  Back to Dashboard
             </a>
         </div>
@@ -33,10 +33,13 @@ export default function UnauthorizedPage() {
 
 const styles: { [key: string]: React.CSSProperties } = {
     container: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
         textAlign: "center",
-        marginTop: "10vh",
         color: "#333",
-        height: "100vh",
+        height: "90%",
     },  
     svgWrapper: {
         display: "inline-block",
@@ -47,7 +50,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     },
     title: {
         fontSize: "2rem",
-        marginBottom: "0.5rem",
+        marginBottom: "1rem",
     },
     caption: {
         fontSize: "1rem",
@@ -57,9 +60,9 @@ const styles: { [key: string]: React.CSSProperties } = {
     button: {
         display: "inline-block",
         padding: "0.75rem 1.5rem",
-        background: "#ff4d4f",
-        color: "#fff",
-        borderRadius: "4px",
+        // background: "#ff4d4f",
+        // color: "#fff",
+        // borderRadius: "4px",
         textDecoration: "none",
         fontWeight: "bold",
     },

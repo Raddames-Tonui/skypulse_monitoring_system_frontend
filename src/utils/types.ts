@@ -255,15 +255,16 @@ export const menuConfig: Record<string, MenuItem[]> = {
     { icon: "services", label: "Services", path: "/services" },
     { icon: "notepad", label: "Reports", path: "/reports/uptime-reports" },
     { icon: "notes", label: "Audit Logs", path: "/audit-logs" },
+    { icon: "paperlight", label: "Templates", path: "/templates" },
     { icon: "settings", label: "Settings", path: "/settings" },
   ],
   operator: [
-    { icon: "pie", label: "Operator Dashboard", path: "/dashboard" },
+    { icon: "pie", label: "Dashboard", path: "/dashboard" },
     { icon: "notes", label: "Services", path: "/services" },
     { icon: "notepad", label: "Reports", path: "/reports/uptime-reports" },
   ],
   viewer: [
-    { icon: "pie", label: "Viewer Dashboard", path: "/dashboard" },
+    { icon: "pie", label: "Dashboard", path: "/dashboard" },
     { icon: "notes", label: "Services", path: "/services" },
     { icon: "notepad", label: "Reports", path: "/reports/uptime-reports" },
   ],

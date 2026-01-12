@@ -69,6 +69,7 @@ const GetUserProfileModal: React.FC<GetUserProfileModalProps> = ({
       isOpen={isOpen}
       title="User Profile"
       onClose={onClose}
+      size="lg"
       body={
         <DynamicForm
           schema={userProfileSchema}
@@ -86,14 +87,14 @@ const GetUserProfileModal: React.FC<GetUserProfileModalProps> = ({
               },
             });
           }}
-          showButtons={false}  // hide internal buttons
+          showButtons={false}  
         />
       }
       footer={
         <>
           <button
             type="submit"
-            form={userProfileSchema.id}   // connects to the form
+            form={userProfileSchema.id}   
             className="btn-primary"
           >
             Save
