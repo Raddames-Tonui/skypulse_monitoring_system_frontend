@@ -107,7 +107,7 @@ function AuditModalBody({
                 </>
             )}
 
-            <div className={{`margin-top 10px`}}>
+            <div className="">
                 <button
                     className="view-button"
                     onClick={() => setShowRaw((v) => !v)}

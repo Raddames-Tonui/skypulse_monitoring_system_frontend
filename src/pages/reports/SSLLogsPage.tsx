@@ -158,15 +158,21 @@ export default function SSLLogsPage() {
         </select>
     );
 
-    const { isProcessing, downloadReport, previewReport } = useSslReportDownload();
+    const { isProcessing, downloadPdfReport, previewPdfReport, downloadSslReport, previewSslReport } = useSslReportDownload();
 
     const tableActionsLeft = (
         <div style={{ display: "flex", gap: "0.5rem" }}>
-            <button className="action-btn-sec" onClick={previewReport} disabled={isProcessing}>
+            <button className="action-btn-sec" onClick={previewPdfReport} disabled={isProcessing}>
                 Preview PDF
             </button>
-            <button className="action-btn-sec" onClick={downloadReport} disabled={isProcessing}>
+            <button className="action-btn-sec" onClick={downloadPdfReport} disabled={isProcessing}>
                 {isProcessing ? "Processing..." : "Download PDF"}
+            </button>
+            <button className="action-btn-sec" onClick={previewSslReport} disabled={isProcessing}>
+                Preview Excel
+            </button>
+            <button className="action-btn-sec" onClick={downloadSslReport} disabled={isProcessing}>
+                {isProcessing ? "Processing..." : "Download Excel"}
             </button>
         </div>
     );
