@@ -249,7 +249,7 @@ export interface MenuItem {
 
 export const menuConfig: Record<string, MenuItem[]> = {
   admin: [
-    { icon: "pie", label: "Odata Dashboard", path: "/dashboard" },
+    { icon: "pie", label: "Dashboard", path: "/dashboard" },
     { icon: "user", label: "Users", path: "/users" },
     { icon: "users", label: "Groups", path: "/groups" },
     { icon: "services", label: "Services", path: "/services" },
