@@ -2,6 +2,14 @@ import type { IconName } from "./IconsList";
 
 // ----------- GENERIC API RESPONSE -----------
 
+export type QueryParams = {
+  page?: number;
+  pageSize?: number;
+  sort?: string;
+  [key: string]: string | number | undefined;
+};
+
+
 export type ApiResponse<T> = {
   domain: string;
   current_page: number;

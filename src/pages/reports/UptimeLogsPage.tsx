@@ -132,7 +132,7 @@ export default function UptimeLogsPage() {
         </select>
     );
 
-    const { isProcessing, downloadReport, previewReport } = useUptimeReportDownload();
+    const { isProcessing, downloadPdfReport, previewPdfReport, downloadSslReport, previewSslReport } = useUptimeReportDownload();
 
     const pdfFilters = useMemo(() => {
         const obj: Record<string, string | number | (string | number)[]> = {};
@@ -144,11 +144,14 @@ export default function UptimeLogsPage() {
 
     const tableActionsLeft = (
         <div style={{ display: "flex", gap: "0.5rem" }}>
-            <button className="action-btn-sec" onClick={() => previewReport(pdfFilters)} disabled={isProcessing}>
+            <button className="action-btn-sec" onClick={() => previewPdfReport(pdfFilters)} disabled={isProcessing}>
                 Preview PDF
             </button>
-            <button className="action-btn-sec" onClick={() => downloadReport(pdfFilters)} disabled={isProcessing}>
+            <button className="action-btn-sec" onClick={() => downloadPdfReport(pdfFilters)} disabled={isProcessing}>
                 {isProcessing ? "Processing..." : "Download PDF"}
+            </button>          
+            <button className="action-btn-sec" onClick={() => downloadSslReport(pdfFilters)} disabled={isProcessing}>
+                {isProcessing ? "Processing..." : "Download Excel"}
             </button>
         </div>
     );

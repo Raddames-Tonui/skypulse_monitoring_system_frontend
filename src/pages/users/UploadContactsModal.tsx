@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosClient from "@/utils/constants/axiosClient";
 import Modal from "@/components/modal/Modal";
+import Icon from "@/utils/Icon";
 
 interface UploadContactsModalProps {
     isOpen: boolean;
@@ -10,10 +11,12 @@ interface UploadContactsModalProps {
 
 export default function UploadContactsModal({ isOpen, onClose }: UploadContactsModalProps) {
     const queryClient = useQueryClient();
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
     const [file, setFile] = useState<File | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [isDragging, setIsDragging] = useState(false);
 
-    // -------- MUTATION FOR UPLOAD --------
     const mutation = useMutation({
         mutationFn: async (file: File) => {
             const formData = new FormData();
@@ -23,10 +26,10 @@ export default function UploadContactsModal({ isOpen, onClose }: UploadContactsM
                 responseType: "blob",
                 headers: { "Content-Type": "multipart/form-data" },
             });
+
             return response.data;
         },
         onSuccess: (data: Blob) => {
-            // Auto download XLSX returned by server
             const url = URL.createObjectURL(data);
             const a = document.createElement("a");
             a.href = url;
@@ -44,6 +47,15 @@ export default function UploadContactsModal({ isOpen, onClose }: UploadContactsM
         },
     });
 
+    const handleFile = (file: File) => {
+        if (!file.name.endsWith(".csv")) {
+            setError("Only CSV files are allowed");
+            return;
+        }
+        setError(null);
+        setFile(file);
+    };
+
     return (
         <Modal
             isOpen={isOpen}
@@ -51,25 +63,47 @@ export default function UploadContactsModal({ isOpen, onClose }: UploadContactsM
             onClose={onClose}
             body={
                 <div className="file-upload-wrapper">
-                    <div className="file-upload-dropzone">
-                        {/* <input
-                            className="file-upload-input"
-                            type="file"
-                            accept=".csv"
-                            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-                        /> */}
-                        <input
-                            type="file"
-                            accept=".csv"
-                            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-                        />
+                    <div
+                        className={`file-upload-dropzone ${isDragging ? "dragging" : ""}`}
+                        onClick={() => fileInputRef.current?.click()}
+                        onDragOver={(e) => {
+                            e.preventDefault();
+                            setIsDragging(true);
+                        }}
+                        onDragLeave={() => setIsDragging(false)}
+                        onDrop={(e) => {
+                            e.preventDefault();
+                            setIsDragging(false);
+                            if (e.dataTransfer.files[0]) {
+                                handleFile(e.dataTransfer.files[0]);
+                            }
+                        }}
+                    >
+                        <Icon iconName="fileUploadLight" className="file-upload-icon" />
+
+                        <div className="file-upload-text">
+                            <strong>Browse</strong> or drop file here
+                        </div>
+
+                        {file && (
+                            <div className="file-upload-filename">
+                                {file.name}
+                            </div>
+                        )}
 
                         {error && (
                             <div className="file-upload-error">{error}</div>
                         )}
+
+                        <input
+                            ref={fileInputRef}
+                            className="file-upload-input"
+                            type="file"
+                            accept=".csv, .xlsx"
+                            onChange={(e) => e.target.files && handleFile(e.target.files[0])}
+                        />
                     </div>
                 </div>
-
             }
             footer={
                 <>
