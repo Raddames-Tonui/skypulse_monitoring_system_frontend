@@ -61,6 +61,8 @@ export default function CreateUser() {
 
   return <section>
     <div className="page-header">
+        <h1>Create New User</h1>
+     
       <Link to="/users" className="btn-secondary"> Back</Link>
     </div>
     <DynamicForm schema={schema} onSubmit={handleSubmit} />

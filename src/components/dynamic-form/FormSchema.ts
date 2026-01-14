@@ -468,7 +468,7 @@ export const addMembersSchema: any = {
 export const createUserSchema: any = {
   id: "create-user-form",
   meta: {
-    title: "Create New User",
+    // title: "Create New User",
     subtitle: "Add a new user to the system",
   },
   fields: {

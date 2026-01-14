@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { DataTable } from "@/components/table/DataTable";
 import type { ColumnProps, SortRule, FilterRule } from "@/components/table/DataTable";

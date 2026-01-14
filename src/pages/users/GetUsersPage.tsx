@@ -1,32 +1,35 @@
 import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useUsers } from "@/hooks/hooks";
-import { DataTable } from "@/components/table/DataTable";
-import type { SortRule, FilterRule } from "@/context/types";
+import { DataTable, SortRule, FilterRule } from "@/components/table/DataTable";
 import type { ApiResponse, Users } from "@/utils/types";
 import { Route } from "@/routes/_protected/_admin/users";
 import UploadContactsModal from "./UploadContactsModal";
 
-const FILTER_MAP: Record<string, string> = {
+/**
+ * FRONTEND COLUMN → BACKEND COLUMN
+ * (URL uses frontend keys ONLY)
+ */
+const FILTER_MAP: Record<keyof Users, string> = {
+  user_id: "u.user_id",
+  uuid: "u.uuid",
   first_name: "u.first_name",
   last_name: "u.last_name",
-  email: "u.user_email",
-  role: "r.role_name",
-  company: "c.company_name",
-  active: "u.is_active",
+  user_email: "u.user_email",
+  role_id: "r.role_id",
+  role_name: "r.role_name",
+  company_id: "c.company_id",
+  company_name: "c.company_name",
+  is_active: "u.is_active",
+  date_created: "u.date_created",
+  date_modified: "u.date_modified",
 };
 
-const SORT_MAP: Record<string, string> = {
-  first_name: "u.first_name",
-  last_name: "u.last_name",
-  email: "u.user_email",
-  role: "r.role_name",
-  company: "c.company_name",
-  active: "u.is_active",
-  created: "u.date_created",
-  modified: "u.date_modified",
-};
+const SORT_MAP = FILTER_MAP;
 
+/**
+ * Columns
+ */
 const columns = [
   { id: "user_id", caption: "ID", size: 80 },
   { id: "first_name", caption: "First Name", isSortable: true, isFilterable: true, size: 120 },
@@ -38,6 +41,7 @@ const columns = [
     id: "is_active",
     caption: "Active",
     isSortable: true,
+    isFilterable: true,
     renderCell: (v: boolean) => (v ? "Yes" : "No"),
     size: 80,
   },
@@ -57,7 +61,7 @@ const columns = [
     size: 180,
     hide: true,
   },
-];
+] as const;
 
 export default function GetUsers() {
   const search = Route.useSearch();
@@ -65,46 +69,77 @@ export default function GetUsers() {
 
   const [isUploadModalOpen, setUploadModalOpen] = useState(false);
 
-  const initialSort: SortRule[] = search.sort
+  /**
+   * Parse sort from URL
+   * URL example: ?sort=first_name:asc,last_name:desc
+   */
+  const initialSort: SortRule<Users>[] = search.sort
     ? search.sort.split(",").map((s) => {
-        const [key, dir = "asc"] = s.split(":");
-        const col = Object.keys(SORT_MAP).find((k) => SORT_MAP[k] === key);
-        return { column: col ?? key, direction: dir as "asc" | "desc" };
+        const [column, direction = "asc"] = s.split(":");
+        return {
+          column: column as keyof Users,
+          direction: direction as "asc" | "desc",
+        };
       })
     : [];
 
-  const initialPage = Number(search.page) || 1;
-  const initialPageSize = Number(search.pageSize) || 20;
+  const [sortBy, setSortBy] = useState<SortRule<Users>[]>(initialSort);
+  const [filters, setFilters] = useState<FilterRule<Users>[]>([]);
+  const [page, setPage] = useState(Number(search.page) || 1);
+  const [pageSize, setPageSize] = useState(Number(search.pageSize) || 20);
 
-  const [sortBy, setSortBy] = useState<SortRule[]>(initialSort);
-  const [filters, setFilters] = useState<FilterRule[]>([]);
-  const [page, setPage] = useState(initialPage);
-  const [pageSize, setPageSize] = useState(initialPageSize);
-
+  /**
+   * Build URL + backend query params
+   * URL stays CLEAN (frontend keys only)
+   */
   const queryParams = useMemo(() => {
-    const params: Record<string, string | number> = { page, pageSize };
+    const params: Record<string, string | number> = {
+      page,
+      pageSize,
+    };
+
+    // sort=first_name:asc
     if (sortBy.length) {
       params.sort = sortBy
-        .map((r) => `${SORT_MAP[r.column] ?? r.column}:${r.direction}`)
+        .map((r) => `${r.column}:${r.direction}`)
         .join(",");
     }
+
+    // first_name=John
     filters.forEach((f) => {
-      if (f.value) params[FILTER_MAP[f.column] ?? f.column] = f.value;
+      if (f.value !== "" && f.value !== undefined) {
+        params[f.column] = String(f.value);
+      }
     });
+
     return params;
   }, [page, pageSize, sortBy, filters]);
 
+  /**
+   * Sync URL
+   */
   useEffect(() => {
     navigate({ search: queryParams });
   }, [queryParams]);
 
-  const { data, isLoading, isError, error, refetch } = useUsers<ApiResponse<Users>>(queryParams);
+  /**
+   * Fetch data
+   */
+  const { data, isLoading, isError, error, refetch } =
+    useUsers<ApiResponse<Users>>(queryParams);
 
-  const handleSortApply = (rules: SortRule[]) => setSortBy(rules);
-  const handleFilterApply = (rules: FilterRule[]) => {
-    setFilters(rules.filter((r) => r.value));
+  /**
+   * Handlers
+   */
+  const handleSortApply = (rules: SortRule<Users>[]) => {
+    setSortBy(rules);
+  };
+
+  const handleFilterApply = (rules: FilterRule<Users>[]) => {
+    setFilters(rules.filter((r) => r.value !== "" && r.value !== undefined));
     setPage(1);
   };
+
   const handlePageChange = (p: number) => setPage(p);
 
   return (
@@ -127,7 +162,7 @@ export default function GetUsers() {
         </div>
       </div>
 
-      <DataTable
+      <DataTable<Users>
         columns={columns}
         data={data?.data ?? []}
         isLoading={isLoading}

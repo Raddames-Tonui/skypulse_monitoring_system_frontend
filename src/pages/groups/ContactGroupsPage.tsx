@@ -105,7 +105,7 @@ export default function ContactGroupsPage() {
       renderCell: (_: any, row: any) => (
         <div className="flex gap-2">
           <button
-            className="view-button"
+            className="action-btn"
             onClick={() =>
               navigate({
                 to: "/groups/$uuid",

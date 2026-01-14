@@ -84,7 +84,7 @@ export default function MonitoredServicesPage() {
       sortable: false,
       renderCell: (_: any, row: any) => (
         <button
-          className="view-button"
+          className="action-btn"
           onClick={() =>
             navigate({
               to: "/services/$uuid",

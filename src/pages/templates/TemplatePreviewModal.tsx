@@ -48,6 +48,26 @@ export default function TemplatePreviewModal({
   return (
     <div className="template-preview-container">
 
+      <div>
+        {view === "rendered" ? (
+          <iframe
+            title="Template Preview"
+            srcDoc={compiledHtml}
+            style={{
+              width: "100%",
+              height: "70vh",
+              border: "1px solid #ddd",
+              background: "white",
+            }}
+            sandbox=""
+          />
+        ) : (
+          <pre className="template-raw-view">
+            {template.body_template}
+          </pre>
+        )}
+      </div>
+
       <div className="template-toolbar">
         <button className="btn-secondary" onClick={() => setView("rendered")}>Preview</button>
         <button className="btn-secondary" onClick={() => setView("raw")}>Raw HTML</button>
@@ -55,25 +75,7 @@ export default function TemplatePreviewModal({
           Copy
         </button>
       </div>
-
-      {view === "rendered" ? (
-        <iframe
-          title="Template Preview"
-          srcDoc={compiledHtml}
-          style={{
-            width: "100%",
-            height: "70vh",
-            border: "1px solid #ddd",
-            background: "white",
-            margin: "5px 0 0"
-          }}
-          sandbox=""
-        />
-      ) : (
-        <pre className="template-raw-view">
-          {template.body_template}
-        </pre>
-      )}
     </div>
+
   );
 }

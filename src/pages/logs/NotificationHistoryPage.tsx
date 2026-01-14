@@ -17,7 +17,6 @@ const fetchNotificationHistory = async (
   return data;
 };
 
-/* ---------------- MODAL ---------------- */
 
 function MessagePreviewModal({ html }: { html: string }) {
   return (
@@ -109,7 +108,7 @@ export default function NotificationHistoryPage() {
       size: 80,
       renderCell: (_: any, row: NotificationHistory) => (
         <button
-          className="view-button"
+          className="action-btn"
           onClick={() => {
             setSelectedMessage(row.message);
             setModalOpen(true);
@@ -121,7 +120,6 @@ export default function NotificationHistoryPage() {
     },
   ];
 
-  /* ---------------- RENDER ---------------- */
 
   return (
     <div>

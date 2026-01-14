@@ -125,7 +125,7 @@ export default function SingleServicePage() {
             {service.last_uptime_status}
           </span>
           <button
-            className="view-button"
+            className="action-btn"
             onClick={() => setModalOpen(true)}
           >
             Edit

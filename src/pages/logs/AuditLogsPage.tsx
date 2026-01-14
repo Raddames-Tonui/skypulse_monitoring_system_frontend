@@ -109,7 +109,7 @@ function AuditModalBody({
 
             <div className="margin-top10px">
                 <button
-                    className="view-button"
+                    className="action-btn"
                     onClick={() => setShowRaw((v) => !v)}
                 >
                     {showRaw ? "Hide raw JSON" : "View raw JSON"}
@@ -181,7 +181,7 @@ export default function AuditLogsPage() {
             size: 50,
             renderCell: (_: any, row: AuditLog) => (
                 <button
-                    className="view-button"
+                    className="action-btn"
                     onClick={() => {
                         setModalData({
                             before_data: row.before_data,

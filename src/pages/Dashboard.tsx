@@ -52,7 +52,7 @@ export default function Dashboard() {
       renderCell: (_, row) => (
         <Link to="/services/$uuid"
           params={{ uuid: row.uuid }}
-          className="view-button"
+          className="action-btn"
         >
           View
         </Link>

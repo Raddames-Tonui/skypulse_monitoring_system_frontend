@@ -1,9 +1,7 @@
-import React from "react";
 import { useDataTable } from "./DataTable";
 
 
 export function Pagination<T>() {
-    const { data } = useDataTable<T>();
     const pagination = (useDataTable<T>() as any).pagination;
 
     if (!pagination) return null;

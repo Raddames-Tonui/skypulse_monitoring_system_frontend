@@ -29,7 +29,7 @@ function NotificationTemplatesPage() {
       size: 100,
       renderCell: (_: any, row: NotificationTemplate) => (
         <button
-          className="view-button"
+          className="action-btn"
           onClick={() => {
             setSelectedTemplate(row);
             setModalOpen(true);
@@ -74,6 +74,7 @@ function NotificationTemplatesPage() {
             <TemplatePreviewModal template={selectedTemplate} />
           ) : null
         }
+      
       />
 
     </>
