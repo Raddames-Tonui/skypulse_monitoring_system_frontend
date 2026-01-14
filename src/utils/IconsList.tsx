@@ -244,6 +244,43 @@ export const FileUploadLight: React.FC<IconBaseProps> = ({ className, style }) =
     </svg>
 );
 
+export const MessageLight: React.FC<IconBaseProps> = ({
+    className,
+    style,
+}) => (
+    <svg
+        className={className}
+        style={{ color: "white", ...style }}
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+    >
+        <path
+            d="m7 8l5 3l5-3"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M10 20H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v6.857"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+        />
+        <path
+            d="M22 17.111h-6.3c-3.6 0-3.6 4.889 0 4.889m6.3-4.889L18.85 14M22 17.111l-3.15 3.111"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+    </svg>
+);
+
+
 
 
 export const Building: React.FC<IconBaseProps> = ({ className }) => (
@@ -528,6 +565,7 @@ export const Icons = {
     list: List,
     menu: Menu,
     microphone: MicroPhone,
+    messageLight: MessageLight,
     notepad: NoteReload,
     notes: Notes,
     notification: Notification,

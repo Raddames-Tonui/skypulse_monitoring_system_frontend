@@ -263,6 +263,7 @@ export const menuConfig: Record<string, MenuItem[]> = {
     { icon: "services", label: "Services", path: "/services" },
     { icon: "notepad", label: "Reports", path: "/reports/uptime-reports" },
     { icon: "notes", label: "Audit Logs", path: "/audit-logs" },
+    { icon: "messageLight", label: "Notifications", path: "/notification-history" },
     { icon: "paperlight", label: "Templates", path: "/templates" },
     { icon: "settings", label: "Settings", path: "/settings" },
   ],

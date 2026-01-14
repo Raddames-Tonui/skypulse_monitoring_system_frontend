@@ -96,7 +96,7 @@
   color: var(--bg-default);
   border: none;
   padding: 8px 18px;
-  border-radius: 6px;
+  border-radius: 3px;
   cursor: pointer;
   font-weight: 600;
   transition: background 0.2s ease;
@@ -111,7 +111,7 @@
   background: var(--bg-default);
   color: var(--primary-800);
   font-weight: 600;
-  border-radius: 6px;
+  border-radius: 3px;
   padding: 8px 16px;
   cursor: pointer;
   transition: all 0.2s ease;

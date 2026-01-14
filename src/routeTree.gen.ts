@@ -26,6 +26,7 @@ import { Route as PublicAuthLoginRouteImport } from './routes/_public/auth/login
 import { Route as ProtectedServicesUuidRouteImport } from './routes/_protected/services/$uuid'
 import { Route as ProtectedReportsUptimeReportsRouteImport } from './routes/_protected/reports/uptime-reports'
 import { Route as ProtectedReportsSslReportsRouteImport } from './routes/_protected/reports/ssl-reports'
+import { Route as ProtectedAdminNotificationHistoryRouteImport } from './routes/_protected/_admin/notification-history'
 import { Route as ProtectedAdminAuditLogsRouteImport } from './routes/_protected/_admin/audit-logs'
 import { Route as ProtectedAdminUsersIndexRouteImport } from './routes/_protected/_admin/users/index'
 import { Route as ProtectedAdminTemplatesIndexRouteImport } from './routes/_protected/_admin/templates/index'
@@ -120,6 +121,12 @@ const ProtectedReportsSslReportsRoute =
     path: '/reports/ssl-reports',
     getParentRoute: () => ProtectedRoute,
   } as any)
+const ProtectedAdminNotificationHistoryRoute =
+  ProtectedAdminNotificationHistoryRouteImport.update({
+    id: '/notification-history',
+    path: '/notification-history',
+    getParentRoute: () => ProtectedAdminRoute,
+  } as any)
 const ProtectedAdminAuditLogsRoute = ProtectedAdminAuditLogsRouteImport.update({
   id: '/audit-logs',
   path: '/audit-logs',
@@ -183,6 +190,7 @@ const ProtectedAdminGroupsUuidRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/audit-logs': typeof ProtectedAdminAuditLogsRoute
+  '/notification-history': typeof ProtectedAdminNotificationHistoryRoute
   '/reports/ssl-reports': typeof ProtectedReportsSslReportsRoute
   '/reports/uptime-reports': typeof ProtectedReportsUptimeReportsRoute
   '/services/$uuid': typeof ProtectedServicesUuidRoute
@@ -207,6 +215,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/audit-logs': typeof ProtectedAdminAuditLogsRoute
+  '/notification-history': typeof ProtectedAdminNotificationHistoryRoute
   '/reports/ssl-reports': typeof ProtectedReportsSslReportsRoute
   '/reports/uptime-reports': typeof ProtectedReportsUptimeReportsRoute
   '/services/$uuid': typeof ProtectedServicesUuidRoute
@@ -237,6 +246,7 @@ export interface FileRoutesById {
   '/_protected/_operator': typeof ProtectedOperatorRoute
   '/_protected/_shared': typeof ProtectedSharedRouteWithChildren
   '/_protected/_admin/audit-logs': typeof ProtectedAdminAuditLogsRoute
+  '/_protected/_admin/notification-history': typeof ProtectedAdminNotificationHistoryRoute
   '/_protected/reports/ssl-reports': typeof ProtectedReportsSslReportsRoute
   '/_protected/reports/uptime-reports': typeof ProtectedReportsUptimeReportsRoute
   '/_protected/services/$uuid': typeof ProtectedServicesUuidRoute
@@ -263,6 +273,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/audit-logs'
+    | '/notification-history'
     | '/reports/ssl-reports'
     | '/reports/uptime-reports'
     | '/services/$uuid'
@@ -287,6 +298,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/audit-logs'
+    | '/notification-history'
     | '/reports/ssl-reports'
     | '/reports/uptime-reports'
     | '/services/$uuid'
@@ -316,6 +328,7 @@ export interface FileRouteTypes {
     | '/_protected/_operator'
     | '/_protected/_shared'
     | '/_protected/_admin/audit-logs'
+    | '/_protected/_admin/notification-history'
     | '/_protected/reports/ssl-reports'
     | '/_protected/reports/uptime-reports'
     | '/_protected/services/$uuid'
@@ -465,6 +478,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedReportsSslReportsRouteImport
       parentRoute: typeof ProtectedRoute
     }
+    '/_protected/_admin/notification-history': {
+      id: '/_protected/_admin/notification-history'
+      path: '/notification-history'
+      fullPath: '/notification-history'
+      preLoaderRoute: typeof ProtectedAdminNotificationHistoryRouteImport
+      parentRoute: typeof ProtectedAdminRoute
+    }
     '/_protected/_admin/audit-logs': {
       id: '/_protected/_admin/audit-logs'
       path: '/audit-logs'
@@ -540,6 +560,7 @@ declare module '@tanstack/react-router' {
 
 interface ProtectedAdminRouteChildren {
   ProtectedAdminAuditLogsRoute: typeof ProtectedAdminAuditLogsRoute
+  ProtectedAdminNotificationHistoryRoute: typeof ProtectedAdminNotificationHistoryRoute
   ProtectedAdminGroupsUuidRoute: typeof ProtectedAdminGroupsUuidRoute
   ProtectedAdminGroupsCreateRoute: typeof ProtectedAdminGroupsCreateRoute
   ProtectedAdminUsersCreateUserRoute: typeof ProtectedAdminUsersCreateUserRoute
@@ -552,6 +573,8 @@ interface ProtectedAdminRouteChildren {
 
 const ProtectedAdminRouteChildren: ProtectedAdminRouteChildren = {
   ProtectedAdminAuditLogsRoute: ProtectedAdminAuditLogsRoute,
+  ProtectedAdminNotificationHistoryRoute:
+    ProtectedAdminNotificationHistoryRoute,
   ProtectedAdminGroupsUuidRoute: ProtectedAdminGroupsUuidRoute,
   ProtectedAdminGroupsCreateRoute: ProtectedAdminGroupsCreateRoute,
   ProtectedAdminUsersCreateUserRoute: ProtectedAdminUsersCreateUserRoute,

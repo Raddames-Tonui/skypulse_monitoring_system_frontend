@@ -272,7 +272,7 @@ header,
         top: 0;
         left: 0;
         width: 100%;
-        z-index: 1000;
+        z-index: 600;
         height: 50px;
         animation: navbar-slide-down 0.3s ease forwards;
     }

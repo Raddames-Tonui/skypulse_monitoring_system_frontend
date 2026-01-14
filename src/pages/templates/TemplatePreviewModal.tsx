@@ -49,9 +49,9 @@ export default function TemplatePreviewModal({
     <div className="template-preview-container">
 
       <div className="template-toolbar">
-        <button onClick={() => setView("rendered")}>Preview</button>
-        <button onClick={() => setView("raw")}>Raw HTML</button>
-        <button onClick={() => navigator.clipboard.writeText(template.body_template)}>
+        <button className="btn-secondary" onClick={() => setView("rendered")}>Preview</button>
+        <button className="btn-secondary" onClick={() => setView("raw")}>Raw HTML</button>
+        <button className="btn-secondary" onClick={() => navigator.clipboard.writeText(template.body_template)}>
           Copy
         </button>
       </div>
@@ -65,6 +65,7 @@ export default function TemplatePreviewModal({
             height: "70vh",
             border: "1px solid #ddd",
             background: "white",
+            margin: "5px 0 0"
           }}
           sandbox=""
         />

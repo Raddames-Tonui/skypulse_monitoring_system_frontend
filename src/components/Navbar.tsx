@@ -11,7 +11,7 @@ const Navbar: React.FC = () => {
   const { user, logout } = useAuth();
   const { isSidebarOpen, isMobileSidebarOpen, toggleMobileSidebar } = useTheme();
 
-  const role = user?.roleName?.toLowerCase() || "";
+  const role = user?.role_name?.toLowerCase() || "";
   const iconClass = `navbar-icon ${isSidebarOpen ? "open" : "collapsed"}`;
 
   const roleColor = (() => {
