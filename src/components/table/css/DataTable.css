@@ -99,6 +99,7 @@ tr {
     /* border-radius: 3px; */
     border: 1px solid var(--primary-700);
     font-size: 13px;
+    text-decoration: none;
 }
 
 .action-btn-select,

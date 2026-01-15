@@ -10,6 +10,7 @@ import axiosClient from '@/utils/constants/axiosClient';
 import { useTheme } from '@/context/ThemeProvider';
 import MobileSidebar from '@/components/MobileSidebar';
 import "@css/layout.css";
+// import Footer from '@/components/Footer';
 
 export const Route = createFileRoute('/_protected')({
   beforeLoad: async () => {

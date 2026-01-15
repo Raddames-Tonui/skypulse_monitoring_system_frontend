@@ -59,7 +59,7 @@ const Navbar: React.FC = () => {
 
             {user && showDropdown && (
               <div className="dropdown-menu show">
-                <p className="dropdown-user">{user.fullName}</p>
+                <p className="dropdown-user">{user.first_name}</p>
 
                 <div className="dropdown-info">
                   <p><strong>Role:</strong> {user.roleName || "N/A"}</p>

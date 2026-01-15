@@ -29,6 +29,7 @@ export default function Dashboard() {
     {
       id: "ssl_status",
       caption: "SSL Status",
+      align: "right",
       size: 120,
       renderCell: (value, row) => {
         const val = String(value ?? "");
