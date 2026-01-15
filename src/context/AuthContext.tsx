@@ -1,126 +1,63 @@
-import React, { createContext, useState, useEffect, useCallback } from "react";
-import type { ReactNode } from "react";
-import type { AuthContextType, UserProfile } from "@/context/data-access/types";
-import axiosClient from "@/utils/constants/axiosClient";
-import { toast } from "react-hot-toast";
-import { useNavigate } from "@tanstack/react-router";
+import { createContext, useContext, useState, useCallback} from "react";
+import type { AuthContextType, AuthProviderProps, UserProfile } from "./data-access/types";
+import { useLogout } from "@/context/data-access/useMutateData";
 
-interface AuthProviderProps {
-  children: ReactNode;
-}
+const USER_KEY = "userProfile";
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const navigate = useNavigate();
-  const [user, setUser] = useState<UserProfile | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-
-  // Fetch profile on mount
-  useEffect(() => {
-    const initProfile = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        await fetchProfile();
-      } catch (err: any) {
-        setError(err.response?.data?.message || err.message || "Failed to load profile");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    initProfile();
-  }, []);
-
-  const login = async (email: string, password: string) => {
-    setIsLoading(true);
-    setError(null);
-
+  const [user, setUser] = useState<UserProfile | null>(() => {
     try {
-      const response = await axiosClient.post("/auth/login", { email, password });
-      const userData = response.data?.data?.user;
-
-      if (!userData) throw new Error(response.data?.message || "Login failed");
-
-      setUser(mapProfile(userData));
-
-      navigate({ to: "/dashboard" });
-    } catch (err: any) {
-      setUser(null);
-      const msg = err.response?.data?.message || err.message || "Login failed";
-      setError(msg);
-      toast.error(msg);
-      throw err;
-    } finally {
-      setIsLoading(false);
+      const stored = localStorage.getItem(USER_KEY);
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
     }
-  };
+  });
 
-  const fetchProfile = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
+  const logoutMutation = useLogout();
 
+  const logout = useCallback(async (): Promise<void> => {
     try {
-      const response = await axiosClient.get("/auth/profile");
-      const profile = response.data?.data;
-
-      if (!profile || !profile.role_name) {
-        await logout();
-        return;
-      }
-
-      setUser(mapProfile(profile));
-      setError(null);
-    } catch (err: any) {
-      setUser(null);
-      // navigate({to:"/auth/login"}); 
+      await logoutMutation.mutateAsync();
     } finally {
-      setIsLoading(false);
+      setUser(null);
+    }
+  }, [logoutMutation]);
+
+  const fetchProfile = useCallback(async (): Promise<UserProfile | null> => {
+    try {
+      const stored = localStorage.getItem(USER_KEY);
+      const profile = stored ? JSON.parse(stored) : null;
+      setUser(profile);
+      return profile;
+    } catch {
+      setUser(null);
+      return null;
     }
   }, []);
 
-  const logout = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
 
-    try {
-      await axiosClient.post("/auth/logout");
-      setUser(null);
-      toast.success("Logged out successfully");
-    } catch (err: any) {
-      const msg = err.response?.data?.message || err.message || "Logout failed";
-      setError(msg);
-      toast.error(msg);
-    } finally {
-      setIsLoading(false);
-      navigate({to:"/auth/login"}); 
-    }
-  }, [navigate]);
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, logout, fetchProfile, error }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isLoading: false,
+        error: null,       
+        logout,
+        fetchProfile,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
 
-function mapProfile(userData: any): UserProfile {
-  return {
-    uuid: userData.uuid,
-    fullName: userData.full_name,
-    email: userData.email,
-    roleName: userData.role_name,
-    companyName: userData?.company_name || undefined,
-    userContacts: userData.user_contacts || [],
-    userPreferences: {
-      alertChannel: userData.user_preferences?.alert_channel,
-      receiveWeeklyReports: userData.user_preferences?.receive_weekly_reports,
-      language: userData.user_preferences?.language,
-      timezone: userData.user_preferences?.timezone,
-      dashboardLayout: userData.user_preferences?.dashboard_layout?.value
-        ? JSON.parse(userData.user_preferences.dashboard_layout.value)
-        : {},
-    },
-  };
-}
+// Custom hook
+export const useAuth = (): AuthContextType => {
+  const context = useContext(AuthContext);
+  if (!context) throw new Error("useAuth must be used within AuthProvider");
+  return context;
+};

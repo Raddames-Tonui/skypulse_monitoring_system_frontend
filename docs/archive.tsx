@@ -1,54 +1,125 @@
-import { useMemo } from "react";
-import { DataTable } from "@/components/table/DataTable";
-import { useFetchTemplates } from "./hooks/useFetchTemplates";
-import type { NotificationTemplate } from "./types";
+import React, { createContext, useState, useEffect, useCallback } from "react";
+import axiosClient from "@/utils/constants/axiosClient";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "@tanstack/react-router";
+import type { AuthContextType, AuthProviderProps, UserProfile } from "@/context/data-access/types";
 
-export default function NotificationTemplatesPage() {
-  const { data, isLoading, isError, error, refetch } = useFetchTemplates();
 
-  // Extract templates array for table
-  const templates = useMemo<NotificationTemplate[]>(() => data?.data ?? [], [data?.data]);
-  const total = data?.total_count ?? 0;
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-  // Table columns
-  const columns = [
-    { id: "notification_template_id", caption: "ID", size: 60 },
-    { id: "subject_template", caption: "Subject", size: 200 },
-    { id: "event_type", caption: "Event Type", size: 150 },
-    { id: "template_syntax", caption: "Syntax", size: 120 },
-    { id: "date_created", caption: "Created At", size: 160, renderCell: (v: string) => new Date(v).toLocaleString() },
-    {
-      id: "actions",
-      caption: "Actions",
-      size: 100,
-      renderCell: (_: any, row: NotificationTemplate) => (
-        <button
-          className="view-button"
-          onClick={() => alert(`Editing template: ${row.subject_template}`)}
-        >
-          Edit
-        </button>
-      ),
-    },
-  ];
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch profile on mount
+  useEffect(() => {
+    const initProfile = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        await fetchProfile();
+      } catch (err: any) {
+        setError(err.response?.data?.message || err.message || "Failed to load profile");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    initProfile();
+  }, []);
+
+  const login = async (email: string, password: string) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await axiosClient.post("/auth/login", { email, password });
+      const userData = response.data?.data?.user;
+
+      if (!userData) throw new Error(response.data?.message || "Login failed");
+
+      setUser(mapProfile(userData));
+
+      navigate({ to: "/dashboard" });
+    } catch (err: any) {
+      setUser(null);
+      const msg = err.response?.data?.message || err.message || "Login failed";
+      setError(msg);
+      toast.error(msg);
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchProfile = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await axiosClient.get("/auth/profile");
+      const profile = response.data?.data;
+
+      if (!profile || !profile.role_name) {
+        await logout();
+        return;
+      }
+
+      setUser(mapProfile(profile));
+      setError(null);
+    } catch (err: any) {
+      setUser(null);
+      // navigate({to:"/auth/login"}); 
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const logout = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      await axiosClient.post("/auth/logout");
+      setUser(null);
+      toast.success("Logged out successfully");
+    } catch (err: any) {
+      const msg = err.response?.data?.message || err.message || "Logout failed";
+      setError(msg);
+      toast.error(msg);
+    } finally {
+      setIsLoading(false);
+      navigate({to:"/auth/login"}); 
+    }
+  }, [navigate]);
 
   return (
-    <div className="page-wrapper">
-      <h1 className="page-header">Notification Templates</h1>
-
-      <DataTable
-        columns={columns}
-        data={templates}
-        isLoading={isLoading}
-        error={isError ? (error as any)?.message : undefined}
-        onRefresh={refetch}
-        pagination={{
-          page: 1,
-          pageSize: total,
-          total,
-          onPageChange: () => {}, // no pagination controls needed
-        }}
-      />
-    </div>
+    <AuthContext.Provider value={{ user, isLoading, login, logout, fetchProfile, error }}>
+      {children}
+    </AuthContext.Provider>
   );
+};
+
+function mapProfile(userData: any): UserProfile {
+  return {
+    uuid: userData.uuid,
+    user_id: userData.user_id,
+    first_name: userData.first_name,
+    last_name: userData.last_name,
+    is_active: userData.is_active,
+    email: userData.email,
+    role_name: userData.role_name,
+    company_name: userData?.company_name || undefined,
+    user_contacts: userData.user_contacts || [],
+    user_preferences: {
+      alert_channel: userData.user_preferences?.alert_channel,
+      receive_weekly_reports: userData.user_preferences?.receive_weekly_reports,
+      language: userData.user_preferences?.language,
+      timezone: userData.user_preferences?.timezone,
+      dashboard_layout: userData.user_preferences?.dashboard_layout?.value
+        ? JSON.parse(userData.user_preferences.dashboard_layout.value)
+        : {},
+    },
+  };
 }

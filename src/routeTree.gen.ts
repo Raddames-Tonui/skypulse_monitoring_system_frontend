@@ -23,6 +23,7 @@ import { Route as PublicAuthResetPasswordRouteImport } from './routes/_public/au
 import { Route as PublicAuthRequestPasswordRouteImport } from './routes/_public/auth/request-password'
 import { Route as PublicAuthRegisterRouteImport } from './routes/_public/auth/register'
 import { Route as PublicAuthLoginRouteImport } from './routes/_public/auth/login'
+import { Route as ProtectedUserProfileRouteImport } from './routes/_protected/user/profile'
 import { Route as ProtectedServicesUuidRouteImport } from './routes/_protected/services/$uuid'
 import { Route as ProtectedReportsUptimeReportsRouteImport } from './routes/_protected/reports/uptime-reports'
 import { Route as ProtectedReportsSslReportsRouteImport } from './routes/_protected/reports/ssl-reports'
@@ -103,6 +104,11 @@ const PublicAuthLoginRoute = PublicAuthLoginRouteImport.update({
   id: '/auth/login',
   path: '/auth/login',
   getParentRoute: () => PublicRoute,
+} as any)
+const ProtectedUserProfileRoute = ProtectedUserProfileRouteImport.update({
+  id: '/user/profile',
+  path: '/user/profile',
+  getParentRoute: () => ProtectedRoute,
 } as any)
 const ProtectedServicesUuidRoute = ProtectedServicesUuidRouteImport.update({
   id: '/services/$uuid',
@@ -194,6 +200,7 @@ export interface FileRoutesByFullPath {
   '/reports/ssl-reports': typeof ProtectedReportsSslReportsRoute
   '/reports/uptime-reports': typeof ProtectedReportsUptimeReportsRoute
   '/services/$uuid': typeof ProtectedServicesUuidRoute
+  '/user/profile': typeof ProtectedUserProfileRoute
   '/auth/login': typeof PublicAuthLoginRoute
   '/auth/register': typeof PublicAuthRegisterRoute
   '/auth/request-password': typeof PublicAuthRequestPasswordRoute
@@ -219,6 +226,7 @@ export interface FileRoutesByTo {
   '/reports/ssl-reports': typeof ProtectedReportsSslReportsRoute
   '/reports/uptime-reports': typeof ProtectedReportsUptimeReportsRoute
   '/services/$uuid': typeof ProtectedServicesUuidRoute
+  '/user/profile': typeof ProtectedUserProfileRoute
   '/auth/login': typeof PublicAuthLoginRoute
   '/auth/register': typeof PublicAuthRegisterRoute
   '/auth/request-password': typeof PublicAuthRequestPasswordRoute
@@ -250,6 +258,7 @@ export interface FileRoutesById {
   '/_protected/reports/ssl-reports': typeof ProtectedReportsSslReportsRoute
   '/_protected/reports/uptime-reports': typeof ProtectedReportsUptimeReportsRoute
   '/_protected/services/$uuid': typeof ProtectedServicesUuidRoute
+  '/_protected/user/profile': typeof ProtectedUserProfileRoute
   '/_public/auth/login': typeof PublicAuthLoginRoute
   '/_public/auth/register': typeof PublicAuthRegisterRoute
   '/_public/auth/request-password': typeof PublicAuthRequestPasswordRoute
@@ -277,6 +286,7 @@ export interface FileRouteTypes {
     | '/reports/ssl-reports'
     | '/reports/uptime-reports'
     | '/services/$uuid'
+    | '/user/profile'
     | '/auth/login'
     | '/auth/register'
     | '/auth/request-password'
@@ -302,6 +312,7 @@ export interface FileRouteTypes {
     | '/reports/ssl-reports'
     | '/reports/uptime-reports'
     | '/services/$uuid'
+    | '/user/profile'
     | '/auth/login'
     | '/auth/register'
     | '/auth/request-password'
@@ -332,6 +343,7 @@ export interface FileRouteTypes {
     | '/_protected/reports/ssl-reports'
     | '/_protected/reports/uptime-reports'
     | '/_protected/services/$uuid'
+    | '/_protected/user/profile'
     | '/_public/auth/login'
     | '/_public/auth/register'
     | '/_public/auth/request-password'
@@ -456,6 +468,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth/login'
       preLoaderRoute: typeof PublicAuthLoginRouteImport
       parentRoute: typeof PublicRoute
+    }
+    '/_protected/user/profile': {
+      id: '/_protected/user/profile'
+      path: '/user/profile'
+      fullPath: '/user/profile'
+      preLoaderRoute: typeof ProtectedUserProfileRouteImport
+      parentRoute: typeof ProtectedRoute
     }
     '/_protected/services/$uuid': {
       id: '/_protected/services/$uuid'
@@ -608,6 +627,7 @@ interface ProtectedRouteChildren {
   ProtectedReportsSslReportsRoute: typeof ProtectedReportsSslReportsRoute
   ProtectedReportsUptimeReportsRoute: typeof ProtectedReportsUptimeReportsRoute
   ProtectedServicesUuidRoute: typeof ProtectedServicesUuidRoute
+  ProtectedUserProfileRoute: typeof ProtectedUserProfileRoute
   ProtectedDashboardIndexRoute: typeof ProtectedDashboardIndexRoute
   ProtectedServicesIndexRoute: typeof ProtectedServicesIndexRoute
 }
@@ -619,6 +639,7 @@ const ProtectedRouteChildren: ProtectedRouteChildren = {
   ProtectedReportsSslReportsRoute: ProtectedReportsSslReportsRoute,
   ProtectedReportsUptimeReportsRoute: ProtectedReportsUptimeReportsRoute,
   ProtectedServicesUuidRoute: ProtectedServicesUuidRoute,
+  ProtectedUserProfileRoute: ProtectedUserProfileRoute,
   ProtectedDashboardIndexRoute: ProtectedDashboardIndexRoute,
   ProtectedServicesIndexRoute: ProtectedServicesIndexRoute,
 }

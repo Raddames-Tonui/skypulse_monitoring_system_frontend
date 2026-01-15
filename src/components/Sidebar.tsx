@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import Icon from "@/utils/Icon";
-import { useAuth } from "@/hooks/hooks";
+import { useAuth } from "@/context/AuthContext"; 
 import { useTheme } from "@/context/ThemeProvider"; 
 import { menuConfig } from "@/utils/types";
 
@@ -10,16 +10,16 @@ const Sidebar: React.FC = () => {
   const navigate = useNavigate();
   const { isSidebarOpen, toggleSidebar } = useTheme();
 
-  const userRole = user?.roleName?.toLowerCase() || "";
+  const userRole = user?.role_name?.toLowerCase() || "";
   const menuItems = menuConfig[userRole] || [];
 
   useEffect(() => {
-    if (!isLoading && !menuItems.length) {
+    if (!isLoading && user && menuItems.length === 0) {
       navigate({ to: "/auth/unauthorized" });
     }
-  }, [isLoading, menuItems.length, navigate]);
+  }, [isLoading, user, menuItems.length, navigate]);
 
-  if (isLoading || !user) return null;
+  if (isLoading || !user) return null; 
 
   return (
     <aside

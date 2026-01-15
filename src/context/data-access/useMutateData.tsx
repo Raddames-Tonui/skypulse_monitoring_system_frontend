@@ -1,31 +1,36 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosClient from "@/utils/constants/axiosClient";
 import toast from "react-hot-toast";
-import type { UserProfile, ApiError, ApiSingleResponse } from "./types";
-import { PROFILE_QUERY_KEY } from "./useFetchData";
+import type { UserProfile, ApiError, ApiSingleResponse } from "@/context/data-access/types";
 
-// -------- LOGIN --------
+
+export const PROFILE_QUERY_KEY = ["user-profile"];
+
+
 export const useLogin = () => {
   const queryClient = useQueryClient();
 
+  // -------- LOG IN--------
   return useMutation<UserProfile, ApiError, { email: string; password: string }>({
     mutationFn: async (credentials) => {
-      const { data } = await axiosClient.post<ApiSingleResponse<UserProfile>>(
+      const response = await axiosClient.post<ApiSingleResponse<UserProfile>>(
         "/auth/login",
         credentials
       );
-      return data.data;
+      return response.data.data;
     },
     onSuccess: (data) => {
-      toast.success("Login successful");
       queryClient.setQueryData(PROFILE_QUERY_KEY, data);
+      localStorage.setItem("userProfile", JSON.stringify(data));
+      toast.success("Login successful");
     },
-    onError: (err: any) => {
-      const msg = err?.response?.data?.message || err.message || "Login failed";
-      toast.error(msg);
+    onError: (err: ApiError) => {
+      toast.error(err.message || "Login failed");
     },
   });
 };
+
+
 
 // -------- LOGOUT --------
 export const useLogout = () => {
@@ -36,8 +41,9 @@ export const useLogout = () => {
       await axiosClient.post("/auth/logout");
     },
     onSuccess: () => {
-      toast.success("Logged out successfully");
       queryClient.removeQueries({ queryKey: PROFILE_QUERY_KEY });
+      localStorage.removeItem("userProfile");
+      toast.success("Logged out successfully");
     },
     onError: (err: any) => {
       const msg = err?.response?.data?.message || err.message || "Logout failed";
@@ -58,6 +64,7 @@ export const useUpdateUserProfile = () => {
       );
       return data.data;
     },
+
     onMutate: async (updatedUser) => {
       await queryClient.cancelQueries({ queryKey: PROFILE_QUERY_KEY });
       const previousData = queryClient.getQueryData<UserProfile>(PROFILE_QUERY_KEY);
@@ -69,15 +76,24 @@ export const useUpdateUserProfile = () => {
 
       return { previousData };
     },
+
     onError: (_err, _updatedUser, context) => {
       if (context?.previousData) {
         queryClient.setQueryData(PROFILE_QUERY_KEY, context.previousData);
       }
       toast.error("Failed to update profile");
     },
+
     onSuccess: (data) => {
       toast.success("Profile updated successfully");
+
       queryClient.setQueryData(PROFILE_QUERY_KEY, data);
+
+      localStorage.setItem("userProfile", JSON.stringify(data));
+
+      // Optional: Invalidate dependent queries if they rely on updated profile
+      // queryClient.invalidateQueries({ queryKey: ["dashboard", "settings"] });
     },
   });
 };
+

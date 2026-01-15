@@ -21,16 +21,12 @@ export const useUpdateUserProfile = () => {
             return response.data.data;
         },
 
-        // Step 1: Optimistically update cache
         onMutate: async (updatedUser) => {
-            // Cancel any ongoing fetches for this user profile
             await queryClient.cancelQueries({ queryKey: ["user-profile"] });
 
-            // Snapshot previous data
             const previousData =
                 queryClient.getQueryData<UserProfile>(["user-profile"]);
 
-            // Update cache optimistically
             queryClient.setQueryData<UserProfile>(["user-profile"], (oldData) => {
                 if (!oldData) return oldData;
 
@@ -44,11 +40,9 @@ export const useUpdateUserProfile = () => {
                 };
             });
 
-            // Return snapshot for rollback
             return { previousData };
         },
 
-        // Step 2: Rollback on error
         onError: (_err, _updatedUser, context) => {
             if (context?.previousData) {
                 queryClient.setQueryData<UserProfile>(
@@ -60,7 +54,6 @@ export const useUpdateUserProfile = () => {
             toast.error("Failed to update profile");
         },
 
-        // Step 3: Sync cache on success
         onSuccess: (data) => {
             toast.success("Profile updated successfully");
             queryClient.setQueryData<UserProfile>(["user-profile"], data);

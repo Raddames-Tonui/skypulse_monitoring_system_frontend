@@ -13,7 +13,7 @@ export type ApiError = {
 
 // ----------- USER CONTACT -----------
 export interface UserContact {
-    contact_type: 'EMAIL' | 'PHONE' | 'SMS' | 'TELEGRAM';
+    type: 'EMAIL' | 'PHONE' | 'SMS' | 'TELEGRAM';
     is_primary: boolean;
     verified: boolean;
     value: string;
@@ -24,7 +24,11 @@ export interface UserPreferences {
   alert_channel: "EMAIL" | "SMS" | "TELEGRAM" | 'PHONE';
   receive_weekly_reports: boolean;
   timezone: string;
-  dashboard_layout?: Record<string, unknown>;
+  dashboard_layout: {
+      type: string;
+      value: string;
+      null: boolean;
+  };
   language: string;
 }
 
@@ -36,7 +40,8 @@ export interface UserProfile {
     first_name: string;
     last_name: string;
     role_name: 'ADMIN' | 'OPERATOR' | 'VIEWER'; 
-    company_name: string;
+    company_name: string | undefined;
+    is_active: boolean;
     user_contacts: UserContact[];
     user_preferences: UserPreferences;
 }
@@ -48,9 +53,10 @@ export interface AuthContextType {
   error: string | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
-  fetchProfile: () => Promise<void>; 
+  fetchProfile: () => Promise<UserProfile> | null; 
 }
 
 export interface AuthProviderProps {
   children: ReactNode;
 }
+
