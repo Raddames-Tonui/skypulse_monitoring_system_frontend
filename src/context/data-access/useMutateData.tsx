@@ -2,9 +2,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosClient from "@/utils/constants/axiosClient";
 import toast from "react-hot-toast";
 import type { UserProfile, ApiError, ApiSingleResponse } from "@/context/data-access/types";
+import { useNavigate } from "@tanstack/react-router";
 
 
 export const PROFILE_QUERY_KEY = ["user-profile"];
+
 
 
 export const useLogin = () => {
@@ -35,6 +37,7 @@ export const useLogin = () => {
 // -------- LOGOUT --------
 export const useLogout = () => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   return useMutation<void, ApiError>({
     mutationFn: async () => {
@@ -43,7 +46,9 @@ export const useLogout = () => {
     onSuccess: () => {
       queryClient.removeQueries({ queryKey: PROFILE_QUERY_KEY });
       localStorage.removeItem("userProfile");
+      localStorage.removeItem("isSidebarOpen");
       toast.success("Logged out successfully");
+      navigate({ to: "/auth/login" });
     },
     onError: (err: any) => {
       const msg = err?.response?.data?.message || err.message || "Logout failed";

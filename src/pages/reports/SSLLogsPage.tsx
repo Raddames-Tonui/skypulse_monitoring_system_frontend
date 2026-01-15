@@ -149,7 +149,9 @@ export default function SSLLogsPage() {
     };
 
     const tableActionsRight = (
-        <select value={pageSize} onChange={(e) => handlePageSizeChange(Number(e.target.value))}>
+        <select value={pageSize}
+            className="action-btn-select"
+            onChange={(e) => handlePageSizeChange(Number(e.target.value))}>
             {[10, 20, 50, 100].map((v) => (
                 <option key={v} value={v}>
                     {v}
@@ -167,7 +169,7 @@ export default function SSLLogsPage() {
             </button>
             <button className="action-btn-sec" onClick={downloadPdfReport} disabled={isProcessing}>
                 {isProcessing ? "Processing..." : "Download PDF"}
-            </button>    
+            </button>
             <button className="action-btn-sec" onClick={downloadSslReport} disabled={isProcessing}>
                 {isProcessing ? "Processing..." : "Download Excel"}
             </button>

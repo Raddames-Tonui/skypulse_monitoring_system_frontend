@@ -1,6 +1,7 @@
+import type { ApiSingleResponse, UserProfile } from "@/context/data-access/types";
 import axiosClient from "@/utils/constants/axiosClient";
-import type { ApiError, ApiSingleResponse, UserProfile } from "./types";
 import { useQuery } from "@tanstack/react-query";
+import type { ApiError } from "./types";
 
 const PROFILE_QUERY_KEY = ["user-profile"];
 

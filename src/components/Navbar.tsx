@@ -1,13 +1,12 @@
-import { useState } from "react";
 import Icon from "@/utils/Icon";
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemeProvider";
-import GetUserProfileModal from "@/pages/users/GetUserProfileModal";
+// import GetUserProfileModal from "@/pages/users/GetUserProfileModal";
 import { useNavigate } from "@tanstack/react-router";
 
 const Navbar: React.FC = () => {
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  // const [showDropdown, setShowDropdown] = useState(false);
+  // const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const { user, logout } = useAuth();
@@ -76,12 +75,15 @@ const Navbar: React.FC = () => {
           <div className="avatar-dropdown">
             <div
               className={`${iconClass} avatar-icon initials`}
-              onClick={() => setShowDropdown((prev) => !prev)}
+              // onClick={() => setShowDropdown((prev) => !prev)}
+              onClick={() => navigate({ to: "/user/profile" })}
             >
               {getInitials(user?.first_name, user?.last_name)}
             </div>
 
-            {showDropdown && (
+
+
+            {/* {showDropdown && (
               <div className="dropdown-menu show">
                 <p className="dropdown-user">{user?.first_name} {user?.last_name}</p>
 
@@ -106,8 +108,12 @@ const Navbar: React.FC = () => {
                   Logout
                 </button>
               </div>
-            )}
+            )} */}
           </div>
+
+          <button onClick={logout} >
+            <Icon iconName="logoutOutline"/>
+          </button>
 
           <button className="navbar-hamburger mobile-only" onClick={toggleMobileSidebar}>
             <Icon iconName={isMobileSidebarOpen ? "closeMobile" : "hamburger"} />
@@ -115,10 +121,6 @@ const Navbar: React.FC = () => {
         </div>
       </div>
 
-      <GetUserProfileModal
-        isOpen={isProfileModalOpen}
-        onClose={() => setIsProfileModalOpen(false)}
-      />
     </header>
   );
 };

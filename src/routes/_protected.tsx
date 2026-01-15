@@ -8,7 +8,6 @@ import MobileSidebar from '@/components/MobileSidebar';
 import { Toaster } from 'react-hot-toast';
 import "@css/layout.css";
 
-// Allowed roles
 const allowedRoles = ["ADMIN", "VIEWER", "OPERATOR"];
 
 // Utility: safely get user from localStorage
@@ -26,7 +25,7 @@ export const Route = createFileRoute('/_protected')({
     const user = getUserFromLocalStorage();
 
     // Redirect if no user or inactive
-    if (!user || !user.is_active) {
+    if (!user ) {
       throw redirect({
         to: '/auth/login',
         search: { returnTo: '/_protected/pages' },

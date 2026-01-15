@@ -653,13 +653,12 @@ export const updateServiceSchema: any = {
 
 
 
-
-
 // USER PROFILE
-export const userProfileSchema: any = {
+export const userProfileSchema = {
   id: "user-profile",
+
   meta: {
-    // title: "User Profile",
+    title: "User Profile",
     subtitle: "Manage your personal information and preferences",
   },
 
@@ -668,60 +667,87 @@ export const userProfileSchema: any = {
       id: "first_name",
       label: "First Name",
       renderer: "text",
-      rules: { required: "Required" },
+      rules: { required: "First name is required" },
     },
-
     last_name: {
       id: "last_name",
       label: "Last Name",
       renderer: "text",
-      rules: { required: "Required" },
+      rules: { required: "Last name is required" },
     },
-
     email: {
       id: "email",
       label: "Primary Email",
       renderer: "text",
       inputType: "email",
-      disabled: true, 
+      disabled: true,
     },
 
-    // CONTACTS
     contact_email: {
       id: "contact_email",
-      label: "Primary Contact Email",
+      label: "Email Contact",
       renderer: "text",
       inputType: "email",
-      rules: { required: "Required" },
+      helperText: "Used for notifications and account recovery",
+      rules: {
+        pattern: {
+          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+          message: "Invalid email address",
+        },
+      },
+    },
+    contact_sms: {
+      id: "contact_sms",
+      label: "SMS Contact",
+      renderer: "text",
+      inputType: "tel",
+      placeholder: "254712345678",
+      rules: {
+        pattern: {
+          value: /^254[17]\d{8}$/,
+          message: "Invalid phone number (254XXXXXXXXX)",
+        },
+      },
+    },
+    contact_telegram: {
+      id: "contact_telegram",
+      label: "Telegram Contact",
+      renderer: "text",
+      placeholder: "@username",
+      rules: {
+        pattern: {
+          value: /^@[\w\d_]{5,32}$/,
+          message: "Invalid Telegram handle",
+        },
+      },
     },
 
-    // PREFERENCES
     alert_channel: {
       id: "alert_channel",
       label: "Alert Channel",
       renderer: "select",
+      rules: { required: "Select an alert channel" },
+      disabled: true,
       props: {
         data: [
           { label: "Email", value: "EMAIL" },
+          { label: "SMS", value: "SMS" },
           { label: "Telegram", value: "TELEGRAM" },
-          { label: "SMS", value: "SMS" }
         ],
       },
-      rules: { required: "Required" },
     },
-
     receive_weekly_reports: {
       id: "receive_weekly_reports",
       label: "Receive Weekly Reports",
       renderer: "switch",
       defaultValue: true,
     },
-
     language: {
       id: "language",
       label: "Language",
       renderer: "select",
       disabled: true,
+      rules: { required: "Language is required" },
       props: {
         data: [
           { label: "English", value: "en" },
@@ -729,14 +755,13 @@ export const userProfileSchema: any = {
           { label: "Swahili", value: "sw" },
         ],
       },
-      rules: { required: "Required" },
     },
-
     timezone: {
       id: "timezone",
       label: "Timezone",
       renderer: "select",
       disabled: true,
+      rules: { required: "Timezone is required" },
       props: {
         data: [
           { label: "UTC", value: "UTC" },
@@ -744,9 +769,9 @@ export const userProfileSchema: any = {
           { label: "Europe/London", value: "Europe/London" },
         ],
       },
-      rules: { required: "Required" },
     },
   },
+
   layout: [
     {
       kind: "section",
@@ -772,9 +797,14 @@ export const userProfileSchema: any = {
       withDivider: true,
       children: [
         {
-          kind: "stack",
+          kind: "grid",
+          cols: 1,
           spacing: "md",
-          children: [{ kind: "field", fieldId: "contact_email" }],
+          children: [
+            { kind: "field", fieldId: "contact_email" },
+            { kind: "field", fieldId: "contact_sms" },
+            { kind: "field", fieldId: "contact_telegram" },
+          ],
         },
       ],
     },

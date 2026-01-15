@@ -121,7 +121,8 @@ export default function ContactGroupsPage() {
   ];
 
   const tableActionsRight = (
-    <select value={pageSize} onChange={(e) => setPageSize(Number(e.target.value))}>
+    <select className="action-btn-select"
+      value={pageSize} onChange={(e) => setPageSize(Number(e.target.value))}>
       {[10, 20, 50, 100].map((v) => (
         <option key={v} value={v}>
           {v}

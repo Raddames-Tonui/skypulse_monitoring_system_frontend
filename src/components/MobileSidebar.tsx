@@ -11,7 +11,7 @@ const MobileSidebar: React.FC = () => {
 
   if (isLoading || !user) return null;
 
-  const role = user.role_name.toLowerCase();
+  const role = user?.role_name?.toLowerCase() || "";
   const menuItems = menuConfig[role] || [];
 
   return (

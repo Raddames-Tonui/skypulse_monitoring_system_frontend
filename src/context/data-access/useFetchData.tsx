@@ -1,33 +1,21 @@
-// import { useQuery } from "@tanstack/react-query";
-// import axiosClient from "@/utils/constants/axiosClient";
-// import type { ApiError, ApiSingleResponse, UserProfile } from "./types";
-// import { useEffect } from "react";
-// import toast from "react-hot-toast";
+import type { ApiError, ApiSingleResponse, UserProfile } from "@/context/data-access/types";
+import axiosClient from "@/utils/constants/axiosClient";
+import { useQuery } from "@tanstack/react-query";
+import { PROFILE_QUERY_KEY } from "@/context/data-access//useMutateData";
 
-// export const PROFILE_QUERY_KEY = ["user-profile"];
 
-// const fetchUserProfile = async (): Promise<UserProfile> => {
-//   const response = await axiosClient.get<ApiSingleResponse<UserProfile>>("/auth/profile");
-//   return response.data.data;
-// };
+const fetchUserProfile = async (): Promise<UserProfile> => {
+    const response = await axiosClient.get<ApiSingleResponse<UserProfile>>(
+        "/auth/profile"
+    );
 
-// export const useGetUserProfile = (enabled = true) => {
-//   const query = useQuery<UserProfile, ApiError>({
-//     queryKey: PROFILE_QUERY_KEY,
-//     queryFn: fetchUserProfile,
-//     staleTime: 5 * 60 * 1000,
-//     retry: false,
-//     enabled, 
-//   });
+    return response.data.data;
+};
 
-//   useEffect(() => {
-//     if (query.isSuccess && query.data) {
-//       localStorage.setItem("userProfile", JSON.stringify(query.data));
-//     }
-//     if (query.isError) {
-//       toast.error(query.error?.message || "Failed to fetch user profile");
-//     }
-//   }, [query.isSuccess, query.isError, query.data, query.error]);
-
-//   return query;
-// };
+export const useGetUserProfile = () => {
+    return useQuery<UserProfile, ApiError>({
+        queryKey: PROFILE_QUERY_KEY,
+        queryFn: fetchUserProfile,
+        staleTime: 5 * 60 * 1000,
+    });
+};

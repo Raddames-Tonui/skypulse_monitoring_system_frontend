@@ -100,7 +100,9 @@ export default function MonitoredServicesPage() {
   ];
 
   const tableActionsRight = (
-    <select value={pageSize} onChange={(e) => setPageSize(Number(e.target.value))}>
+    <select value={pageSize}
+      className="action-btn-select"
+      onChange={(e) => setPageSize(Number(e.target.value))}>
       {[10, 20, 50, 100].map((v) => (
         <option key={v} value={v}>
           {v}

@@ -224,6 +224,7 @@ export default function AuditLogsPage() {
                 tableActionsRight={
                     <select
                         value={pageSize}
+                        className="action-btn-select"
                         onChange={(e) => setPageSize(Number(e.target.value))}
                     >
                         {[10, 15, 20, 50, 100].map((v) => (

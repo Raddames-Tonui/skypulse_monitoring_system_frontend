@@ -123,7 +123,9 @@ export default function UptimeLogsPage() {
     };
 
     const tableActionsRight = (
-        <select value={pageSize} onChange={(e) => handlePageSizeChange(Number(e.target.value))}>
+        <select value={pageSize}
+            className="action-btn-select"
+            onChange={(e) => handlePageSizeChange(Number(e.target.value))}>
             {[10, 20, 50, 100].map((v) => (
                 <option key={v} value={v}>
                     {v}
@@ -149,7 +151,7 @@ export default function UptimeLogsPage() {
             </button>
             <button className="action-btn-sec" onClick={() => downloadPdfReport(pdfFilters)} disabled={isProcessing}>
                 {isProcessing ? "Processing..." : "Download PDF"}
-            </button>          
+            </button>
             <button className="action-btn-sec" onClick={() => downloadSslReport(pdfFilters)} disabled={isProcessing}>
                 {isProcessing ? "Processing..." : "Download Excel"}
             </button>
