@@ -4,10 +4,12 @@ import { useMemo, useState } from "react";
 import Modal from "@/components/modal/Modal";
 import type { NotificationTemplate } from "./data-access/types";
 import TemplatePreviewModal from "./TemplatePreviewModal";
+import UpdateTemplateModal from "./UpdateTemplateModal";
 
 
 function NotificationTemplatesPage() {
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [isPreviewModalOpen, setPreviewModalOpen] = useState(false);
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<NotificationTemplate | null>(null);
 
 
@@ -26,17 +28,28 @@ function NotificationTemplatesPage() {
     {
       id: "actions",
       caption: "Actions",
-      size: 100,
+      size: 150,
       renderCell: (_: any, row: NotificationTemplate) => (
-        <button
-          className="action-btn"
-          onClick={() => {
-            setSelectedTemplate(row);
-            setModalOpen(true);
-          }}
-        >
-          View
-        </button>
+        <div style={{ display: "flex", gap: "0.5rem" }}>
+          <button
+            className="action-btn"
+            onClick={() => {
+              setSelectedTemplate(row);
+              setPreviewModalOpen(true);
+            }}
+          >
+            View
+          </button>
+          <button
+            className="action-btn"
+            onClick={() => {
+              setSelectedTemplate(row);
+              setEditModalOpen(true);
+            }}
+          >
+            Edit
+          </button>
+        </div>
       ),
     },
   ];
@@ -65,18 +78,22 @@ function NotificationTemplatesPage() {
       />
 
       <Modal
-        isOpen={isModalOpen}
+        isOpen={isPreviewModalOpen}
         title={selectedTemplate?.subject_template ?? "Template Preview"}
-        onClose={() => setModalOpen(false)}
+        onClose={() => setPreviewModalOpen(false)}
         size="lg"
         body={
           selectedTemplate ? (
             <TemplatePreviewModal template={selectedTemplate} />
           ) : null
         }
-      
       />
 
+      <UpdateTemplateModal
+        isOpen={isEditModalOpen}
+        onClose={() => setEditModalOpen(false)}
+        initialData={selectedTemplate}
+      />
     </>
   )
 }
