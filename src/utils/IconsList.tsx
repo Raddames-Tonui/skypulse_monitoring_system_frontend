@@ -244,41 +244,6 @@ export const FileUploadLight: React.FC<IconBaseProps> = ({ className, style }) =
     </svg>
 );
 
-export const LogoutOutline: React.FC<IconBaseProps> = ({ className, style }) => (
-    <svg
-        className={className}
-        style={style}
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        width="1em"
-        height="1em"
-    >
-        <path
-            d="M12 4.75h6a1.5 1.5 0 0 1 1.5 1.5v11.5a1.5 1.5 0 0 1-1.5 1.5h-6"
-            stroke="currentColor"
-            strokeWidth="1.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        />
-
-        <path
-            d="M5 12h9"
-            stroke="currentColor"
-            strokeWidth="1.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        />
-
-        <path
-            d="M8.5 8.5L5 12l3.5 3.5"
-            stroke="currentColor"
-            strokeWidth="1.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        />
-    </svg>
-);
 
 
 
@@ -347,6 +312,43 @@ export const Notification: React.FC<IconBaseProps> = ({ className }) => (
         <path d="M7 19H11C11 20.1 10.1 21 9 21C7.9 21 7 20.1 7 19ZM18 17V18H0V17L2 15V9C2 5.9 4 3.2 7 2.3V2C7 0.9 7.9 0 9 0C10.1 0 11 0.9 11 2V2.3C14 3.2 16 5.9 16 9V15L18 17ZM14 9C14 6.2 11.8 4 9 4C6.2 4 4 6.2 4 9V16H14V9Z" fill="white" />
     </svg>
 )
+
+export const LogoutOutline: React.FC<IconBaseProps> = ({ className, style }) => (
+    <svg
+        className={className}
+        style={style}
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="21"
+    >
+        <path
+            d="M12 4.75h6a1.5 1.5 0 0 1 1.5 1.5v11.5a1.5 1.5 0 0 1-1.5 1.5h-6"
+            stroke="currentColor"
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+
+        <path
+            d="M5 12h9"
+            stroke="currentColor"
+            strokeWidth="1.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+
+        <path
+            d="M8.5 8.5L5 12l3.5 3.5"
+            stroke="currentColor"
+            strokeWidth="1.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+    </svg>
+);
+
 
 export const Avatar: React.FC<IconBaseProps> = ({ className }) => (
     <svg className={className} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
