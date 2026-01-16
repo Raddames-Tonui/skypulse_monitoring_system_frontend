@@ -74,7 +74,10 @@ export default function MonitoredServicesPage() {
     },
     { id: "monitored_service_region", caption: "Region", size: 120, filterable: true, sortable: true },
     { id: "ssl_enabled", caption: "SSL Enabled", size: 120, filterable: true, sortable: true, renderCell: (v: boolean) => (v ? "Yes" : "No") },
-    { id: "last_uptime_status", caption: "Status", size: 100, filterable: true, sortable: true, renderCell: (v: string) => <span style={{ color: v === "UP" ? "#27ae60" : "#e74c3c", fontWeight: 600 }}>{v}</span> },
+    {
+      id: "last_uptime_status", caption: "Status", size: 100, filterable: true, sortable: true,
+      renderCell: (v: string) => <span style={{ color: v === "UP" ? "#27ae60" : "#e74c3c", fontWeight: 600 }}>{v}</span>
+    },
     { id: "date_created", caption: "Created At", size: 160, sortable: true, renderCell: (v: string) => new Date(v).toISOString().split("T")[0] },
     {
       id: "actions",

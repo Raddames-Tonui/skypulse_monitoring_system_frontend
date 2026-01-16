@@ -123,6 +123,7 @@
 .profile-content h2 {
   margin-top: 0;
   margin-bottom: 24px;
+  color: var(--primary-700);
 }
 
 .profile-grid {
@@ -132,19 +133,12 @@
 }
 
 .profile-grid label {
-  font-size: 12px;
+  font-size: 14px;
   color: #777;
   display: block;
   margin-bottom: 4px;
 }
 
-.profile-role-tag {
-  padding: 4px 10px;
-  font-size: 12px;
-  background: var(--primary-100);
-  color: var(--primary-700);
-  border-radius: var(--border-radius-md);
-}
 
 .status-active {
   color: var(--primary-600);
