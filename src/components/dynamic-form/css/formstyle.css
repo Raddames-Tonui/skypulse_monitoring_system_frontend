@@ -250,7 +250,8 @@ textarea {
   background: var(--bg-secondary);
 }
 
-.form-section legend {
+.form-section legend,
+.section-title {
   font-weight: 700;
   color: var(--primary-700);
   font-size: 1.1rem;
