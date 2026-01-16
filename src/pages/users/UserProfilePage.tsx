@@ -21,70 +21,77 @@ export default function UserProfilePage() {
   const fullName = `${data.first_name} ${data.last_name}`;
 
   return (
-    <div className="profile-container">
-      <aside className="profile-sidebar">
-        <div className="profile-avatar">{data.first_name.charAt(0)}</div>
-        <h3 className="profile-name">{fullName}</h3>
-        <p className="profile-email profile-name">{contactsMap.EMAIL}</p>
-        <span className="profile-role profile-name">{data.role_name}</span>
+    <>
+      <div className="page-header">
+        <h1>User Profile</h1>
+      </div>
 
-        <nav className="profile-nav">
-          {/* <button className="active">Overview</button> */}
-          <button onClick={() => setIsModalOpen(true)}>Edit Profile</button>
-          <button>Change Password</button>
-          <button>Settings</button>
-          <button>Activity Log</button>
-        </nav>
-      </aside>
+      <div className="profile-container">
+        <aside className="profile-sidebar">
+          <div className="profile-avatar">{data.first_name.charAt(0)}</div>
+          <h3 className="profile-name">{fullName}</h3>
+          <p className="profile-email profile-name">{contactsMap.EMAIL}</p>
+          <span className="profile-role profile-name">{data.role_name}</span>
 
-      <section className="profile-content">
-        <h2>Account Overview</h2>
-        <div className="profile-grid">
-         
-          <div>
-            <label>Company</label>
-            <p>{data.company_name}</p>
-          </div>
-          <div>
-            <label>Email</label>
-            <p>{contactsMap.EMAIL}</p>
-          </div>
-          <div>
-            <label>Phone</label>
-            <p>{contactsMap.SMS ?? "Not set"}</p>
-          </div>
-          <div>
-            <label>Telegram</label>
-            <p>{contactsMap.TELEGRAM ?? "Not set"}</p>
-          </div>
-          <div>
-            <label>Role</label>
-            <span className="profile-role-tag">{data.role_name}</span>
-          </div>
-          <div>
-            <label>Language</label>
-            <p>{data.user_preferences.language.toUpperCase()}</p>
-          </div>
-          <div>
-            <label>Timezone</label>
-            <p>{data.user_preferences.timezone}</p>
-          </div>
-        </div>
+          <nav className="profile-nav">
+            {/* <button className="active">Overview</button> */}
+            <button onClick={() => setIsModalOpen(true)}>Edit Profile</button>
+            <button>Change Password</button>
+            <button>Settings</button>
+            <button>Activity Log</button>
+          </nav>
+        </aside>
 
-        <div className="profile-actions">
-          <button className="btn-primary" onClick={() => setIsModalOpen(true)}>
-            Edit Profile
-          </button>
-          {/* <button className="btn-secondary">Change Password</button> */}
-        </div>
-      </section>
+        <section className="profile-content">
+          <h2>Account Overview</h2>
+          <div className="profile-grid">
 
-      {isModalOpen && (
-        <GetUserProfileModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-        />
-      )}
-    </div>
+            <div>
+              <label>Company</label>
+              <p>{data.company_name}</p>
+            </div>
+            <div>
+              <label>Email</label>
+              <p>{contactsMap.EMAIL}</p>
+            </div>
+            <div>
+              <label>Phone</label>
+              <p>{contactsMap.SMS ?? "Not set"}</p>
+            </div>
+            <div>
+              <label>Telegram</label>
+              <p>{contactsMap.TELEGRAM ?? "Not set"}</p>
+            </div>
+            <div>
+              <label>Role</label>
+              <span className="profile-role-tag">{data.role_name}</span>
+            </div>
+            <div>
+              <label>Language</label>
+              <p>{data.user_preferences.language.toUpperCase()}</p>
+            </div>
+            <div>
+              <label>Timezone</label>
+              <p>{data.user_preferences.timezone}</p>
+            </div>
+          </div>
+
+          <div className="profile-actions">
+            <button className="btn-primary" onClick={() => setIsModalOpen(true)}>
+              Edit Profile
+            </button>
+            {/* <button className="btn-secondary">Change Password</button> */}
+          </div>
+        </section>
+
+        {isModalOpen && (
+          <GetUserProfileModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+          />
+        )}
+      </div>
+    </>
+
   );
 }

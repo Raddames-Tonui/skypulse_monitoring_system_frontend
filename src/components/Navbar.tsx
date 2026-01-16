@@ -111,9 +111,18 @@ const Navbar: React.FC = () => {
             )} */}
           </div>
 
-          <button onClick={logout} >
-            <Icon iconName="logoutOutline"/>
-          </button>
+          <div onClick={logout}>
+            <Icon
+              iconName="logoutOutline"
+              style={{
+                color: "#fff",
+                width: 30,
+                height: 30,
+              }}
+            />
+          </div>
+
+
 
           <button className="navbar-hamburger mobile-only" onClick={toggleMobileSidebar}>
             <Icon iconName={isMobileSidebarOpen ? "closeMobile" : "hamburger"} />
