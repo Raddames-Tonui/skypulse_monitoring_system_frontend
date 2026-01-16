@@ -86,11 +86,12 @@ export default function NotificationHistoryPage() {
             size: 120,
             isSortable: true,
             isFilterable: true,
-            renderCell: (v: string) => (
-                <span className={`status-pill status-${v.toLowerCase()}`}>
-                    {v}
-                </span>
-            ),
+            // renderCell: (v: string) => (
+            //     <span className={`status-pill status-${v.toLowerCase()}`}>
+            //         {v}
+            //     </span>
+            // ),
+            renderCell: (v: string) => <span style={{ color: v === "UP" ? "#27ae60" : "#e74c3c", fontWeight: 600 }}>{v}</span>
         },
 
         {

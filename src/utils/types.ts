@@ -258,9 +258,9 @@ export interface MenuItem {
 export const menuConfig: Record<string, MenuItem[]> = {
   admin: [
     { icon: "pie", label: "Dashboard", path: "/dashboard" },
+    { icon: "services", label: "Services", path: "/services" },
     { icon: "user", label: "Users", path: "/users" },
     { icon: "users", label: "Groups", path: "/groups" },
-    { icon: "services", label: "Services", path: "/services" },
     { icon: "notepad", label: "Reports", path: "/reports/uptime-reports" },
     { icon: "notes", label: "Audit Logs", path: "/audit-logs" },
     { icon: "messageLight", label: "Notifications", path: "/notification-history" },

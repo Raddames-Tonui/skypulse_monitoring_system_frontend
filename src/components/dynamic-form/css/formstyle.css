@@ -134,14 +134,14 @@
 .dynamic-form {
   background: var(--bg-default);
   border-radius: var(--border-radius-sm);
-  padding: var(--space-lg);
+  padding: var(--space-sm) var(--space-lg);
   /* box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02); */
   /* max-width: 800px; */
   margin: 0.5rem auto;
 }
 
 .form-h1 {
-  font-size: 1.75rem;
+  font-size: 1.4rem;
   color: var(--primary-700);
   margin-bottom: 0.25rem;
   text-align: start;

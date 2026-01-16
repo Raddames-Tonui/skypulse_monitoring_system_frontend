@@ -64,6 +64,7 @@ export const updateTemplateSchema: any = {
       id: "template_syntax",
       label: "Template Syntax",
       renderer: "select",
+      disabled: true,
       props: {
         data: [
           { label: "Mustache", value: "mustache" },
