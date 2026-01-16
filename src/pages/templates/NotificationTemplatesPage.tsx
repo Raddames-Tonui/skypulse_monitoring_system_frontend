@@ -1,15 +1,14 @@
 import { DataTable } from "@/components/table/DataTable"
 import { useFetchTemplates } from "./data-access/useFetchData";
 import { useMemo, useState } from "react";
+import { Link } from "@tanstack/react-router";
 import Modal from "@/components/modal/Modal";
 import type { NotificationTemplate } from "./data-access/types";
 import TemplatePreviewModal from "./TemplatePreviewModal";
-import UpdateTemplateModal from "./UpdateTemplateModal";
 
 
 function NotificationTemplatesPage() {
   const [isPreviewModalOpen, setPreviewModalOpen] = useState(false);
-  const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<NotificationTemplate | null>(null);
 
 
@@ -40,15 +39,15 @@ function NotificationTemplatesPage() {
           >
             View
           </button>
-          <button
+          <Link
+            // @ts-ignore - Route exists but types need regeneration
+            to="/templates/$uuid"
+            params={{ uuid: row.uuid }}
             className="action-btn"
-            onClick={() => {
-              setSelectedTemplate(row);
-              setEditModalOpen(true);
-            }}
+            style={{ textDecoration: "none", display: "inline-block" }}
           >
             Edit
-          </button>
+          </Link>
         </div>
       ),
     },
@@ -87,12 +86,6 @@ function NotificationTemplatesPage() {
             <TemplatePreviewModal template={selectedTemplate} />
           ) : null
         }
-      />
-
-      <UpdateTemplateModal
-        isOpen={isEditModalOpen}
-        onClose={() => setEditModalOpen(false)}
-        initialData={selectedTemplate}
       />
     </>
   )
