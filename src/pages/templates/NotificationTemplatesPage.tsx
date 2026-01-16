@@ -1,13 +1,14 @@
 import { DataTable } from "@/components/table/DataTable"
 import { useFetchTemplates } from "./data-access/useFetchData";
 import { useMemo, useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import Modal from "@/components/modal/Modal";
 import type { NotificationTemplate } from "./data-access/types";
 import TemplatePreviewModal from "./TemplatePreviewModal";
 
 
 function NotificationTemplatesPage() {
+  const navigate = useNavigate();
   const [isPreviewModalOpen, setPreviewModalOpen] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<NotificationTemplate | null>(null);
 
@@ -39,15 +40,15 @@ function NotificationTemplatesPage() {
           >
             View
           </button>
-          <Link
-            // @ts-ignore - Route exists but types need regeneration
-            to="/templates/$uuid"
-            params={{ uuid: row.uuid }}
+          <button
             className="action-btn"
-            style={{ textDecoration: "none", display: "inline-block" }}
+            onClick={() => {
+              // @ts-ignore - Route exists but types need regeneration
+              navigate({ to: "/templates/$uuid", params: { uuid: row.uuid } });
+            }}
           >
             Edit
-          </Link>
+          </button>
         </div>
       ),
     },

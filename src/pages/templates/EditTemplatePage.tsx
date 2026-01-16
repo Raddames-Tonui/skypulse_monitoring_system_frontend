@@ -23,10 +23,17 @@ export default function EditTemplatePage() {
     queryKey: ["notification-template", uuid],
     queryFn: async () => {
       if (!uuid) throw new Error("Missing UUID");
-      const response = await axiosClient.get(`/notifications/templates?uuid=${uuid}`);
+      const response = await axiosClient.get(`/notifications/templates`, {
+        params: { uuid }
+      });
       const templates = response.data?.data;
       if (!templates || templates.length === 0) throw new Error("Template not found");
-      return templates[0] as NotificationTemplate;
+      
+      // Find the template with matching UUID
+      const matchedTemplate = templates.find((t: NotificationTemplate) => t.uuid === uuid);
+      if (!matchedTemplate) throw new Error("Template not found");
+      
+      return matchedTemplate as NotificationTemplate;
     },
     enabled: !!uuid,
   });
