@@ -87,7 +87,7 @@ export default function SSLLogsPage() {
         return (data?.data ?? []).map((l) => ({ ...l, ...parseIssuer(l.issuer) }));
     }, [data?.data]);
 
-    const columns: ColumnProps<SSLLog>[] = [
+    const columns = [
         { id: "ssl_log_id", caption: "ID", size: 50 },
         { id: "service_name", caption: "Service", isSortable: true, isFilterable: true, size: 150 },
         { id: "domain", caption: "Domain", isSortable: true, isFilterable: true, size: 200 },
@@ -101,7 +101,34 @@ export default function SSLLogsPage() {
             size: 120,
             renderCell: (v) => (v ? new Date(v as string).toLocaleDateString() : "-"),
         },
-        { id: "days_remaining", caption: "Days Remaining", isSortable: true, size: 100 },
+        {
+            id: "days_remaining",
+            caption: "Days Remaining",
+            size: 100,
+            isSortable: true,
+            renderCell: (v: number) => {
+                let bgColor = "#27ae60";
+                if (v <= 7) bgColor = "#e74c3c";
+                else if (v <= 14) bgColor = "#f1c40f";
+
+                return (
+                    <span
+                        style={{
+                            display: "inline-block",
+                            padding: "4px 10px",
+                            borderRadius: 5,
+                            backgroundColor: bgColor,
+                            color: "#fff",
+                            fontWeight: 600,
+                            textAlign: "center",
+                            minWidth: 40,
+                        }}
+                    >
+                        {v} days
+                    </span>
+                );
+            },
+        },
         {
             id: "chain_valid",
             caption: "Chain Valid",

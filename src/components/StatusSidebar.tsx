@@ -52,7 +52,7 @@ export default function StatusSidebar({ data, system }) {
           </div>
         </div>
 
-          <div className="dashboard-status-item">
+        <div className="dashboard-status-item">
           <span className="dashboard-status-number gray">
             {formatUptime(system?.uptime_seconds ?? 0)}
           </span>
@@ -60,9 +60,9 @@ export default function StatusSidebar({ data, system }) {
         </div>
 
         <p className="dashboard-status-subtext ">
-          Using {data?.total_services ?? 0} of 50 monitors.
+          Registered {data?.total_services ?? 0} Services
         </p>
-      
+
       </div>
 
       {/* LAST 24 HOURS */}
@@ -122,11 +122,20 @@ export default function StatusSidebar({ data, system }) {
               {system?.database_status}
             </span>
           </div>
+          <div className="dashboard-system-item">
+            <span className="dashboard-status-label">Network</span>
+            <span
+              className={`dashboard-system-number ${system?.network_status === "Network Available" ? "green" : "red"
+                }`}
+            >
+              {system?.network_status}
+            </span>
+          </div>
 
           <div className="dashboard-system-item">
             <span className="dashboard-status-label">SSE Interval</span>
             <span className="dashboard-system-number gray">
-              {system?.sse_push_interval_seconds}s
+              {system?.sse_push_interval_seconds} sec
             </span>
           </div>
         </div>

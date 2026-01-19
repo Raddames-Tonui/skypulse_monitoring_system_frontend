@@ -75,7 +75,7 @@ export const systemSettingsFormSchema: any = {
     //  UPTIME 
     uptime_check_interval: {
       id: "uptime_check_interval",
-      label: "Uptime Check Interval (seconds)",
+      label: "Uptime Check Interval (Minutes)",
       renderer: "number",
       props: { min: 1 },
       placeholders: 60,
@@ -145,7 +145,7 @@ export const systemSettingsFormSchema: any = {
     //  NOTIFICATIONS 
     notification_check_interval: {
       id: "notification_check_interval",
-      label: "Notification Check Interval (seconds)",
+      label: "Notification Check Interval (minutes)",
       renderer: "number",
       props: { min: 1 },
       placeholders: 120,
@@ -161,7 +161,7 @@ export const systemSettingsFormSchema: any = {
     },
     notification_cooldown_minutes: {
       id: "notification_cooldown_minutes",
-      label: "Notification Cooldown (minutes)",
+      label: "Notification Cooldown (seconds)",
       renderer: "number",
       props: { min: 0 },
       placeholders: 15,
@@ -288,7 +288,8 @@ export const monitoredServiceFormSchema: any = {
             id: "monitored_service_region",
             label: "Region",
             renderer: "select",
-            placeholder: "Select region",
+            placeholder: "default",
+            disabled: true,            
             props: {
                 data: [
                     { label: "US-East", value: "us-east" },
@@ -302,7 +303,7 @@ export const monitoredServiceFormSchema: any = {
 
         check_interval: {
             id: "check_interval",
-            label: "Check Interval (seconds)",
+            label: "Uptime Check Interval (sec)",
             renderer: "number",
             placeholder: "60",
             props: {
@@ -317,9 +318,8 @@ export const monitoredServiceFormSchema: any = {
             label: "Active",
             renderer: "switch",
             defaultValue: true
-        },
-
-        retry_count: {
+      },
+            retry_count: {
             id: "retry_count",
             label: "Retry Count",
             renderer: "number",
@@ -348,7 +348,7 @@ export const monitoredServiceFormSchema: any = {
             label: "SSL Enabled",
             renderer: "switch",
             defaultValue: true
-        }
+      }
     },
 
     layout: [
@@ -468,7 +468,7 @@ export const addMembersSchema: any = {
 export const createUserSchema: any = {
   id: "create-user-form",
   meta: {
-    // title: "Create New User",
+    title: "Create New User",
     subtitle: "Add a new user to the system",
   },
   fields: {
@@ -575,8 +575,19 @@ export const updateServiceSchema: any = {
     monitored_service_region: {
       id: "monitored_service_region",
       label: "Region",
-      renderer: "text"
-    },
+      renderer: "select",
+      placeholder: "default",
+      disabled: true,            
+      props: {
+          data: [
+              { label: "US-East", value: "us-east" },
+              { label: "US-West", value: "us-west" },
+              { label: "EU", value: "eu" },
+              { label: "APAC", value: "apac" },
+              { label: "default", value: "default" }
+          ]
+      }
+  },
     check_interval: {
       id: "check_interval",
       label: "Check Interval (seconds)",
@@ -650,15 +661,12 @@ export const updateServiceSchema: any = {
 
 
 
-
-
-
 // USER PROFILE
 export const userProfileSchema = {
   id: "user-profile",
 
   meta: {
-    title: "User Profile",
+    // title: "User Profile",
     subtitle: "Manage your personal information and preferences",
   },
 
@@ -681,7 +689,7 @@ export const userProfileSchema = {
       renderer: "text",
       inputType: "email",
       disabled: true,
-    },
+    },  
 
     contact_email: {
       id: "contact_email",
@@ -726,7 +734,6 @@ export const userProfileSchema = {
       id: "alert_channel",
       label: "Alert Channel",
       renderer: "select",
-      rules: { required: "Select an alert channel" },
       disabled: true,
       props: {
         data: [
@@ -747,7 +754,6 @@ export const userProfileSchema = {
       label: "Language",
       renderer: "select",
       disabled: true,
-      rules: { required: "Language is required" },
       props: {
         data: [
           { label: "English", value: "en" },
@@ -761,7 +767,6 @@ export const userProfileSchema = {
       label: "Timezone",
       renderer: "select",
       disabled: true,
-      rules: { required: "Timezone is required" },
       props: {
         data: [
           { label: "UTC", value: "UTC" },

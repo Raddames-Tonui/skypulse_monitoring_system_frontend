@@ -1,15 +1,13 @@
 import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useUsers } from "@/hooks/hooks";
-import { DataTable, SortRule, FilterRule } from "@/components/table/DataTable";
-import type { ApiResponse, Users } from "@/utils/types";
+import { DataTable } from "@/components/table/DataTable";
+import type { SortRule, FilterRule } from "@/components/table/DataTable";
+import type { Users } from "@/utils/types";
 import { Route } from "@/routes/_protected/_admin/users";
 import UploadContactsModal from "./UploadContactsModal";
 
-/**
- * FRONTEND COLUMN → BACKEND COLUMN
- * (URL uses frontend keys ONLY)
- */
+// Mapping DB fields for filtering/sorting
 const FILTER_MAP: Record<keyof Users, string> = {
   user_id: "u.user_id",
   uuid: "u.uuid",
@@ -27,15 +25,40 @@ const FILTER_MAP: Record<keyof Users, string> = {
 
 const SORT_MAP = FILTER_MAP;
 
-/**
- * Columns
- */
 const columns = [
   { id: "user_id", caption: "ID", size: 80 },
   { id: "first_name", caption: "First Name", isSortable: true, isFilterable: true, size: 120 },
   { id: "last_name", caption: "Last Name", isSortable: true, isFilterable: true, size: 120 },
   { id: "user_email", caption: "Email", isSortable: true, isFilterable: true, size: 200 },
-  { id: "role_name", caption: "Role", isSortable: true, isFilterable: true, size: 120 },
+  {
+    id: "role_name",
+    caption: "Role",
+    isSortable: true,
+    isFilterable: true,
+    size: 120,
+    renderCell: (role: string) => {
+      const normalizedRole = (role ?? "").toUpperCase();
+      let bgColor = "#28a745";
+      if (normalizedRole === "ADMIN") bgColor = "#e74c3c";
+      else if (normalizedRole === "OPERATOR") bgColor = "#f1c40f";
+      return (
+        <span
+          style={{
+            display: "inline-block",
+            padding: "4px 10px",
+            borderRadius: 5,
+            backgroundColor: bgColor,
+            color: "#fff",
+            fontWeight: 500,
+            textAlign: "center",
+            minWidth: 70,
+          }}
+        >
+          {normalizedRole}
+        </span>
+      );
+    },
+  },
   { id: "company_name", caption: "Company", isSortable: true, size: 150 },
   {
     id: "is_active",
@@ -45,101 +68,59 @@ const columns = [
     renderCell: (v: boolean) => (v ? "Yes" : "No"),
     size: 80,
   },
-  {
-    id: "date_created",
-    caption: "Created At",
-    isSortable: true,
-    renderCell: (v: string) => new Date(v).toLocaleString(),
-    size: 180,
-    hide: true,
-  },
-  {
-    id: "date_modified",
-    caption: "Modified At",
-    isSortable: true,
-    renderCell: (v: string) => new Date(v).toLocaleString(),
-    size: 180,
-    hide: true,
-  },
+  { id: "date_created", caption: "Created At", isSortable: true, renderCell: (v: string) => new Date(v).toLocaleString(), size: 180, hide: true },
+  { id: "date_modified", caption: "Modified At", isSortable: true, renderCell: (v: string) => new Date(v).toLocaleString(), size: 180, hide: true },
 ] as const;
 
-export default function GetUsers() {
-  const search = Route.useSearch();
-  const navigate = useNavigate();
+// Type for search params
+type UsersSearch = {
+  page?: number;
+  pageSize?: number;
+  sort?: string;
+  [key: string]: any;
+};
 
+export default function GetUsers() {
+  const search = Route.useSearch<UsersSearch>();
+  const navigate = useNavigate();
   const [isUploadModalOpen, setUploadModalOpen] = useState(false);
 
-  /**
-   * Parse sort from URL
-   * URL example: ?sort=first_name:asc,last_name:desc
-   */
-  const initialSort: SortRule<Users>[] = search.sort
+  const [page, setPage] = useState(search.page ?? 1);
+  const [pageSize, setPageSize] = useState(search.pageSize ?? 20);
+
+  // Initialize sort from query param
+  const initialSort: SortRule[] = search.sort
     ? search.sort.split(",").map((s) => {
         const [column, direction = "asc"] = s.split(":");
-        return {
-          column: column as keyof Users,
-          direction: direction as "asc" | "desc",
-        };
+        return { column: column as keyof Users, direction: direction as "asc" | "desc" };
       })
     : [];
 
-  const [sortBy, setSortBy] = useState<SortRule<Users>[]>(initialSort);
-  const [filters, setFilters] = useState<FilterRule<Users>[]>([]);
-  const [page, setPage] = useState(Number(search.page) || 1);
-  const [pageSize, setPageSize] = useState(Number(search.pageSize) || 20);
+  const [sortBy, setSortBy] = useState<SortRule[]>(initialSort);
+  const [filters, setFilters] = useState<FilterRule[]>([]);
 
-  /**
-   * Build URL + backend query params
-   * URL stays CLEAN (frontend keys only)
-   */
+  // Build query params for API / URL
   const queryParams = useMemo(() => {
-    const params: Record<string, string | number> = {
-      page,
-      pageSize,
-    };
-
-    // sort=first_name:asc
-    if (sortBy.length) {
-      params.sort = sortBy
-        .map((r) => `${r.column}:${r.direction}`)
-        .join(",");
-    }
-
-    // first_name=John
+    const params: Record<string, string | number> = { page, pageSize };
+    if (sortBy.length) params.sort = sortBy.map((r) => `${r.column}:${r.direction}`).join(",");
     filters.forEach((f) => {
-      if (f.value !== "" && f.value !== undefined) {
-        params[f.column] = String(f.value);
-      }
+      if (f.value !== "" && f.value !== undefined) params[f.column] = String(f.value);
     });
-
     return params;
   }, [page, pageSize, sortBy, filters]);
 
-  /**
-   * Sync URL
-   */
+  // Update URL query
   useEffect(() => {
     navigate({ search: queryParams });
-  }, [queryParams]);
+  }, [queryParams, navigate]);
 
-  /**
-   * Fetch data
-   */
-  const { data, isLoading, isError, error, refetch } =
-    useUsers<ApiResponse<Users>>(queryParams);
+  const { data, isLoading, isError, error, refetch } = useUsers(queryParams);
 
-  /**
-   * Handlers
-   */
-  const handleSortApply = (rules: SortRule<Users>[]) => {
-    setSortBy(rules);
-  };
-
-  const handleFilterApply = (rules: FilterRule<Users>[]) => {
+  const handleSortApply = (rules: SortRule[]) => setSortBy(rules);
+  const handleFilterApply = (rules: FilterRule[]) => {
     setFilters(rules.filter((r) => r.value !== "" && r.value !== undefined));
     setPage(1);
   };
-
   const handlePageChange = (p: number) => setPage(p);
 
   return (
@@ -147,18 +128,8 @@ export default function GetUsers() {
       <div className="page-header">
         <h1>Users</h1>
         <div>
-          <button
-            className="btn btn-secondary"
-            onClick={() => navigate({ to: "/users/create-user" })}
-          >
-            New User
-          </button>
-          <button
-            className="btn btn-secondary"
-            onClick={() => setUploadModalOpen(true)}
-          >
-            Add Contacts
-          </button>
+          <button className="btn btn-secondary" onClick={() => navigate({ to: "/users/create-user" })}>New User</button>
+          <button className="btn btn-secondary" onClick={() => setUploadModalOpen(true)}>Add Contacts</button>
         </div>
       </div>
 
@@ -179,12 +150,7 @@ export default function GetUsers() {
         }}
       />
 
-      {isUploadModalOpen && (
-        <UploadContactsModal
-          isOpen={isUploadModalOpen}
-          onClose={() => setUploadModalOpen(false)}
-        />
-      )}
+      {isUploadModalOpen && <UploadContactsModal isOpen={isUploadModalOpen} onClose={() => setUploadModalOpen(false)} />}
     </>
   );
 }

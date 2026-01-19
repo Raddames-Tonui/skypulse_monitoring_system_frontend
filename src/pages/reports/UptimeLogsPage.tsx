@@ -76,10 +76,33 @@ export default function UptimeLogsPage() {
         {
             id: "status",
             caption: "Status",
-            isSortable: true,
-            isFilterable: true,
-            renderCell: (v) => <span style={{ color: v === "UP" ? "green" : "red", fontWeight: "bold" }}>{v}</span>,
-            size: 80,
+            size: 120,
+            filterable: true,
+            sortable: true,
+            renderCell: (status: string) => {
+                const normalizedStatus = (status ?? "").toUpperCase();
+                let bgColor = "#e74c3c";
+
+                if (normalizedStatus === "UP") bgColor = "#27ae60";
+                else if (normalizedStatus === "MAINTENANCE") bgColor = "#f1c40f";
+
+                return (
+                    <span
+                        style={{
+                            display: "inline-block",
+                            padding: "4px 10px",
+                            borderRadius: 5,
+                            backgroundColor: bgColor,
+                            color: "#fff",
+                            fontWeight: 600,
+                            textAlign: "center",
+                            minWidth: 70,
+                        }}
+                    >
+                        {normalizedStatus}
+                    </span>
+                );
+            },
         },
         { id: "response_time_ms", caption: "Response Time (ms)", isSortable: true, size: 120 },
         { id: "http_status", caption: "HTTP Status", isSortable: true, isFilterable: false, size: 80 },

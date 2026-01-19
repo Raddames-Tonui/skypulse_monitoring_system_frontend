@@ -199,8 +199,8 @@ export interface Service {
   name: string;
   status: string;
   response_time_ms: number | null;
-  ssl_days_remaining: number | null;   // actual days remaining
-  ssl_status: "OK" | "WARNING" | "CRITICAL" | "SEVERE"; // severity level
+  ssl_days_remaining: number | null;  
+  ssl_status: "OK" | "WARNING" | "CRITICAL" | "SEVERE"; 
   actions?: () => void;
 }
 
@@ -257,7 +257,7 @@ export interface MenuItem {
 
 export const menuConfig: Record<string, MenuItem[]> = {
   admin: [
-    { icon: "pie", label: "Dashboard", path: "/dashboard" },
+    { icon: "dashboard", label: "Dashboard", path: "/dashboard" },
     { icon: "services", label: "Services", path: "/services" },
     { icon: "user", label: "Users", path: "/users" },
     { icon: "users", label: "Groups", path: "/groups" },
@@ -268,12 +268,12 @@ export const menuConfig: Record<string, MenuItem[]> = {
     { icon: "settings", label: "Settings", path: "/settings" },
   ],
   operator: [
-    { icon: "pie", label: "Dashboard", path: "/dashboard" },
+    { icon: "dashboard", label: "Dashboard", path: "/dashboard" },
     { icon: "notes", label: "Services", path: "/services" },
     { icon: "notepad", label: "Reports", path: "/reports/uptime-reports" },
   ],
   viewer: [
-    { icon: "pie", label: "Dashboard", path: "/dashboard" },
+    { icon: "dashboard", label: "Dashboard", path: "/dashboard" },
     { icon: "notes", label: "Services", path: "/services" },
     { icon: "notepad", label: "Reports", path: "/reports/uptime-reports" },
   ],

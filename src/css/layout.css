@@ -153,7 +153,7 @@ header {
   transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
-/* When dropdown is active */
+
 .dropdown-menu.show {
   opacity: 1;
   transform: translateX(0);
@@ -161,45 +161,60 @@ header {
 }
 
 .dropdown-user {
-  padding: 12px 16px;
-  font-size: 16px;
-  font-weight: bold;
-  color: var(--primary-700);
-  text-align: left;
-  border-bottom: 1px solid #eee;
-}
-
-
-
-
-
-.dropdown-info, 
-.dropdown-item {
-  width: 100%;
-  background: none;
-  border: none;
-  text-align: left;
-  padding: 12px 16px;
-  font-size: 15px;
-  cursor: pointer;
-  color: var(--primary-700);
-  font-weight: 600;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #444;
   text-align: center;
-  transition: background 0.2s ease, color 0.2s ease;
-}
-.dropdown-info  {
   border-bottom: 1px solid #eee;
 }
 
-.dropdown-info:hover,
+.dropdown-info {
+  padding: 10px 16px;
+  font-size: 13px;
+  color: #444;
+  line-height: 1.4;
+  
+}
+
+.dropdown-info p {
+  margin: 4px 0;
+}
+
+.btn-profile {
+    width: 100%;
+    border: none;
+    padding: 10px 10px;  
+    color: #444;  
+}
+.btn-profile:hover {
+    background: var(--primary-700);
+}
+
+
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 100%;
+    border: none;
+    padding: 10px 10px;
+    font-size: 13px;
+    cursor: pointer;
+    color: var(--accent-600);
+    font-weight: 500;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+
+
 .dropdown-item:hover {
   background: var(--primary-700);
   color: white;
   border-radius: 0 0 var(--border-radius-sm) var(--border-radius-sm) ;
 }
-
-
-
 
 
 /* Hide hamburger on desktop */
@@ -438,10 +453,9 @@ aside {
 
 .sidebar-item {
     display: flex;
-    align-items: center;
     justify-content: start; 
     gap: 12px;
-    padding: 8px 13px;
+    padding: 8px 18px;
     cursor: pointer;
     white-space: nowrap;
     text-decoration: none;
@@ -500,8 +514,6 @@ aside {
 }
 
 /* -------------------------------------------------------- */
-
-
 /* ----------------- MAIN ------------------------ */
 
 

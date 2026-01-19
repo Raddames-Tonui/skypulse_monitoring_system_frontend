@@ -40,7 +40,6 @@ function NotificationTemplatesPage() {
             View
           </button>
           <Link
-            // @ts-ignore - Route exists but types need regeneration
             to="/templates/$uuid"
             params={{ uuid: row.uuid }}
             className="action-btn"

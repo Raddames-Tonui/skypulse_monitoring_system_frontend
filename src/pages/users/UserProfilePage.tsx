@@ -9,7 +9,6 @@ export default function UserProfilePage() {
   if (isLoading) return <div className="profile-loading">Loading profile…</div>;
   if (isError || !data) return <div className="profile-error">Failed to load profile</div>;
 
-  // Map user_contacts array to a record by type
   const contactsMap = data.user_contacts.reduce<Record<string, string>>(
     (acc, c) => {
       acc[c.type] = c.value;
@@ -34,7 +33,6 @@ export default function UserProfilePage() {
           <span className="profile-role profile-name">{data.role_name}</span>
 
           <nav className="profile-nav">
-            {/* <button className="active">Overview</button> */}
             <button onClick={() => setIsModalOpen(true)}>Edit Profile</button>
             <button>Change Password</button>
             <button>Settings</button>

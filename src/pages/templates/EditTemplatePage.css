@@ -85,7 +85,7 @@
   background: #fff;
   transition: border-color 0.2s, box-shadow 0.2s;
   outline: none;
-  font-family: inherit;
+  font-family: "Noto Sans", "Inter", sans-serif;
 }
 
 .form-field input:focus,
@@ -97,7 +97,7 @@
 
 .form-field textarea {
   resize: vertical;
-  font-family: 'Courier New', monospace;
+  font-family: "Noto Sans", "Inter", sans-serif;
   font-size: 0.9rem;
 }
 

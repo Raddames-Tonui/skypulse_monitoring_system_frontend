@@ -53,7 +53,7 @@ interface PaginationProps {
 
 
 export interface DataTableProps<T> {
-  columns: ColumnProps<T, any>[];
+  columns?: ColumnProps<T, any>[] | undefined;
   data: T[];
   tableActionsLeft?: React.ReactNode;
   tableActionsRight?: React.ReactNode;
@@ -125,7 +125,7 @@ export function DataTable<T>({
   isLoading,
   enableSort = true,
   enableFilter = true,
-  enableRefresh= true,
+  enableRefresh = true,
 }: DataTableProps<T>) {
   const [sortBy, setSortBy] = useState<SortRule[]>(initialSort);
   const [filter, setFilter] = useState<FilterRule[]>(initialFilter);

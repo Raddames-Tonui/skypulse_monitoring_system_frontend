@@ -34,7 +34,7 @@ const Sidebar: React.FC = () => {
             className="sidebar-item"
             title={!isSidebarOpen ? item.label : ""}
           >
-            <Icon iconName={item.icon} />
+            <Icon iconName={item.icon}  />
             {isSidebarOpen && <span className="sidebar-label">{item.label}</span>}
           </Link>
         ))}

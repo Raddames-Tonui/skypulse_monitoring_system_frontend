@@ -29,7 +29,6 @@ const Navbar: React.FC = () => {
     return f + l;
   };
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -42,7 +41,6 @@ const Navbar: React.FC = () => {
 
   return (
     <header className="header">
-      {/* Sidebar mic icon animation */}
       <div
         className="mic-icon"
         style={{ width: isSidebarOpen ? "240px" : "48px", transition: "width 0.3s ease" }}
@@ -68,14 +66,12 @@ const Navbar: React.FC = () => {
       </div>
 
       <div className="header-wrapper">
-        {/* Logo + Role */}
         <div className="logo">
           <h1 className="responsive-hide">{user?.company_name || "Company Name"}</h1>
           <h2 style={{ color: roleColor }} className="responsive-hide">{user?.role_name}</h2>
         </div>
 
         <div className="icon-search">
-          {/* Notifications */}
           <div className={iconClass}>
             <Icon iconName="notification" />
           </div>
@@ -92,13 +88,28 @@ const Navbar: React.FC = () => {
 
             {showDropdown && (
               <div className="dropdown-menu show">
-                <p className="dropdown-user">{user?.first_name} {user?.last_name}</p>
-                  <button className="dropdown-info"
-                    onClick={() => navigate({ to: "/user/profile" })}
-                  >Go to Profile
-                  </button>
+                <div className="dropdown-user">
+                  <p>{user?.first_name} {user?.last_name}</p>
+                  <p> {user?.email}</p>
+                </div>
 
-                <button className="dropdown-item" onClick={logout}>Logout</button>
+                <div className="dropdown-info">
+                  <p><strong>Role:</strong> {user?.role_name || "N/A"}</p>
+                  <p><strong>Language:</strong> {user?.user_preferences.language}</p>
+                  <p><strong>Timezone:</strong> {user?.user_preferences.timezone}</p>
+                  <p><strong>Receive Weekly Reports:</strong> {user?.user_preferences.receive_weekly_reports ? "Yes" : "No"}</p>
+                </div>
+                <div>
+                  <button onClick={() => {
+                    navigate({ to: "/user/profile" });
+                    setShowDropdown(false);
+                  }
+                  } className="btn-profile btn-secondary">Go to Profile</button>
+                </div>
+
+                <button className=" dropdown-item" onClick={logout}>
+                  <Icon iconName="logout" /> Logout
+                </button>
               </div>
             )}
           </div>
@@ -108,7 +119,7 @@ const Navbar: React.FC = () => {
           </button>
         </div>
       </div>
-    </header>
+    </header >
   );
 };
 

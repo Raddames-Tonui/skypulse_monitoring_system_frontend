@@ -32,7 +32,7 @@ export default function NotificationHistoryPage() {
     const [sortBy, setSortBy] = useState<any[]>([]);
     const [filters, setFilters] = useState<any[]>([]);
     const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(15);
+    const [pageSize, setPageSize] = useState(50);
 
     const [isModalOpen, setModalOpen] = useState(false);
     const [selectedMessage, setSelectedMessage] = useState<string | null>(null);
@@ -69,7 +69,7 @@ export default function NotificationHistoryPage() {
         {
             id: "subject",
             caption: "Subject",
-            size: 220,
+            size: 150,
             isSortable: true,
         },
 
@@ -86,14 +86,30 @@ export default function NotificationHistoryPage() {
             size: 120,
             isSortable: true,
             isFilterable: true,
-            // renderCell: (v: string) => (
-            //     <span className={`status-pill status-${v.toLowerCase()}`}>
-            //         {v}
-            //     </span>
-            // ),
-            renderCell: (v: string) => <span style={{ color: v === "UP" ? "#27ae60" : "#e74c3c", fontWeight: 600 }}>{v}</span>
-        },
+            renderCell: (v: string) => {
+                const status = (v ?? "").toUpperCase();
 
+                const bgColor = status === "SENT" ? "#27ae60" : "#e74c3c";
+
+                return (
+                    <span
+                        style={{
+                            display: "inline-block",
+                            padding: "2px 12px",
+                            borderRadius: "5px",
+                            backgroundColor: bgColor,
+                            color: "#fff",
+                            fontWeight: 400,
+                            textAlign: "center",
+                            minWidth: 60,
+                        }}
+                    >
+                        {status}
+                    </span>
+                );
+            },
+        },
+        
         {
             id: "sent_at",
             caption: "Sent At",
@@ -153,7 +169,7 @@ export default function NotificationHistoryPage() {
                         className="action-btn-select"
                         onChange={(e) => setPageSize(Number(e.target.value))}
                     >
-                        {[10, 15, 20, 50, 100].map((v) => (
+                        {[10, 15, 20, 50, 1000].map((v) => (
                             <option key={v} value={v}>
                                 {v}
                             </option>

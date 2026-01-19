@@ -1,4 +1,3 @@
-// ---------------- _protected.tsx ----------------
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 import { useTheme } from '@/context/ThemeProvider';
 import Loader from '@/components/Loader';
@@ -10,7 +9,6 @@ import "@css/layout.css";
 
 const allowedRoles = ["ADMIN", "VIEWER", "OPERATOR"];
 
-// Utility: safely get user from localStorage
 const getUserFromLocalStorage = () => {
   try {
     const stored = localStorage.getItem("userProfile");
@@ -24,7 +22,6 @@ export const Route = createFileRoute('/_protected')({
   beforeLoad: async () => {
     const user = getUserFromLocalStorage();
 
-    // Redirect if no user or inactive
     if (!user ) {
       throw redirect({
         to: '/auth/login',
@@ -32,7 +29,6 @@ export const Route = createFileRoute('/_protected')({
       });
     }
 
-    // Redirect if user role is not allowed
     if (!allowedRoles.includes(user.role_name)) {
       throw redirect({ to: '/auth/unauthorized' });
     }
@@ -45,10 +41,8 @@ export const Route = createFileRoute('/_protected')({
 function ProtectedRouteComponent() {
   const { isSidebarOpen } = useTheme();
 
-  // Always get user from localStorage
   const user = getUserFromLocalStorage();
 
-  // Show loader while checking
   if (!user) {
     return (
       <div className="loader">

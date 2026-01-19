@@ -57,7 +57,7 @@ export default function MonitoredServicesPage() {
     { id: "monitored_service_name", caption: "Name", size: 200, filterable: true, sortable: true },
     {
       id: "monitored_service_url",
-      caption: "URL",
+      caption: "Service URL",
       size: 250,
       filterable: false,
       sortable: false,
@@ -72,11 +72,37 @@ export default function MonitoredServicesPage() {
         </a>
       ),
     },
-    { id: "monitored_service_region", caption: "Region", size: 120, filterable: true, sortable: true },
-    { id: "ssl_enabled", caption: "SSL Enabled", size: 120, filterable: true, sortable: true, renderCell: (v: boolean) => (v ? "Yes" : "No") },
+    { id: "ssl_enabled", caption: "SSL Enabled", size: 120,align: "center", filterable: true, sortable: true, renderCell: (v: boolean) => (v ? "Yes" : "No") },
     {
-      id: "last_uptime_status", caption: "Status", size: 100, filterable: true, sortable: true,
-      renderCell: (v: string) => <span style={{ color: v === "UP" ? "#27ae60" : "#e74c3c", fontWeight: 600 }}>{v}</span>
+      id: "last_uptime_status",
+      caption: "Status",
+      size: 120,
+      filterable: true,
+      sortable: true,
+      renderCell: (status: string) => {
+        const normalizedStatus = (status ?? "").toUpperCase();
+        let bgColor = "#e74c3c";
+
+        if (normalizedStatus === "UP") bgColor = "#27ae60";
+        else if (normalizedStatus === "MAINTENANCE") bgColor = "#f1c40f";
+
+        return (
+          <span
+            style={{
+              display: "inline-block",
+              padding: "4px 10px",
+              borderRadius: 5,
+              backgroundColor: bgColor,
+              color: "#fff",
+              fontWeight: 600,
+              textAlign: "center",
+              minWidth: 70,
+            }}
+          >
+            {normalizedStatus}
+          </span>
+        );
+      },
     },
     { id: "date_created", caption: "Created At", size: 160, sortable: true, renderCell: (v: string) => new Date(v).toISOString().split("T")[0] },
     {

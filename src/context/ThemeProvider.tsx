@@ -14,7 +14,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
     const [isSidebarOpen, setSidebarOpen] = useState<boolean>(() => {
-        const saved = localStorage.getItem("isSidebarOpen");
+        const saved = sessionStorage.getItem("isSidebarOpen");
         return saved === null ? true : saved === "true";
     });
 
@@ -23,7 +23,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     const toggleSidebar = () => {
         setSidebarOpen(prev => {
             const newState = !prev;
-            localStorage.setItem("isSidebarOpen", newState.toString());
+            sessionStorage.setItem("isSidebarOpen", newState.toString());
             return newState;
         });
     };

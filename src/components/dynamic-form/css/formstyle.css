@@ -183,6 +183,7 @@
   background: #fff;
   transition: border-color 0.2s, box-shadow 0.2s;
   outline: none;
+  font-family: inherit;
 }
 
 .form-field input:focus,
@@ -195,6 +196,8 @@
 
 textarea {
   resize: vertical;
+  min-width: 100%;
+  font-family: inherit;
 }
 
 /*  STACK LAYOUTS  */
@@ -325,6 +328,7 @@ textarea {
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
+  justify-content: baseline;
 }
 
 .switch input {

@@ -46,7 +46,7 @@ export const useLogout = () => {
     onSuccess: () => {
       queryClient.removeQueries({ queryKey: PROFILE_QUERY_KEY });
       localStorage.removeItem("userProfile");
-      localStorage.removeItem("isSidebarOpen");
+      sessionStorage.removeItem("isSidebarOpen");
       toast.success("Logged out successfully");
       navigate({ to: "/auth/login" });
     },

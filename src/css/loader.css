@@ -46,3 +46,13 @@
 .loader-p {
   font-weight: bold;
 }
+
+
+
+.table-loader{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 40vh;
+}
