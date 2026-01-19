@@ -6,6 +6,7 @@ import { useGetUserProfile } from "./data-access/useFetchData";
 import { useUpdateUserProfile } from "@/context/data-access/useMutateData";
 import { userProfileSchema } from "@/components/dynamic-form/FormSchema";
 import type { UserProfile } from "@/context/data-access/types";
+import { normalizeContacts } from "./data-access/normalizeContacts";
 
 interface GetUserProfileModalProps {
   isOpen: boolean;
@@ -20,10 +21,17 @@ const GetUserProfileModal: React.FC<GetUserProfileModalProps> = ({
   const updateMutation = useUpdateUserProfile();
 
   if (isFetching) {
-    return <Modal isOpen={isOpen} title="User Profile" body={<Loader />} onClose={onClose} />;
+    return (
+      <Modal
+        isOpen={isOpen}
+        title="User Profile"
+        body={<Loader />}
+        onClose={onClose}
+      />
+    );
   }
 
-  if (isError) {
+  if (isError || !data) {
     return (
       <Modal
         isOpen={isOpen}
@@ -34,25 +42,17 @@ const GetUserProfileModal: React.FC<GetUserProfileModalProps> = ({
     );
   }
 
-  if (!data) {
-    return (
-      <Modal
-        isOpen={isOpen}
-        title="User Profile"
-        body={<div>No profile found.</div>}
-        onClose={onClose}
-      />
-    );
-  }
+  const contactsMap = normalizeContacts(data.user_contacts);
 
-  // Map backend contacts to individual form fields
   const initialData = {
     first_name: data.first_name,
     last_name: data.last_name,
     email: data.email,
-    contact_email: data.user_contacts?.EMAIL ?? "",
-    contact_sms: data.user_contacts?.SMS ?? "",
-    contact_telegram: data.user_contacts?.TELEGRAM ?? "",
+
+    contact_email: contactsMap.EMAIL ?? "",
+    contact_sms: contactsMap.SMS ?? "",
+    contact_telegram: contactsMap.TELEGRAM ?? "",
+
     alert_channel: data.user_preferences.alert_channel,
     receive_weekly_reports: data.user_preferences.receive_weekly_reports,
     language: data.user_preferences.language,
@@ -76,6 +76,7 @@ const GetUserProfileModal: React.FC<GetUserProfileModalProps> = ({
               user_id: data.user_id,
               first_name: values.first_name,
               last_name: values.last_name,
+
               user_preferences: {
                 alert_channel: values.alert_channel,
                 receive_weekly_reports: values.receive_weekly_reports,
@@ -83,10 +84,11 @@ const GetUserProfileModal: React.FC<GetUserProfileModalProps> = ({
                 timezone: values.timezone,
                 dashboard_layout: values.dashboard_layout ?? {},
               },
+
               user_contacts: {
-                EMAIL: values.contact_email,
-                SMS: values.contact_sms,
-                TELEGRAM: values.contact_telegram,
+                EMAIL: values.contact_email || null,
+                SMS: values.contact_sms || null,
+                TELEGRAM: values.contact_telegram || null,
               },
             } satisfies Partial<UserProfile>);
           }}

@@ -251,12 +251,22 @@ export const PaperLight: React.FC<IconBaseProps> = ({ className }) => (
         fill="none"
     >
         <path
-            d="M18 3H7c-1.886 0-2.828 0-3.414.586S3 5.114 3 7v14l3-1 3 1 3-1 3 1V9m3-6a3 3 0 0 0-3 3v3m3-6a3 3 0 0 1 3 3v2.143c0 .334 0 .501-.077.623a.5.5 0 0 1-.157.157C20.644 9 20.477 9  9H15"
+            d="M18 3H7
+     c-1.886 0-2.828 0-3.414.586
+     S3 5.114 3 7
+     v14l3-1 3 1 3-1 3 1V9
+     m3-6a3 3 0 0 0-3 3v3
+     m3-6a3 3 0 0 1 3 3v2.143
+     c0 .334 0 .501-.077.623
+     a.5.5 0 0 1-.157.157
+     C20.644 9 20.477 9 20.3 9
+     H15"
             stroke="white"
             strokeWidth="1.4"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
+
         <path
             d="M7 7h4m-3 4H7m0 4h3"
             stroke="white"

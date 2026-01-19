@@ -8,7 +8,7 @@ export const validateField = (
     const rules = field.rules;
     if (!rules) return null;
 
-    // Required
+    // Required 
     if (
         rules.required && 
         (value === undefined || value === "" || value === null || value === false)
@@ -18,7 +18,7 @@ export const validateField = (
             : "This field is required";
     }
 
-    // Min length
+    // Min length 
     if (
         rules.minLength &&
         typeof value === "string" &&
@@ -27,7 +27,7 @@ export const validateField = (
         return rules.minLength.message || `Minimum length is ${rules.minLength.value}`;
     }
     
-    // Max length
+    // Max length 
     if (
         rules.maxLength &&
         typeof value === "string" && 
@@ -36,16 +36,15 @@ export const validateField = (
         return rules.maxLength.message || `Maximum length is ${rules.maxLength.value}`;
     }
 
-    // Pattern (regex)
-    if (rules.pattern &&
-        typeof value === "string" &&
-        !rules.pattern.value.test(value)
-    ) {
-        return rules.pattern.message || "Invalid format";
+    // Pattern (regex) 
+    // Only run if value exists OR field is required
+    if (rules.pattern && typeof value === "string" && value !== "") {
+        if (!rules.pattern.value.test(value)) {
+            return rules.pattern.message || "Invalid format";
+        }
     }
     
-
-    // Min/Max (for numbers)
+    // Min/Max (numbers) 
     if (
         rules.min &&
         typeof value === "number" && 
@@ -62,7 +61,7 @@ export const validateField = (
         return rules.max.message || `Value must be <= ${rules.max.value}`;    
     }
     
-    // Custom validator
+    // Custom validator 
     if (typeof rules.validate === "function") {
         const result = rules.validate(value, allValues);
         if (result !== true && result !== undefined) return result;

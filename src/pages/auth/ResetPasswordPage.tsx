@@ -69,67 +69,73 @@ export default function ResetPasswordPage() {
   if (!token) return <p>Invalid or missing reset token.</p>;
 
   return (
-    <div className={styles.loginContainer}>
-      <form className={styles.loginCard} onSubmit={handleSubmit}>
-        <h2 className={styles.title}>
-          Reset your <span className={styles.green}>password</span>
-        </h2>
 
-        <label className={styles.label} htmlFor="password">
-          New Password
-        </label>
-        <input
-          id="password"
-          type="password"
-          className={getInputClass("password")}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          onBlur={() =>
-            setTouched((prev) => ({ ...prev, password: true }))
-          }
-          placeholder="Enter new password"
-        />
-        <p
-          className={`${styles.errorMessage} ${touched.password && password.length < 6 ? styles.active : ""
-            }`}
-        >
-          Password must be at least 6 characters
-        </p>
+    <section className={styles.authPageWrapper}>
+      <div className={styles.logoCard}>
+        <img src="/skypulse_flavicon.png" alt="logo" />
+      </div>
+      <div className={styles.loginContainer}>
+        <form className={styles.loginCard} onSubmit={handleSubmit}>
+          <h2 className={styles.title}>
+            Reset your <span className={styles.green}>password</span>
+          </h2>
 
-        <label className={styles.label} htmlFor="confirmPassword">
-          Confirm Password
-        </label>
-        <input
-          id="confirmPassword"
-          type="password"
-          className={getInputClass("confirmPassword")}
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          onBlur={() =>
-            setTouched((prev) => ({ ...prev, confirmPassword: true }))
-          }
-          placeholder="Confirm new password"
-        />
-        <p
-          className={`${styles.errorMessage} ${touched.confirmPassword && password !== confirmPassword
-            ? styles.active
-            : ""
-            }`}
-        >
-          Passwords do not match
-        </p>
-        <button
-          type="submit"
-          className={styles.button}
-          disabled={mutation.isPending}
-        >
-          {mutation.isPending ? "Resetting..." : "Reset Password"}
-        </button>
-        <p className={styles.footerText}>
-          Remembered Password?{" "}
-          <Link to="/auth/login" from="/auth/reset-password" className={styles.greenLink}>Back to Login</Link>
-        </p>
-      </form>
-    </div>
+          <label className={styles.label} htmlFor="password">
+            New Password
+          </label>
+          <input
+            id="password"
+            type="password"
+            className={getInputClass("password")}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            onBlur={() =>
+              setTouched((prev) => ({ ...prev, password: true }))
+            }
+            placeholder="Enter new password"
+          />
+          <p
+            className={`${styles.errorMessage} ${touched.password && password.length < 6 ? styles.active : ""
+              }`}
+          >
+            Password must be at least 6 characters
+          </p>
+
+          <label className={styles.label} htmlFor="confirmPassword">
+            Confirm Password
+          </label>
+          <input
+            id="confirmPassword"
+            type="password"
+            className={getInputClass("confirmPassword")}
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            onBlur={() =>
+              setTouched((prev) => ({ ...prev, confirmPassword: true }))
+            }
+            placeholder="Confirm new password"
+          />
+          <p
+            className={`${styles.errorMessage} ${touched.confirmPassword && password !== confirmPassword
+              ? styles.active
+              : ""
+              }`}
+          >
+            Passwords do not match
+          </p>
+          <button
+            type="submit"
+            className={styles.button}
+            disabled={mutation.isPending}
+          >
+            {mutation.isPending ? "Resetting..." : "Reset Password"}
+          </button>
+          <p className={styles.footerText}>
+            Remembered Password?{" "}
+            <Link to="/auth/login" from="/auth/reset-password" className={styles.greenLink}>Back to Login</Link>
+          </p>
+        </form>
+      </div>
+    </section>
   );
 }

@@ -170,7 +170,6 @@ export const systemSettingsFormSchema: any = {
   },
 
   layout: [
-    // Uptime Section
     {
       kind: "section",
       title: "Uptime Settings",

@@ -2,10 +2,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "@tanstack/react-router";
 import * as z from "zod";
+import { toast } from "react-hot-toast";
 
 import styles from "@/css/login.module.css";
 import { useLogin } from "@/context/data-access/useMutateData";
-
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email").nonempty("Email is required"),
@@ -33,58 +33,80 @@ export default function LoginPage() {
   };
 
   const onSubmit = async (data: FormData) => {
-    await loginMutation.mutateAsync({
-      email: data.email,
-      password: data.password,
-    });
-
-    navigate({ to: "/dashboard" });
+    try {
+      await loginMutation.mutateAsync({
+        email: data.email,
+        password: data.password,
+      });
+      toast.success("Login successful");
+      navigate({ to: "/dashboard" });
+    } catch (error: any) {
+      const message = error.response?.data?.message || "Login failed";
+      toast.error(message);
+    }
   };
 
   return (
-    <div className={styles.loginContainer}>
-      <form onSubmit={handleSubmit(onSubmit)} className={styles.loginCard}>
-        <h1 className={styles.title}>
-          Welcome back <span className={styles.green}>!</span>
-        </h1>
+    <section className={styles.authPageWrapper}>
+      <div className={styles.logoCard}>
+        <img src="/skypulse_flavicon.png" alt="logo" />
+      </div>
 
-        <label className={styles.label} htmlFor="email">Email</label>
-        <input
-          id="email"
-          type="email"
-          {...register("email")}
-          className={getInputClass("email")}
-          placeholder="Enter email"
-        />
-        <p className={`${styles.errorMessage} ${errors.email ? styles.active : ""}`}>
-          {errors.email?.message}
-        </p>
+      <div className={styles.loginContainer}>
+        <form onSubmit={handleSubmit(onSubmit)} className={styles.loginCard}>
+          <h1 className={styles.title}>
+            Welcome back <span className={styles.green}>!</span>
+          </h1>
 
-        <label className={styles.label} htmlFor="password">Password</label>
-        <input
-          id="password"
-          type="password"
-          {...register("password")}
-          className={getInputClass("password")}
-          placeholder="Enter password"
-        />
-        <p className={`${styles.errorMessage} ${errors.password ? styles.active : ""}`}>
-          {errors.password?.message}
-        </p>
+          <label className={styles.label} htmlFor="email">
+            Email
+          </label>
+          <input
+            id="email"
+            type="email"
+            {...register("email")}
+            className={getInputClass("email")}
+            placeholder="Enter email"
+          />
+          <p
+            className={`${styles.errorMessage} ${
+              errors.email ? styles.active : ""
+            }`}
+          >
+            {errors.email?.message}
+          </p>
 
-        <a href="/auth/request-password" className={styles.link}>
-          Forgot your password?
-        </a>
+          <label className={styles.label} htmlFor="password">
+            Password
+          </label>
+          <input
+            id="password"
+            type="password"
+            {...register("password")}
+            className={getInputClass("password")}
+            placeholder="Enter password"
+          />
+          <p
+            className={`${styles.errorMessage} ${
+              errors.password ? styles.active : ""
+            }`}
+          >
+            {errors.password?.message}
+          </p>
 
-        <button
-          type="submit"
-          className={styles.button}
-          disabled={loginMutation.isPending}
-        >
-          {loginMutation.isPending ? "Logging in..." : "Login"}
-        </button>
+          <a href="/auth/request-password" className={styles.link}>
+            Forgot your password?
+          </a>
 
-      </form>
-    </div>
+          <button
+            type="submit"
+            className={styles.button}
+            disabled={loginMutation.isPending}
+          >
+            {loginMutation.isPending ? "Logging in..." : "Login"}
+          </button>
+        </form>
+      </div>
+    </section>
   );
 }

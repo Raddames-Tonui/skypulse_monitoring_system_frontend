@@ -1,20 +1,52 @@
 @import url(./variables.css);
 
-.loginContainer {
+.authPageWrapper {
   min-height: 100vh;
   background: #f1f1f1;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.logoCard {
+  background: var(--bg-secondary);
+  width: 100%;
+  max-width: 26.25rem;
+  padding: 1rem 2rem;
+  margin-bottom: 1rem;
+
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 0 5rem rgba(0, 0, 0, 0.1);
+
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1.25rem;
+}
+
+.logoCard img {
+  max-width: 90px;
+  width: 100%;
+  height: auto;
+}
+
+
+.loginContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 0 1.25rem;
   color: var(--primary-800);
 }
+
 
 .loginCard {
   background: var(--bg-secondary);
   width: 100%;
   max-width: 26.25rem;
-  border-radius: 0.875rem;
+  border-radius: var(--border-radius-md);
   padding: 2rem;
   border: 1px solid var(--border-color);
   box-shadow: 0 0 5rem rgba(0, 0, 0, 0.1);

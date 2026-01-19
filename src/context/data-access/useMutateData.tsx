@@ -24,11 +24,7 @@ export const useLogin = () => {
     onSuccess: (data) => {
       queryClient.setQueryData(PROFILE_QUERY_KEY, data);
       localStorage.setItem("userProfile", JSON.stringify(data));
-      toast.success("Login successful");
-    },
-    onError: (err: ApiError) => {
-      toast.error(err.message || "Login failed");
-    },
+    }    
   });
 };
 

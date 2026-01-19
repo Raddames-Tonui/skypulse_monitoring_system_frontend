@@ -15,7 +15,7 @@ export default function RequestResetPassword() {
     onSuccess: (res: any) => {
       toast.success(
         res?.data?.message ??
-          "If the email exists, a reset link has been sent."
+        "If the email exists, a reset link has been sent."
       );
       setEmail("");
       setTouched(false);
@@ -23,7 +23,7 @@ export default function RequestResetPassword() {
     onError: (err: any) => {
       toast.error(
         err?.response?.data?.message ??
-          "Unable to process your request. Try again."
+        "Unable to process your request. Try again."
       );
     },
   });
@@ -43,62 +43,64 @@ export default function RequestResetPassword() {
   const inputClass = () => {
     if (!touched) return styles.formInput;
     const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    return `${styles.formInput} ${
-      valid ? styles.success : styles.error
-    }`;
+    return `${styles.formInput} ${valid ? styles.success : styles.error
+      }`;
   };
 
   return (
-    <div className={styles.loginContainer}>
-      <form onSubmit={handleSubmit} className={styles.loginCard}>
+    <section className={styles.authPageWrapper}>
+      <div className={styles.logoCard}>
+        <img src="/skypulse_flavicon.png" alt="logo" />
+      </div>
+      <div className={styles.loginContainer}>
+        <form onSubmit={handleSubmit} className={styles.loginCard}>
 
-        <h2 className={styles.title}>
-          Reset <span className={styles.green}>Password</span>
-        </h2>
+          <h2 className={styles.title}>
+            Reset <span className={styles.green}>Password</span>
+          </h2>
 
-        <label className={styles.label} htmlFor="email">
-          Email Address
-        </label>
+          <label className={styles.label} htmlFor="email">
+            Email Address
+          </label>
 
-        <input
-          id="email"
-          type="email"
-          className={inputClass()}
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          onBlur={() => setTouched(true)}
-          placeholder="Enter your email"
-        />
+          <input
+            id="email"
+            type="email"
+            className={inputClass()}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            onBlur={() => setTouched(true)}
+            placeholder="Enter your email"
+          />
 
-        {/* Error message */}
-        <p
-          className={`${styles.errorMessage} ${
-            touched &&
-            (!email ||
-              !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+          <p
+            className={`${styles.errorMessage} ${touched &&
+              (!email ||
+                !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
               ? styles.active
               : ""
-          }`}
-        >
-          {!email && touched && "Email is required"}
-          {email &&
-            touched &&
-            !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) &&
-            "Invalid email address"}
-        </p>
+              }`}
+          >
+            {!email && touched && "Email is required"}
+            {email &&
+              touched &&
+              !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) &&
+              "Invalid email address"}
+          </p>
 
-        <a href="/auth/login" className={styles.greenLink}>
-          Back to login
-        </a>
+          <a href="/auth/login" className={styles.greenLink}>
+            Back to login
+          </a>
 
-        <button
-          type="submit"
-          className={styles.button}
-          disabled={mutation.isPending}
-        >
-          {mutation.isPending ? "Sending..." : "Send Reset Link"}
-        </button>
-      </form>
-    </div>
+          <button
+            type="submit"
+            className={styles.button}
+            disabled={mutation.isPending}
+          >
+            {mutation.isPending ? "Sending..." : "Send Reset Link"}
+          </button>
+        </form>
+      </div>
+    </section>
   );
 }

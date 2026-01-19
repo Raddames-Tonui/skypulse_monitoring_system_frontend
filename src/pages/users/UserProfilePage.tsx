@@ -1,21 +1,17 @@
 import { useState } from "react";
 import { useGetUserProfile } from "./data-access/useFetchData";
 import GetUserProfileModal from "./GetUserProfileModal";
+import { normalizeContacts } from "./data-access/normalizeContacts";
 
 export default function UserProfilePage() {
   const { data, isLoading, isError } = useGetUserProfile();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (isLoading) return <div className="profile-loading">Loading profile…</div>;
-  if (isError || !data) return <div className="profile-error">Failed to load profile</div>;
+  if (isError || !data)
+    return <div className="profile-error">Failed to load profile</div>;
 
-  const contactsMap = data.user_contacts.reduce<Record<string, string>>(
-    (acc, c) => {
-      acc[c.type] = c.value;
-      return acc;
-    },
-    {}
-  );
+  const contactsMap = normalizeContacts(data.user_contacts);
 
   const fullName = `${data.first_name} ${data.last_name}`;
 
@@ -27,10 +23,18 @@ export default function UserProfilePage() {
 
       <div className="profile-container">
         <aside className="profile-sidebar">
-          <div className="profile-avatar">{data.first_name.charAt(0)}</div>
+          <div className="profile-avatar">
+            {data.first_name.charAt(0)}
+          </div>
+
           <h3 className="profile-name">{fullName}</h3>
-          <p className="profile-email profile-name">{contactsMap.EMAIL}</p>
-          <span className="profile-role profile-name">{data.role_name}</span>
+          <p className="profile-email profile-name">
+            {contactsMap.EMAIL ?? data.email}
+          </p>
+
+          <span className="profile-role profile-name">
+            {data.role_name}
+          </span>
 
           <nav className="profile-nav">
             <button onClick={() => setIsModalOpen(true)}>Edit Profile</button>
@@ -42,32 +46,40 @@ export default function UserProfilePage() {
 
         <section className="profile-content">
           <h2>Account Overview</h2>
-          <div className="profile-grid">
 
+          <div className="profile-grid">
             <div>
               <label>Company</label>
-              <p>{data.company_name}</p>
+              <p>{data.company_name ?? "—"}</p>
             </div>
+
             <div>
               <label>Email</label>
-              <p>{contactsMap.EMAIL}</p>
+              <p>{contactsMap.EMAIL ?? "Not set"}</p>
             </div>
+
             <div>
               <label>Phone</label>
               <p>{contactsMap.SMS ?? "Not set"}</p>
             </div>
+
             <div>
               <label>Telegram</label>
               <p>{contactsMap.TELEGRAM ?? "Not set"}</p>
             </div>
+
             <div>
               <label>Role</label>
-              <span className="profile-role-tag">{data.role_name}</span>
+              <span className="profile-role-tag">
+                {data.role_name}
+              </span>
             </div>
+
             <div>
               <label>Language</label>
               <p>{data.user_preferences.language.toUpperCase()}</p>
             </div>
+
             <div>
               <label>Timezone</label>
               <p>{data.user_preferences.timezone}</p>
@@ -75,10 +87,12 @@ export default function UserProfilePage() {
           </div>
 
           <div className="profile-actions">
-            <button className="btn-primary" onClick={() => setIsModalOpen(true)}>
+            <button
+              className="btn-primary"
+              onClick={() => setIsModalOpen(true)}
+            >
               Edit Profile
             </button>
-            {/* <button className="btn-secondary">Change Password</button> */}
           </div>
         </section>
 
@@ -90,6 +104,5 @@ export default function UserProfilePage() {
         )}
       </div>
     </>
-
   );
 }

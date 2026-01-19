@@ -60,34 +60,41 @@ export default function ActivateUser() {
   if (!token) return <p>Invalid or missing activation token.</p>
 
   return (
-    <div className={styles.loginContainer}>
-      <form className={styles.loginCard} onSubmit={handleSubmit}>
-        <h2 className={styles.title}>
-          Just enter your <span className={styles.green}>password!</span>
-        </h2>
+    <section className={styles.authPageWrapper}>
+      <div className={styles.logoCard}>
+        <img src="/skypulse_flavicon.png" alt="logo" />
+      </div>
 
-        <label className={styles.label} htmlFor="password">
-          Your password
-        </label>
-        <input
-          id="password"
-          type="password"
-          className={getInputClass()}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          onBlur={() => setTouched(true)}
-          placeholder="Enter password"
-        />
-        {touched && password.length < 6 && (
-          <p className={`${styles.errorMessage} ${styles.active}`}>
-            Password must be at least 6 characters
-          </p>
-        )}
+      <div className={styles.loginContainer}>
+        <form className={styles.loginCard} onSubmit={handleSubmit}>
+          <h2 className={styles.title}>
+            Just enter your <span className={styles.green}>password!</span>
+          </h2>
 
-        <button className={styles.button} type="submit" disabled={mutation.isPending}>
-          {mutation.isPending ? 'Activating...' : 'Activate Account'}
-        </button>
-      </form>
-    </div>
+          <label className={styles.label} htmlFor="password">
+            Your password
+          </label>
+          <input
+            id="password"
+            type="password"
+            className={getInputClass()}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            onBlur={() => setTouched(true)}
+            placeholder="Enter password"
+          />
+          {touched && password.length < 6 && (
+            <p className={`${styles.errorMessage} ${styles.active}`}>
+              Password must be at least 6 characters
+            </p>
+          )}
+
+          <button className={styles.button} type="submit" disabled={mutation.isPending}>
+            {mutation.isPending ? 'Activating...' : 'Activate Account'}
+          </button>
+        </form>
+      </div>
+    </section>
+
   )
 }
