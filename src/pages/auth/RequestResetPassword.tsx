@@ -4,10 +4,14 @@ import axiosClient from "@/utils/constants/axiosClient";
 import toast from "react-hot-toast";
 
 import styles from "@/css/login.module.css";
+import {useNavigate} from "@tanstack/react-router";
 
 export default function RequestResetPassword() {
   const [email, setEmail] = useState("");
   const [touched, setTouched] = useState(false);
+
+  const navigate = useNavigate();
+
 
   const mutation = useMutation({
     mutationFn: (email: string) =>
@@ -50,7 +54,12 @@ export default function RequestResetPassword() {
   return (
     <section className={styles.authPageWrapper}>
       <div className={styles.logoCard}>
-        <img src="/skypulse_flavicon.png" alt="logo" />
+        <img
+            src="/skypulse_flavicon.png"
+            alt="logo"
+            style={{ cursor: "pointer" }}
+            onClick={() => navigate({ to: "/" })}
+        />
       </div>
       <div className={styles.loginContainer}>
         <form onSubmit={handleSubmit} className={styles.loginCard}>
