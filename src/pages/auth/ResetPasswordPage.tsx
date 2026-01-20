@@ -89,7 +89,7 @@ export default function ResetPasswordPage() {
                 }`}
             >
               <div className={ruleClass(checks.oneChar)}>
-                <Icon iconName="check" /> At least 1 character
+                <Icon iconName="check" className={styles.checkIcon}/> At least 1 character
               </div>
 
               <div className={ruleClass(checks.upper)}>

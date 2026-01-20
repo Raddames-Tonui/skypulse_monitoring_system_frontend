@@ -1,10 +1,5 @@
 
 // ----------- GENERIC API RESPONSE  -----------
-export type ApiSingleResponse<T> = {
-    data: T;
-    message: string;
-}
-
 
 export type ApiError = {
     message: string;
@@ -40,4 +35,69 @@ export interface UserProfile {
     company_name: string;
     user_contacts: UserContact[];
     user_preferences:  UserPreferences;
+} // ----------CREATE USER -----------
+// ---- users -------
+export type Users = {
+    uuid: string;
+    user_id: number;
+    first_name: string;
+    last_name: string;
+    user_email: string;
+    role_id: number;
+    role_name: string;
+    company_id: number;
+    company_name: string;
+    is_active: boolean;
+    date_created: string;
+    date_modified: string;
+};
+
+// ----------- USERS -----------
+export interface User {
+    id: number;
+    uuid: string;
+    first_name: string;
+    last_name: string;
+    user_email: string;
+    role_name: string;
+    company_name: string;
+    is_active: boolean;
+    date_created: string;
+    date_modified: string;
+}
+
+export interface CreateUserPayload {
+    first_name: string;
+    last_name: string;
+    user_email: string;
+    role_name: string;
+    company_id: number;
+}
+
+export interface CreateUserSuccessResponse {
+    data: {
+        userCreationStatus: "QUEUED";
+        userId: number;
+        uuid: string;
+        emailStatus: "QUEUED";
+        tokenGenerationStatus: "QUEUED";
+    };
+    message: string;
+    status: "success";
+}
+
+export interface CreateUserErrorResponse {
+    message: string;
+    status: "error";
+}
+
+export type CreateUserResponse =
+    | CreateUserSuccessResponse
+    | CreateUserErrorResponse;
+
+export interface User {
+    id: number;
+    first_name: string;
+    last_name: string;
+    email: string;
 }

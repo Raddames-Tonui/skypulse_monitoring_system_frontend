@@ -1,7 +1,8 @@
 import DynamicForm from "@/components/dynamic-form/DynamicForm";
-import { monitoredServiceFormSchema } from "@/components/dynamic-form/FormSchema";
-import NavigationBar from "@/components/NavigationBar";
-import { useCreateService } from "@/hooks/services";
+import { monitoredServiceFormSchema } from "@components/dynamic-form/utils/FormSchema.ts";
+import NavigationBar from "@components/layout/NavigationBar.tsx";
+
+import {useCreateService} from "@/pages/services/data-access/useMutateData.tsx";
 
 function CreateService() {
   const createService = useCreateService();

@@ -1,4 +1,4 @@
-import "@/css/loader.css";
+import "@css/loader.css";
 
 interface LoaderProps {
   size?: string | number;

@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { validateField } from "./utils/valitation";
+import React, { useEffect, useState} from "react";
+import type {JSX }  from "react";
 import type { DynamicFormProps, FieldNode, LayoutNode } from "./utils/types";
+import {isFieldVisible} from "@components/dynamic-form/utils/visibility.ts";
+import { validateField } from "./utils/valitation";
 import "./css/formstyle.css";
 
 
@@ -26,7 +28,11 @@ export default function DynamicForm({ schema, onSubmit, initialData, className, 
     })
   );
 
+
   const [formValues, setFormValues] = useState<Record<string, any>>(initialValues);
+  const isVisible = (field: FieldNode) =>
+      isFieldVisible(field, formValues);
+
   useEffect(() => {
     if (initialData) {
       const newValues = Object.fromEntries(
@@ -39,38 +45,35 @@ export default function DynamicForm({ schema, onSubmit, initialData, className, 
     }
   }, [initialData, fields]);
 
-  // ---------- Visibility Logic ----------
-  const isFieldVisible = (field: FieldNode): boolean => {
-    const rule = field.visibleWhen;
-    if (!rule) return true;
-
-    const checkCondition = (condition: any) => {
-      const target = formValues[condition.field];
-      switch (condition.op) {
-        case "equals":
-          return target === condition.value;
-        case "in":
-          return Array.isArray(condition.value) && condition.value.includes(target);
-        default:
-          return true;
-      }
-    };
-
-    return Array.isArray(rule) ? rule.every(checkCondition) : checkCondition(rule);
+  // ---------- Visibility helper for handleChange ----------
+  const isVisibleWith = (
+      values: Record<string, any>,
+      field: FieldNode
+  ): boolean => {
+    return isFieldVisible(field, values);
   };
+
 
   // ---------- Handle Input ----------
   const handleChange = (fieldId: string, value: any) => {
     setFormValues((prev) => {
       const updated = { ...prev, [fieldId]: value };
+
       Object.values(fields).forEach((f) => {
-        if (!isFieldVisible(f)) updated[f.id] = undefined;
+        if (!isVisibleWith(updated, f)) {
+          updated[f.id] = undefined;
+        }
       });
+
       return updated;
     });
 
     const field = fields[fieldId];
-    const error = validateField(field, value, { ...formValues, [fieldId]: value });
+    const error = validateField(field, value, {
+      ...formValues,
+      [fieldId]: value,
+    });
+
     setErrors((p) => ({ ...p, [fieldId]: error || "" }));
   };
 
@@ -80,7 +83,7 @@ export default function DynamicForm({ schema, onSubmit, initialData, className, 
     const validationErrors: Record<string, string> = {};
 
     Object.values(fields).forEach((f) => {
-      if (!isFieldVisible(f)) return;
+      if (!isVisible(f)) return;
       const val = formValues[f.id];
       const err = validateField(f, val, formValues);
       if (err) validationErrors[f.id] = err;
@@ -104,98 +107,150 @@ export default function DynamicForm({ schema, onSubmit, initialData, className, 
 
 
   // ---------- MultiSelect Component ----------
-  const MultiSelectField = ({
-    field,
-    value,
-    onChange,
-    wrapperClassName,
-  }: {
-    field: FieldNode;
-    value: string[];
-    onChange: (id: string, value: any) => void;
-    wrapperClassName?: string;
-  }) => {
-    const [search, setSearch] = useState("");
-    const options = field.props?.data || [];
-    const selected = value || [];
+    const MultiSelectField = ({
+                                  field,
+                                  value,
+                                  onChange,
+                                  wrapperClassName,
+                              }: {
+        field: FieldNode;
+        value: string[] | string;
+        onChange: (id: string, value: any) => void;
+        wrapperClassName?: string;
+    }) => {
+        const [search, setSearch] = useState("");
+        const [showAllSelected, setShowAllSelected] = useState(false);
 
-    // Filter options if searchable
-    const filtered = field.props?.searchable
-      ? options.filter((o: any) =>
-        o.label.toLowerCase().includes(search.toLowerCase())
-      )
-      : options;
+        const options = field.props?.data || [];
+        const multiple = field.props?.multiple ?? true;
+        const maxVisibleTags = field.props?.maxVisibleTags ?? 3;
 
-    // Toggle item selection
-    const toggle = (optValue: string) => {
-      if (field.disabled) return;
-      const newVals = selected.includes(optValue)
-        ? selected.filter((v) => v !== optValue)
-        : [...selected, optValue];
-      onChange(field.id, newVals);
-    };
+        const valueKey = field.props?.valueKey || "value";
+        const labelKey = field.props?.labelKey || "label";
 
-    // Remove selected tag
-    const remove = (optValue: string) => {
-      if (field.disabled) return;
-      const newVals = selected.filter((v) => v !== optValue);
-      onChange(field.id, newVals);
-    };
+        const selectedValues = Array.isArray(value)
+            ? value.map((v) => String(v))
+            : value
+                ? [String(value)]
+                : [];
 
-    return (
-      <div className={`multiselect-wrapper ${wrapperClassName || ""}`}>
-        {field.props?.searchable && (
-          <input
-            type="text"
-            placeholder="Search..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="search-input"
-            disabled={field.disabled}
-          />
-        )}
-        <div className="options-list">
-          {filtered.map((opt: any, i: number) => (
-            <div
-              key={i}
-              className={`option-item ${selected.includes(opt.value) ? "selected" : ""}`}
-              onClick={() => toggle(opt.value)}
-              style={{ cursor: field.disabled ? "not-allowed" : "pointer" }}
-            >
-              {opt.label}
-            </div>
-          ))}
-        </div>
-        {selected.length > 0 && (
-          <div className="selected-tags">
-            {selected.map((val, i) => {
-              const item = options.find((o: any) => o.value === val);
-              return (
-                <span key={i} className="tag">
-                  {item?.label || val}
-                  {!field.disabled && (
-                    <button type="button" onClick={() => remove(val)}>
-                      ×
-                    </button>
-                  )}
+        const filteredOptions = field.props?.searchable
+            ? options.filter((opt: any) => {
+                const label = typeof opt === "string" ? opt : opt[labelKey];
+                return label?.toString().toLowerCase().includes(search.toLowerCase());
+            })
+            : options;
+
+        const toggleOption = (opt: any) => {
+            const optValue = typeof opt === "string" ? opt : opt[valueKey];
+            let newVals: string[];
+            if (selectedValues.includes(optValue)) {
+                newVals = selectedValues.filter((v) => v !== optValue);
+            } else {
+                newVals = multiple ? [...selectedValues, optValue] : [optValue];
+            }
+            onChange(field.id, multiple ? newVals : newVals[0]);
+        };
+
+        const removeTag = (val: string) => {
+            const newVals = selectedValues.filter((v) => v !== val);
+            onChange(field.id, multiple ? newVals : newVals[0] ?? "");
+        };
+
+        const previewTags = selectedValues.slice(0, maxVisibleTags);
+        const hiddenCount = selectedValues.length - previewTags.length;
+
+        return (
+            <div className={`multiselect-wrapper ${wrapperClassName || ""}`}>
+                {field.props?.searchable && (
+                    <input
+                        type="text"
+                        placeholder="Search..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="search-input"
+                        disabled={field.disabled}
+                    />
+                )}
+
+                <div className="options-list" style={{ maxHeight: "200px", overflowY: "auto" }}>
+                    {filteredOptions.map((opt: any, i: number) => {
+                        const optValue = typeof opt === "string" ? opt : opt[valueKey];
+                        const optLabel = typeof opt === "string" ? opt : opt[labelKey];
+                        const isSelected = selectedValues.includes(optValue);
+
+                        return (
+                            <div
+                                key={i}
+                                className={`option-item ${isSelected ? "selected" : ""}`}
+                                onClick={() => !field.disabled && toggleOption(opt)}
+                                style={{ cursor: field.disabled ? "not-allowed" : "pointer" }}
+                            >
+                                {optLabel}
+                            </div>
+                        );
+                    })}
+                </div>
+
+                {selectedValues.length > 0 && (
+                    <div className="selected-tags">
+                        {previewTags.map((val) => {
+                            const item = options.find((o) =>
+                                typeof o === "string" ? o === val : o[valueKey] === val
+                            );
+                            const label = item ? (typeof item === "string" ? item : item[labelKey]) : val;
+
+                            return (
+                                <span key={val} className="tag">
+                {label}
+                                    {!field.disabled && <button type="button" onClick={() => removeTag(val)}>×</button>}
+              </span>
+                            );
+                        })}
+
+                        {hiddenCount > 0 && (
+                            <button type="button" className="view-all-btn" onClick={() => setShowAllSelected(true)}>
+                                +{hiddenCount} more
+                            </button>
+                        )}
+                    </div>
+                )}
+
+                {showAllSelected && (
+                    <div className="selected-all-panel">
+                        <div className="selected-all-tags" style={{ maxHeight: "200px", overflowY: "auto" }}>
+                            {selectedValues.map((val) => {
+                                const item = options.find((o) =>
+                                    typeof o === "string" ? o === val : o[valueKey] === val
+                                );
+                                const label = item ? (typeof item === "string" ? item : item[labelKey]) : val;
+
+                                return (
+                                    <span key={val} className="tag">
+                  {label}
+                                        {!field.disabled && <button type="button" onClick={() => removeTag(val)}>×</button>}
                 </span>
-              );
-            })}
-          </div>
-        )}
-      </div>
-    );
-  };
+                                );
+                            })}
+                        </div>
+                        <button type="button" className="back-btn" onClick={() => setShowAllSelected(false)}>
+                            Back
+                        </button>
+                    </div>
+                )}
+            </div>
+        );
+    };
 
 
-  // ---------- Render Field ----------
+    // ---------- Render Field ----------
   const renderField = (field: FieldNode) => {
     const value = formValues[field.id] ?? field.defaultValue ?? "";
     const handleInputChange = (e: React.ChangeEvent<any>) => handleChange(field.id, e.target.value);
     const hasError = !!errors[field.id];
     const errorClass = hasError ? "input-error" : "";
 
-    if (!isFieldVisible(field)) return null;
+    if (!isVisible(field)) return null;
 
     switch (field.renderer) {
       case "select":
@@ -324,7 +379,10 @@ export default function DynamicForm({ schema, onSubmit, initialData, className, 
               type="file"
               accept={field.props?.accept}
               multiple={field.props?.multiple || false}
-              onChange={(e) => handleChange(field.id, e.target.files)}
+              onChange={(e) => {
+                const files = e.target.files ? Array.from(e.target.files) : [];
+                handleChange(field.id, field.props?.multiple ? files : files[0]);
+              }}
               className={errorClass}
               disabled={field.disabled}
             />
@@ -351,71 +409,70 @@ export default function DynamicForm({ schema, onSubmit, initialData, className, 
 
   // ---------- Layout Renderer ----------
   const renderLayoutNode = (node: LayoutNode, index?: number): JSX.Element | null => {
-    const key = node.fieldId || node.title || `${node.kind}-${index}`;
+    // Use node.id if available, otherwise fieldId/title, otherwise fallback to kind + index
+    const key = node.id ?? node.fieldId ?? node.title ?? `${node.kind}-${index}`;
 
     switch (node.kind) {
       case "field": {
         const field = fields[node.fieldId!];
-        if (!isFieldVisible(field)) return null;
+        if (!isVisible(field)) return null;
 
         return (
-          <div key={field.id} className={`form-field ${fieldClassName || ""}`}>
-            {/* Render label except for checkbox/switch */}
-            {field.renderer !== "checkbox" && field.renderer !== "switch" && field.label && (
-              <label
-                htmlFor={field.id}
-                className={field.rules?.required ? "required" : ""}
-              >
-                {field.label}
-              </label>
-            )}
+            <div key={field.id} className={`form-field ${fieldClassName || ""}`}>
+              {field.renderer !== "checkbox" && field.renderer !== "switch" && field.label && (
+                  <label
+                      htmlFor={field.id}
+                      className={field.rules?.required ? "required" : ""}
+                  >
+                    {field.label}
+                  </label>
+              )}
 
-            {renderField(field)}
+              {renderField(field)}
 
-            {errors[field.id] && (
-              <p className="error-text">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="error-icon"
-                >
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="12" y1="7" x2="12" y2="13" />
-                  <circle cx="12" cy="17" r="1" fill="currentColor" />
-                </svg>
-                {errors[field.id]}
-              </p>
-            )}
-          </div>
+              {errors[field.id] && (
+                  <p className="error-text">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="error-icon"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="12" y1="7" x2="12" y2="13" />
+                      <circle cx="12" cy="17" r="1" fill="currentColor" />
+                    </svg>
+                    {errors[field.id]}
+                  </p>
+              )}
+            </div>
         );
       }
 
-
       case "stack":
         return (
-          <div key={key} className={`stack stack-${node.spacing || "md"}`}>
-            {node.children?.map((child, i) => renderLayoutNode(child, i))}
-          </div>
+            <div key={key} className={`stack stack-${node.spacing || "md"}`}>
+              {node.children?.map(renderLayoutNode)}
+            </div>
         );
 
       case "grid":
         return (
-          <div key={key} className={`grid grid-cols-${node.cols || 2} gap-${node.spacing || "md"}`}>
-            {node.children?.map((child, i) => renderLayoutNode(child, i))}
-          </div>
+            <div key={key} className={`grid grid-cols-${node.cols || 2} gap-${node.spacing || "md"}`}>
+              {node.children?.map(renderLayoutNode)}
+            </div>
         );
 
       case "section":
         return (
-          <fieldset key={key} className="form-section">
-            {node.title && <h3 className="section-title">{node.title}</h3>}
-            {node.children?.map((child, i) => renderLayoutNode(child, i))}
-          </fieldset>
+            <fieldset key={key} className="form-section">
+              {node.title && <h3 className="section-title">{node.title}</h3>}
+              {node.children?.map(renderLayoutNode)}
+            </fieldset>
         );
 
       default:
@@ -436,7 +493,7 @@ export default function DynamicForm({ schema, onSubmit, initialData, className, 
       {meta.subtitle && <h2 className="form-h2">{meta.subtitle}</h2>}
 
       <form id={id} onSubmit={handleSubmit} onReset={handleReset}>
-        {layout?.map((node, i) => renderLayoutNode(node))}
+        {layout?.map((node, _) => renderLayoutNode(node))}
 
 
         {showButtons && (

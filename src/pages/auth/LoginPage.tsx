@@ -42,8 +42,8 @@ export default function LoginPage() {
         email: data.email,
         password: data.password,
       });
-      toast.success("Login successful");
       navigate({ to: "/dashboard" });
+      toast.success("Login successful");
     } catch (error: any) {
       const message = error.response?.data?.message || "Login failed";
       toast.error(message);

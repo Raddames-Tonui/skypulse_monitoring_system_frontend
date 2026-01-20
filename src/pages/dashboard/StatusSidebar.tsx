@@ -1,5 +1,7 @@
-import "@/css/StatusSidebar.css";
+import "@css/StatusSidebar.css";
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 export default function StatusSidebar({ data, system }) {
   const uptimePercent =
     data && data.total_services > 0
@@ -60,7 +62,7 @@ export default function StatusSidebar({ data, system }) {
         </div>
 
         <p className="dashboard-status-subtext ">
-          Registered {data?.total_services ?? 0} Services
+         Monitoring {data?.total_services ?? 0} Services
         </p>
 
       </div>

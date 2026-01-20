@@ -1,10 +1,10 @@
 import React from "react";
-import Loader from "@/components/Loader";
+import Loader from "@components/layout/Loader.tsx";
 import Modal from "@/components/modal/Modal";
 import DynamicForm from "@/components/dynamic-form/DynamicForm";
 import { useGetUserProfile } from "./data-access/useFetchData";
 import { useUpdateUserProfile } from "@/context/data-access/useMutateData";
-import { userProfileSchema } from "@/components/dynamic-form/FormSchema";
+import { userProfileSchema } from "@components/dynamic-form/utils/FormSchema.ts";
 import type { UserProfile } from "@/context/data-access/types";
 import { normalizeContacts } from "./data-access/normalizeContacts";
 

@@ -3,8 +3,8 @@ import { Route as SingleServiceRoute } from "@/routes/_protected/services/$uuid"
 import { useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 
-import type { MonitoredService } from "@/utils/types-single-service";
 import axiosClient from "@/utils/constants/axiosClient";
+import type {MonitoredService} from "@/pages/services/data-access/types.ts";
 
 
 import PieChartWithCustomizedLabel from "@/components/charts/PieChartWithCustomizedLabel";
@@ -12,7 +12,7 @@ import SimpleAreaChart from "@/components/charts/SimpleAreaChart";
 import type { ColumnProps } from "@/components/table/DataTable";
 import UpdateServiceModal from "./UpdateServiceModalProps";
 import { DataTable } from "@/components/table/DataTable";
-import Loader from "@/components/Loader";
+import Loader from "@components/layout/Loader.tsx";
 
 import "@/css/singleService.css";
 

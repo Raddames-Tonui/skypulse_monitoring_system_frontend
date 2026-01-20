@@ -7,7 +7,7 @@ import Modal from "@/components/modal/Modal";
 import DynamicForm from "@/components/dynamic-form/DynamicForm";
 import { toast } from "react-hot-toast";
 import type { SortRule, FilterRule } from "@/components/table/DataTable";
-import { createGroupSchema } from "@/components/dynamic-form/FormSchema";
+import { createGroupSchema } from "@components/dynamic-form/utils/FormSchema.ts";
 
 const SORT_MAP: Record<string, string> = {
   contact_group_name: "contact_group_name",

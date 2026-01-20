@@ -1,9 +1,9 @@
 import React from "react";
 import DynamicForm from "@/components/dynamic-form/DynamicForm";
-import { updateTemplateSchema } from "@/components/dynamic-form/TemplateFormSchema";
 import Modal from "@/components/modal/Modal";
 import { useUpdateTemplate } from "./data-access/useMutateData";
 import type { NotificationTemplate } from "./data-access/types";
+import {updateTemplateSchema} from "@components/dynamic-form/utils/FormSchema.ts";
 
 interface UpdateTemplateModalProps {
   isOpen: boolean;

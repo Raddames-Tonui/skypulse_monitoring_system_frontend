@@ -1,12 +1,12 @@
 import DynamicForm from "@/components/dynamic-form/DynamicForm";
-import { createUserSchema } from "@/components/dynamic-form/FormSchema";
-import { useCreateUser } from "@/hooks/hooks";
+import { createUserSchema } from "@components/dynamic-form/utils/FormSchema.ts";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axiosClient from "@/utils/constants/axiosClient";
 import toast from "react-hot-toast";
 import type { AxiosError } from "axios";
-import type { CreateUserPayload } from "@/utils/types";
 import { Link } from "@tanstack/react-router";
+import {useCreateUser} from "@/pages/users/data-access/useFetchData.tsx";
+import type {CreateUserPayload} from "@/pages/users/data-access/types.ts";
 
 export default function CreateUser() {
   const queryClient = useQueryClient();

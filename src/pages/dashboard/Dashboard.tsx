@@ -1,10 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { DataTable } from "@/components/table/DataTable";
-import type { ColumnProps } from "@/components/table/DataTable";
-import StatusSidebar from "../components/StatusSidebar";
-import { useSystemHealthSSE, useServiceStatusSSE } from "@/hooks/useSSE";
-import type { Service } from "@/utils/types";
-import "@/css/dashboard.css";
+import { DataTable } from "@components/table/DataTable.tsx";
+import type { ColumnProps } from "@components/table/DataTable.tsx";
+import StatusSidebar from "@/pages/dashboard/StatusSidebar.tsx";
+import { useSystemHealthSSE, useServiceStatusSSE } from "@/pages/dashboard/data-access/useSSE.tsx";
+import "@css/dashboard.css";
+import type {Service} from "@/pages/dashboard/data-access/types.ts";
 
 export default function Dashboard() {
   const sseData = useServiceStatusSSE();
@@ -60,8 +60,8 @@ export default function Dashboard() {
         const val = String(value ?? "").toUpperCase();
         let bgColor = "#27ae60";
 
-        if (val === "WARNING" || row.ssl_days_remaining <= 14) bgColor = "#f1c40f";
-        if (val === "CRITICAL" || row.ssl_days_remaining <= 7) bgColor = "#e74c3c";
+        if (val === "WARNING" || row.ssl_days_remaining <= 18) bgColor = "#f1c40f";
+        if (val === "CRITICAL" || row.ssl_days_remaining <= 14) bgColor = "#e74c3c";
         if (val === "SEVERE") bgColor = "#e74c3c";
 
         return (

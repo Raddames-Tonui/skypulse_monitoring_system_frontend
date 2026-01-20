@@ -1,13 +1,13 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
-import { Link, useNavigate } from "@tanstack/react-router";
+import {  useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { DataTable } from "@/components/table/DataTable";
-import type { ColumnProps, SortRule, FilterRule } from "@/components/table/DataTable";
+import type {  SortRule, FilterRule } from "@/components/table/DataTable";
 import axiosClient from "@/utils/constants/axiosClient";
-import NavigationBar from "@/components/NavigationBar";
-import type { SSLLogsResponse } from "@/context/types";
+import NavigationBar from "@components/layout/NavigationBar.tsx";
 import { Route } from "@/routes/_protected/reports/ssl-reports";
-import { useSslReportDownload } from "@/hooks/hooks";
+
+import {useSslReportDownload} from "@/pages/reports/data-access/useMutateData.tsx";
 
 
 
@@ -187,7 +187,7 @@ export default function SSLLogsPage() {
         </select>
     );
 
-    const { isProcessing, downloadPdfReport, previewPdfReport, downloadSslReport, previewSslReport } = useSslReportDownload();
+    const { isProcessing, downloadPdfReport, previewPdfReport, downloadSslReport } = useSslReportDownload();
 
     const tableActionsLeft = (
         <div style={{ display: "flex", gap: "0.5rem" }}>

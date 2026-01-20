@@ -1,7 +1,8 @@
-import type { ApiSingleResponse, UserProfile } from "@/context/data-access/types";
+import type {ApiSingleResponse, UserProfile} from "@/context/data-access/types";
 import axiosClient from "@/utils/constants/axiosClient";
-import { useQuery } from "@tanstack/react-query";
-import type { ApiError } from "./types";
+import {useMutation, useQuery} from "@tanstack/react-query";
+import type {ApiError, ApiResponse} from "@/utils/types.ts";
+import type {CreateUserPayload, CreateUserResponse, Users} from "@/pages/users/data-access/types.ts";
 
 const PROFILE_QUERY_KEY = ["user-profile"];
 
@@ -20,3 +21,21 @@ export const useGetUserProfile = () => {
         staleTime: 5 * 60 * 1000,
     });
 };
+export const useUsers = (params: Record<string, string | number | boolean>) => {
+    return useQuery<ApiResponse<Users>, ApiError>({
+        queryKey: ["users", params],
+        queryFn: async () => {
+            const {data} = await axiosClient.get<ApiResponse<Users>>("/users", {params});
+            return data;
+        },
+    });
+};
+
+export function useCreateUser() {
+    return useMutation<CreateUserResponse, any, CreateUserPayload>({
+        mutationFn: async (payload) => {
+            const res = await axiosClient.post("/users/user/create", payload);
+            return res.data;
+        },
+    });
+}

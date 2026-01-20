@@ -1,6 +1,6 @@
 import { Outlet, redirect } from '@tanstack/react-router';
 import { useAuth } from '@/context/AuthContext';
-import Loader from '@/components/Loader';
+import Loader from '@components/layout/Loader.tsx';
 import UnauthorizedPage from '@/pages/auth/UnauthorizedPage';
 import { hasRole } from '@/pages/auth/roles';
 

@@ -1,6 +1,6 @@
 import DynamicForm from "@/components/dynamic-form/DynamicForm";
-import { systemSettingsFormSchema } from "@/components/dynamic-form/FormSchema";
-import Loader from "@/components/Loader";
+import { systemSettingsFormSchema } from "@components/dynamic-form/utils/FormSchema.ts";
+import Loader from "@components/layout/Loader.tsx";
 import { useRestartApplication, useRollbackSettings, useSaveSettings } from "@/pages/settings/data-access/useMutateData";
 import { useSystemSettings } from "@/pages/settings/data-access/useFetchData";
 

@@ -1,6 +1,6 @@
-import Icon from "@/utils/Icon";
-import { useAuth } from "@/context/AuthContext";
-import { useTheme } from "@/context/ThemeProvider";
+import Icon from "@/utils/Icon.tsx";
+import { useAuth } from "@/context/AuthContext.tsx";
+import { useTheme } from "@/context/ThemeProvider.tsx";
 import { useNavigate } from "@tanstack/react-router";
 import { useState, useRef, useEffect } from "react";
 

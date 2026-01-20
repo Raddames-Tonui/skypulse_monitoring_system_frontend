@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { DataTable } from "@/components/table/DataTable";
 import axiosClient from "@/utils/constants/axiosClient";
 import Modal from "@/components/modal/Modal";
-import TreeView from "@/components/TreeView";
+import TreeView from "@/pages/logs/TreeView.tsx";
 
 type AuditLog = {
     audit_log_id: number;

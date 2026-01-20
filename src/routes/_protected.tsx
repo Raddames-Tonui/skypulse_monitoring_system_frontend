@@ -1,9 +1,9 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 import { useTheme } from '@/context/ThemeProvider';
-import Loader from '@/components/Loader';
-import Navbar from '@/components/Navbar';
-import Sidebar from '@/components/Sidebar';
-import MobileSidebar from '@/components/MobileSidebar';
+import Loader from '@components/layout/Loader.tsx';
+import Navbar from '@components/layout/Navbar.tsx';
+import Sidebar from '@components/layout/Sidebar.tsx';
+import MobileSidebar from '@components/layout/MobileSidebar.tsx';
 import { Toaster } from 'react-hot-toast';
 import "@css/layout.css";
 

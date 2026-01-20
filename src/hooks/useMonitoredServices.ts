@@ -1,6 +1,7 @@
 import axiosClient from "@/utils/constants/axiosClient";
-import type { ApiResponse, MonitoredService } from "@/utils/types";
+import type { ApiResponse } from "@/utils/types";
 import { useQuery } from "@tanstack/react-query";
+import type {MonitoredService} from "@/pages/services/data-access/useFetchData.tsx";
 
 export function useMonitoredService(uuid: string) {
   return useQuery<ApiResponse<MonitoredService>, Error>({

@@ -1,6 +1,7 @@
 import React from "react";
-import Icon from "@/utils/Icon";
-import { useAuth } from "@/hooks/hooks";
+import Icon from "@/utils/Icon.tsx";
+
+import {useAuth} from "@/context/data-access/types.ts";
 
 
 const Footer: React.FC = () => {

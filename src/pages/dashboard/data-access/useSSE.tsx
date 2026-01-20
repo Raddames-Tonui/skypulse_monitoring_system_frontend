@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { CONFIG } from "@/utils/constants/Constants";
-import type { SSEPayload, SystemHealth } from "@/utils/types";
+import { CONFIG } from "@/utils/constants/Constants.tsx";
+import type {SSEPayload, SystemHealth} from "@/pages/dashboard/data-access/types.ts";
 
 const defaultSystemHealth: SystemHealth = {
   app: "—",

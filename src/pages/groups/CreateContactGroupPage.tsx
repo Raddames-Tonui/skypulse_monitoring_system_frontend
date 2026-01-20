@@ -1,6 +1,6 @@
 import DynamicForm from "@/components/dynamic-form/DynamicForm";
-import { createGroupSchema } from "@/components/dynamic-form/FormSchema";
-import NavigationBar from "@/components/NavigationBar";
+import { createGroupSchema } from "@components/dynamic-form/utils/FormSchema.ts";
+import NavigationBar from "@components/layout/NavigationBar.tsx";
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import axiosClient from "@/utils/constants/axiosClient";

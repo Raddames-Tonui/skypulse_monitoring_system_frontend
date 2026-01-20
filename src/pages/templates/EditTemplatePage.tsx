@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import axiosClient from "@/utils/constants/axiosClient";
 import { useUpdateTemplate } from "./data-access/useMutateData";
 import type { NotificationTemplate } from "./data-access/types";
-import Loader from "@/components/Loader";
+import Loader from "@components/layout/Loader.tsx";
 import "./EditTemplatePage.css";
 
 export default function EditTemplatePage() {

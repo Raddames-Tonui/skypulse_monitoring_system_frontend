@@ -2,8 +2,8 @@ import { useQueryClient, useMutation } from "@tanstack/react-query";
 import axiosClient from "@/utils/constants/axiosClient";
 import Modal from "@/components/modal/Modal";
 import DynamicForm from "@/components/dynamic-form/DynamicForm";
-import type { MonitoredService } from "@/utils/types";
-import { useMonitoredServices } from "@/hooks/hooks";
+import toast from "react-hot-toast";
+import {type MonitoredService, useMonitoredServices} from "@/pages/services/data-access/useFetchData.tsx";
 
 interface AddServicesModalProps {
     isOpen: boolean;
@@ -20,18 +20,15 @@ export default function AddServicesModal({
 }: AddServicesModalProps) {
     const queryClient = useQueryClient();
 
-    // -------- FETCH SERVICES --------
     const { data, isLoading } = useMonitoredServices({
         page: 1,
         pageSize: 1000,
     });
 
-    // ---- FIX: flatten response safely ----
     const services: MonitoredService[] = Array.isArray(data?.data)
         ? (data.data as MonitoredService[] | MonitoredService[][]).flat()
         : [];
 
-    // -------- MUTATION --------
     const mutation = useMutation({
         mutationFn: async (selectedIds: number[]) => {
             await axiosClient.post(`/contacts/groups/${groupUuid}/services`, {
@@ -39,16 +36,16 @@ export default function AddServicesModal({
             });
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["contactGroup", groupUuid] });
+            queryClient.invalidateQueries({ queryKey: ["contact-group-services", groupUuid] });
+            toast.success("Services added successfully.");
             onClose();
         },
     });
 
-    // -------- FORM SCHEMA --------
     const schema: any = {
         id: "add-services",
         meta: {
-            title: "Add Services",
+            // title: "Add Services",
             subtitle: "Select monitored services to add to the group",
         },
         fields: {
@@ -81,6 +78,7 @@ export default function AddServicesModal({
             isOpen={isOpen}
             title="Add Services"
             onClose={onClose}
+            size={"lg"}
             body={
                 isLoading ? (
                     <div>Loading services...</div>

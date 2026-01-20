@@ -1,8 +1,9 @@
 import DynamicForm from "@/components/dynamic-form/DynamicForm";
-import { updateServiceSchema } from "@/components/dynamic-form/FormSchema";
+import { updateServiceSchema } from "@components/dynamic-form/utils/FormSchema.ts";
 import Modal from "@/components/modal/Modal";
-import { useUpdateService } from "@/hooks/hooks";
 import React from "react";
+
+import {useUpdateService} from "@/pages/services/data-access/useMutateData.tsx";
 
 interface UpdateServiceModalProps {
     isOpen: boolean;
@@ -49,8 +50,6 @@ const UpdateServiceModal: React.FC<UpdateServiceModalProps> = ({
                             ssl_enabled: initialData.ssl_enabled,
                         }}
                         onSubmit={handleSubmit}
-                        // className="update-service-form"
-                        // buttonClassName="form-buttons"
                         showButtons={false} 
                     />
                 </div>

@@ -4,10 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 import { DataTable } from "@/components/table/DataTable";
 import type { SortRule, FilterRule } from "@/components/table/DataTable";
 import axiosClient from "@/utils/constants/axiosClient";
-import NavigationBar from "@/components/NavigationBar";
+import NavigationBar from "@components/layout/NavigationBar.tsx";
 import { Route } from "@/routes/_protected/reports/uptime-reports";
-import { useUptimeReportDownload } from "@/hooks/hooks";
 import type { UptimeLogsResponse } from "@/context/data-access/types";
+import {useUptimeReportDownload} from "@/pages/reports/data-access/useMutateData.tsx";
 
 const SORT_MAP: Record<string, string> = {
     monitored_service_name: "service",

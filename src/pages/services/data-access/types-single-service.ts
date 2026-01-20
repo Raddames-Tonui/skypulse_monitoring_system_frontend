@@ -1,7 +1,3 @@
-export interface MonitoredServiceResponse {
-  data: MonitoredService;
-  message: string;
-}
 
 export interface MonitoredService {
   uuid: string;

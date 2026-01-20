@@ -1,5 +1,5 @@
 :root {
-    --modal-error-50:  #FFF5F5;
+  --modal-error-50:  #FFF5F5;
   --modal-error-100: #FFE3E3;
   --modal-error-200: #FFBDBD;
   --modal-error-300: #FF9494;
@@ -124,6 +124,8 @@
   max-height: 100vh;
   border-radius: 0;
 }
+
+
 
 .alert-message-wrapper {
   display: flex;

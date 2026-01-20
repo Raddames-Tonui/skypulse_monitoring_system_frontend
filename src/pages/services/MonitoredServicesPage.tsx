@@ -3,7 +3,8 @@ import { useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { DataTable } from "@/components/table/DataTable";
 import axiosClient from "@/utils/constants/axiosClient";
-import { useAuth } from "@/hooks/hooks";
+
+import {useAuth} from "@/context/data-access/types.ts";
 
 type FilterRule = { column: string; operator?: string; value: string };
 type SortRule = { column: string; direction: "asc" | "desc" };

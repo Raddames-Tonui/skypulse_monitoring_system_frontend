@@ -2,8 +2,9 @@ import { useQueryClient, useMutation } from "@tanstack/react-query";
 import axiosClient from "@/utils/constants/axiosClient";
 import Modal from "@/components/modal/Modal";
 import DynamicForm from "@/components/dynamic-form/DynamicForm";
-import { useUsers } from "@/hooks/hooks";
-import type { User } from "@/utils/types";
+import toast from "react-hot-toast";
+import {useUsers} from "@/pages/users/data-access/useFetchData.tsx";
+import type {User} from "@/pages/users/data-access/types.ts";
 
 interface AddMembersModalProps {
     isOpen: boolean;
@@ -17,6 +18,7 @@ export default function AddMembersModal({
     onClose,
     groupUuid,
     currentMembers = [],
+
 }: AddMembersModalProps) {
     const queryClient = useQueryClient();
 
@@ -31,7 +33,8 @@ export default function AddMembersModal({
             });
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["contactGroup", groupUuid] });
+            queryClient.invalidateQueries({ queryKey: ["contact-group", groupUuid] });
+            toast.success("Members added successfully.");
             onClose();
         },
     });
@@ -39,7 +42,7 @@ export default function AddMembersModal({
     const schema: any = {
         id: "add-members",
         meta: {
-            title: "Add Members",
+            // title: "Add Members",
             subtitle: "Select users to add to the group",
         },
         fields: {
@@ -72,6 +75,7 @@ export default function AddMembersModal({
             isOpen={isOpen}
             title="Add Members"
             onClose={onClose}
+            size={"lg"}
             body={
                 isLoading ? (
                     <div>Loading users...</div>

@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import Icon from "@/utils/Icon";
-import { useAuth } from "@/context/AuthContext"; 
-import { useTheme } from "@/context/ThemeProvider"; 
-import { menuConfig } from "@/utils/types";
+import Icon from "@/utils/Icon.tsx";
+import { useAuth } from "@/context/AuthContext.tsx";
+import { useTheme } from "@/context/ThemeProvider.tsx";
+
+import {menuConfig} from "@components/layout/data-access/types.ts";
 
 const Sidebar: React.FC = () => {
   const { user, isLoading } = useAuth();

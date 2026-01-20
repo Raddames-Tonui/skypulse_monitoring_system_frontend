@@ -1,11 +1,11 @@
 import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { useUsers } from "@/hooks/hooks";
 import { DataTable } from "@/components/table/DataTable";
 import type { SortRule, FilterRule } from "@/components/table/DataTable";
-import type { Users } from "@/utils/types";
 import { Route } from "@/routes/_protected/_admin/users";
 import UploadContactsModal from "./UploadContactsModal";
+import {useUsers} from "@/pages/users/data-access/useFetchData.tsx";
+import type {Users} from "@/pages/users/data-access/types.ts";
 
 // Mapping DB fields for filtering/sorting
 const FILTER_MAP: Record<keyof Users, string> = {

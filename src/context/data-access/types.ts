@@ -1,4 +1,5 @@
-import type { ReactNode } from "react";
+import {type ReactNode, useContext} from "react";
+import {AuthContext} from "@/context/AuthContext.tsx";
 
 // ----------- GENERIC API RESPONSE  -----------
 export type ApiSingleResponse<T> = {
@@ -60,3 +61,8 @@ export interface AuthProviderProps {
   children: ReactNode;
 }
 
+export const useAuth = (): AuthContextType => {
+    const context = useContext(AuthContext);
+    if (!context) throw new Error("useAuth must be used within an AuthProvider");
+    return context;
+};

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useRouterState } from '@tanstack/react-router';
-import '@/css/NavigationBar.css';
+import '@css/NavigationBar.css';
 
 interface NavLink {
     label: string;

@@ -5,7 +5,7 @@ import { TableHeader } from "./TableHeader";
 import { TableBody } from "./TableBody";
 import TableFooter from "./TableFooter";
 import { Pagination } from "./Pagination";
-import Loader from "@/components/Loader";
+import Loader from "@components/layout/Loader.tsx";
 
 
 // Column config for Datatable
@@ -18,7 +18,6 @@ export interface ColumnProps<T, K extends keyof T = keyof T> {
   isSortable?: boolean;
   isFilterable?: boolean;
   filterType?: "text" | "dropdown";
-
   data_type?: string | boolean | number | Date;
   renderCell?: (value: T[K], row: T) => React.ReactNode;
   renderColumn?: (column: ColumnProps<any, any>) => React.ReactNode;
@@ -40,7 +39,7 @@ export interface SortRule {
 
 export interface FilterRule {
   column: string;
-  operator: string;
+  operator?: string;
   value: string;
 }
 
@@ -53,7 +52,7 @@ interface PaginationProps {
 
 
 export interface DataTableProps<T> {
-  columns?: ColumnProps<T, any>[] | undefined;
+  columns: ColumnProps<T, any>[];
   data: T[];
   tableActionsLeft?: React.ReactNode;
   tableActionsRight?: React.ReactNode;
@@ -87,9 +86,9 @@ interface DataTableContextType<T> {
   error?: string | null | Error;
   isLoading?: boolean;
 
-  sortBy: SortRule[];
-  filter: FilterRule[];
-  search: string[];
+  sortBy?: SortRule[];
+  filter?: FilterRule[];
+  search?: string[];
   onSortApply?: (sortRules: SortRule[]) => void;
   onFilterApply?: (filterRules: FilterRule[]) => void;
   onSearchApply?: (searchArr: string[]) => void;
@@ -132,7 +131,7 @@ export function DataTable<T>({
   const [search, setSearch] = useState<string[]>(initialSearch);
 
   const value: DataTableContextType<any> = {
-    columns,
+    columns: columns || [],
     data,
     rowRender,
     pagination,
@@ -199,6 +198,7 @@ export function DataTable<T>({
 }
 
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useDataTable = <T,>() => {
   const context = useContext(DataTableContext) as DataTableContextType<T>;
   if (!context) throw new Error("useDataTable must be used within a DataTableProvider");
