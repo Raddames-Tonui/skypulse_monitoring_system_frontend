@@ -4,10 +4,9 @@ import { DataTable } from "@/components/table/DataTable";
 import type { SortRule, FilterRule } from "@/components/table/DataTable";
 import { Route } from "@/routes/_protected/_admin/users";
 import UploadContactsModal from "./UploadContactsModal";
-import {useUsers} from "@/pages/users/data-access/useFetchData.tsx";
-import type {Users} from "@/pages/users/data-access/types.ts";
+import { useUsers } from "@/pages/users/data-access/useFetchData.tsx";
+import type { Users } from "@/pages/users/data-access/types.ts";
 
-// Mapping DB fields for filtering/sorting
 const FILTER_MAP: Record<keyof Users, string> = {
   user_id: "u.user_id",
   uuid: "u.uuid",
@@ -72,7 +71,6 @@ const columns = [
   { id: "date_modified", caption: "Modified At", isSortable: true, renderCell: (v: string) => new Date(v).toLocaleString(), size: 180, hide: true },
 ] as const;
 
-// Type for search params
 type UsersSearch = {
   page?: number;
   pageSize?: number;
@@ -88,18 +86,16 @@ export default function GetUsers() {
   const [page, setPage] = useState(search.page ?? 1);
   const [pageSize, setPageSize] = useState(search.pageSize ?? 20);
 
-  // Initialize sort from query param
   const initialSort: SortRule[] = search.sort
     ? search.sort.split(",").map((s) => {
-        const [column, direction = "asc"] = s.split(":");
-        return { column: column as keyof Users, direction: direction as "asc" | "desc" };
-      })
+      const [column, direction = "asc"] = s.split(":");
+      return { column: column as keyof Users, direction: direction as "asc" | "desc" };
+    })
     : [];
 
   const [sortBy, setSortBy] = useState<SortRule[]>(initialSort);
   const [filters, setFilters] = useState<FilterRule[]>([]);
 
-  // Build query params for API / URL
   const queryParams = useMemo(() => {
     const params: Record<string, string | number> = { page, pageSize };
     if (sortBy.length) params.sort = sortBy.map((r) => `${r.column}:${r.direction}`).join(",");
@@ -109,7 +105,6 @@ export default function GetUsers() {
     return params;
   }, [page, pageSize, sortBy, filters]);
 
-  // Update URL query
   useEffect(() => {
     navigate({ search: queryParams });
   }, [queryParams, navigate]);
