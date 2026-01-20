@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
       <div className="footer-wrapper">
         <div>
           <Icon iconName="building" />
-          <p>{user?.companyName|| "Company Name"}</p>
+          <p>{user?.company_name|| "Company Name"}</p>
         </div>
         <div>
           <Icon iconName="user" />

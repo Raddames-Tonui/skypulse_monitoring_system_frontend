@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "@tanstack/react-router";
@@ -6,6 +7,7 @@ import { toast } from "react-hot-toast";
 
 import styles from "@/css/login.module.css";
 import { useLogin } from "@/context/data-access/useMutateData";
+import Icon from "@/utils/Icon";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email").nonempty("Email is required"),
@@ -17,6 +19,8 @@ type FormData = z.infer<typeof loginSchema>;
 export default function LoginPage() {
   const navigate = useNavigate();
   const loginMutation = useLogin();
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -47,66 +51,83 @@ export default function LoginPage() {
   };
 
   return (
-    <section className={styles.authPageWrapper}>
-      <div className={styles.logoCard}>
-        <img src="/skypulse_flavicon.png" alt="logo" />
-      </div>
-
-      <div className={styles.loginContainer}>
-        <form onSubmit={handleSubmit(onSubmit)} className={styles.loginCard}>
-          <h1 className={styles.title}>
-            Welcome back <span className={styles.green}>!</span>
-          </h1>
-
-          <label className={styles.label} htmlFor="email">
-            Email
-          </label>
-          <input
-            id="email"
-            type="email"
-            {...register("email")}
-            className={getInputClass("email")}
-            placeholder="Enter email"
+      <section className={styles.authPageWrapper}>
+        <div className={styles.logoCard}>
+          <img
+              src="/skypulse_flavicon.png"
+              alt="logo"
+              style={{ cursor: "pointer" }}
+              onClick={() => navigate({ to: "/" })}
           />
-          <p
-            className={`${styles.errorMessage} ${
-              errors.email ? styles.active : ""
-            }`}
-          >
-            {errors.email?.message}
-          </p>
+        </div>
 
-          <label className={styles.label} htmlFor="password">
-            Password
-          </label>
-          <input
-            id="password"
-            type="password"
-            {...register("password")}
-            className={getInputClass("password")}
-            placeholder="Enter password"
-          />
-          <p
-            className={`${styles.errorMessage} ${
-              errors.password ? styles.active : ""
-            }`}
-          >
-            {errors.password?.message}
-          </p>
+        <div className={styles.loginContainer}>
+          <form onSubmit={handleSubmit(onSubmit)} className={styles.loginCard}>
+            <h1 className={styles.title}>
+              Welcome back <span className={styles.green}>!</span>
+            </h1>
 
-          <a href="/auth/request-password" className={styles.link}>
-            Forgot your password?
-          </a>
+            {/* Email */}
+            <label className={styles.label} htmlFor="email">
+              Email
+            </label>
+            <input
+                id="email"
+                type="email"
+                {...register("email")}
+                className={getInputClass("email")}
+                placeholder="Enter email"
+            />
+            <p
+                className={`${styles.errorMessage} ${
+                    errors.email ? styles.active : ""
+                }`}
+            >
+              {errors.email?.message}
+            </p>
 
-          <button
-            type="submit"
-            className={styles.button}
-            disabled={loginMutation.isPending}
-          >
-            {loginMutation.isPending ? "Logging in..." : "Login"}
-          </button>
-        </form>
-      </div>
-    </section>
+            {/* Password */}
+            <label className={styles.label} htmlFor="password">
+              Password
+            </label>
+            <div className={styles.passwordWrapper}>
+              <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  {...register("password")}
+                  className={getInputClass("password")}
+                  placeholder="Enter password"
+              />
+
+              <span
+                  className={styles.eyeIcon}
+                  onClick={() => setShowPassword((p) => !p)}
+              >
+              <Icon iconName={showPassword ? "eyeClosed" : "eye"} />
+            </span>
+            </div>
+
+            <p
+                className={`${styles.errorMessage} ${
+                    errors.password ? styles.active : ""
+                }`}
+            >
+              {errors.password?.message}
+            </p>
+
+            <a href="/auth/request-password" className={styles.link}>
+              Forgot your password?
+            </a>
+
+            <button
+                type="submit"
+                className={styles.button}
+                disabled={loginMutation.isPending}
+            >
+              {loginMutation.isPending ? "Logging in..." : "Login"}
+            </button>
+          </form>
+        </div>
+      </section>
   );
 }

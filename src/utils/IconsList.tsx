@@ -726,6 +726,72 @@ export const Maintenance: React.FC<IconBaseProps> = ({
     </svg>
 );
 
+
+export const Eye: React.FC<IconBaseProps> = ({ className, style }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="1em"
+        height="1em"
+        viewBox="0 0 24 24"
+        className={className}
+        style={style}
+    >
+        <g
+            fill="none"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+        >
+            <path d="M3 13c3.6-8 14.4-8 18 0" />
+            <path d="M12 17a3 3 0 1 1 0-6a3 3 0 0 1 0 6" />
+        </g>
+    </svg>
+);
+
+
+export const EyeClosed: React.FC<IconBaseProps> = ({ className, style }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="1em"
+        height="1em"
+        viewBox="0 0 24 24"
+        className={className}
+        style={style}
+    >
+        <path
+            fill="none"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+            d="m19.5 16-2.475-3.396M12 17.5V14m-7.5 2 2.469-3.388M3 8c3.6 8 14.4 8 18 0"
+        />
+    </svg>
+);
+
+export const CheckCircle: React.FC<IconBaseProps> = ({ className, style }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="1em"
+        height="1em"
+        viewBox="0 0 24 24"
+        className={className}
+        style={style}
+    >
+        <g
+            fill="none"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+        >
+            <path d="m7 12.5 3 3 7-7" />
+            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10" />
+        </g>
+    </svg>
+);
+
 export const Icons = {
     add: Add,
     alignCenter: AlignCenter,
@@ -735,6 +801,7 @@ export const Icons = {
     avatar: Avatar,
     bold: Bold,
     building: Building,
+    check: CheckCircle,
     close: Close,
     closeMobile: CloseMobile,
     correct: Correct,
@@ -744,6 +811,8 @@ export const Icons = {
     delete: Delete,
     editIcon: EditIcon,
     eyeView: EyeView,
+    eye: Eye,
+    eyeClosed: EyeClosed,
     fileUploadLight: FileUploadLight,
     h1: H1,
     h2: H2,

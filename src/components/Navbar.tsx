@@ -107,7 +107,7 @@ const Navbar: React.FC = () => {
                   } className="btn-profile btn-secondary">Go to Profile</button>
                 </div>
 
-                <button className=" dropdown-item" onClick={logout}>
+                <button className="dropdown-item" onClick={logout}>
                   <Icon iconName="logout" /> Logout
                 </button>
               </div>
