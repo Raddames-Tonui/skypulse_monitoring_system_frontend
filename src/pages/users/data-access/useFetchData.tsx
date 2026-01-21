@@ -21,6 +21,7 @@ export const useGetUserProfile = () => {
         staleTime: 5 * 60 * 1000,
     });
 };
+
 export const useUsers = (params: Record<string, string | number | boolean>) => {
     return useQuery<ApiResponse<Users>, ApiError>({
         queryKey: ["users", params],

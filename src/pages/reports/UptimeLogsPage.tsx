@@ -6,8 +6,8 @@ import type { SortRule, FilterRule } from "@/components/table/DataTable";
 import axiosClient from "@/utils/constants/axiosClient";
 import NavigationBar from "@components/layout/NavigationBar.tsx";
 import { Route } from "@/routes/_protected/reports/uptime-reports";
-import type { UptimeLogsResponse } from "@/context/data-access/types";
 import {useUptimeReportDownload} from "@/pages/reports/data-access/useMutateData.tsx";
+import type {UptimeLog} from "@/pages/services/data-access/types.ts";
 
 const SORT_MAP: Record<string, string> = {
     monitored_service_name: "service",
@@ -29,7 +29,7 @@ const FILTER_MAP: Record<string, string> = {
 };
 
 const fetchUptimeLogs = async (params: Record<string, string | number>) => {
-    const { data } = await axiosClient.get<UptimeLogsResponse>("/services/logs/uptime", { params });
+    const { data } = await axiosClient.get("/services/logs/uptime", { params });
     return data;
 };
 

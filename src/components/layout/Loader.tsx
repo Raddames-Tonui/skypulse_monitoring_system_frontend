@@ -11,7 +11,7 @@ interface LoaderProps {
 export default function Loader({
   size = "2em",
   speed = 1.4,
-  className = "",
+  className = "loading",
   ariaLabel = "Loading",
   showText = true,
 }: LoaderProps) {

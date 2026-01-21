@@ -11,7 +11,7 @@ function SystemSettings() {
   const rollbackMutation = useRollbackSettings(queryClient);
   const restartApplication = useRestartApplication();
 
-  if (isLoading || isFetching) return <Loader />;
+  if (isLoading || isFetching) return <Loader  className={"loading"}/>;
 
   return (
     <div className="page-wrapper">

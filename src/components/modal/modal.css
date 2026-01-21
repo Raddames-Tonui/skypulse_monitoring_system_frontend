@@ -20,7 +20,7 @@
   align-items: center;
   justify-content: center;
   z-index: 700;
-  padding: 20px auto;
+  /*padding: 20px auto;*/
 }
 
 .custom-modal-box {
@@ -31,6 +31,7 @@
   overflow: hidden;
   border-radius: var(--border-radius-sm);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  transition: width 0.4s ease-in-out, height 0.4s ease-in-out, max-height 0.4s ease-in-out;
 }
 
 
@@ -79,6 +80,7 @@
   padding: 16px 20px;
   background: var(--bg-default);
   flex-wrap: wrap;
+  border-top: 1px solid var(--border-color);
 }
 
 
@@ -119,10 +121,10 @@
 
 /* Fullscreen — mobile or immersive flows */
 .modal-fullscreen {
-  width: 100vw;
-  height: 100vh;
-  max-height: 100vh;
-  border-radius: 0;
+  width: 90vw;
+  height: 90vh;
+  max-height: 90vh;
+  border-radius: 4px;
 }
 
 

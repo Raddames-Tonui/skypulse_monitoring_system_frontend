@@ -196,7 +196,7 @@
 
 textarea {
   resize: vertical;
-  min-width: 100%;
+  min-width: 50%;
   font-family: inherit;
 }
 

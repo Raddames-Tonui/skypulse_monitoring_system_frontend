@@ -99,17 +99,19 @@ const Navbar: React.FC = () => {
                   <p><strong>Timezone:</strong> {user?.user_preferences.timezone}</p>
                   <p><strong>Receive Weekly Reports:</strong> {user?.user_preferences.receive_weekly_reports ? "Yes" : "No"}</p>
                 </div>
-                <div>
+
+                <div className="dropdown-item" >
                   <button onClick={() => {
                     navigate({ to: "/user/profile" });
                     setShowDropdown(false);
                   }
-                  } className="btn-profile btn-secondary">Go to Profile</button>
+                  } className="btn-profile">
+                    <Icon iconName="avatar"/> Go to Profile
+                  </button>
+                  <button className="btn-logout" onClick={logout}>
+                    <Icon iconName="logout" /> Logout
+                  </button>
                 </div>
-
-                <button className="dropdown-item" onClick={logout}>
-                  <Icon iconName="logout" /> Logout
-                </button>
               </div>
             )}
           </div>

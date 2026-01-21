@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 // import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 // import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 
-import "@/css/authPages.css";
+import "@css/UserProfilePage.css";
 
 import { ThemeProvider } from '@/context/ThemeProvider';
 import { AuthProvider } from '@/context/AuthContext';

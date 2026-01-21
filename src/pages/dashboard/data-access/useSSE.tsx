@@ -9,7 +9,7 @@ const defaultSystemHealth: SystemHealth = {
   uptime_seconds: 0,
   timestamp: new Date().toISOString(),
   database: "—",
-  database_status: "disconnected",
+  database_status: "—",
   sse_push_interval_seconds: 5,
 };
 

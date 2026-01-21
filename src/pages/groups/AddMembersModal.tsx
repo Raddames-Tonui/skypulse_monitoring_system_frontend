@@ -10,7 +10,7 @@ interface AddMembersModalProps {
     isOpen: boolean;
     onClose: () => void;
     groupUuid: string;
-    currentMembers?: { id: number;[key: string]: any }[];
+    currentMembers?: { user_id: number }[];
 }
 
 export default function AddMembersModal({

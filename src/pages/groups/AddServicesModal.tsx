@@ -9,7 +9,7 @@ interface AddServicesModalProps {
     isOpen: boolean;
     onClose: () => void;
     groupUuid: string;
-    currentServices?: { id: number;[key: string]: any }[];
+    currentServices?: any[];
 }
 
 export default function AddServicesModal({

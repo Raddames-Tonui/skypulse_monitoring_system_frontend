@@ -1,3 +1,4 @@
+@import url(./variables.css);
 
 .logs-nav {
   display: flex;
@@ -15,10 +16,11 @@
   font-weight: 600;
   transition: background 0.2s ease;
   text-decoration: none;
+  margin-right: 0.5rem;
 }
 
 .btn-primary:hover {
-  background: var(--bg-primary-200);
+  background: var(--bg-secondary);
   border: 1px solid var(--primary-700);
   color: var(--primary-800);
 }
@@ -61,4 +63,61 @@
 
 .view-button:active {
   transform: translateY(0);
+}
+
+
+
+
+/* ----------- Tabs Buttons-------- */
+.tab-buttons {
+  display: flex;
+  gap: 10px;
+  border-bottom: 1px solid var(--gray-200)
+}
+
+
+.tab-primary,
+.tab-secondary {
+  appearance: none;
+  background: transparent;
+  border: none;
+  padding: 14px 4px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  position: relative;
+  color: var(--text-muted);
+  transition: color 0.2s ease;
+}
+
+/* Inactive tab */
+.tab-secondary {
+  color: var(--gray-500);
+}
+
+.tab-secondary:hover {
+  color: var(--text-default);
+}
+
+/* Active tab */
+.tab-primary {
+  color: var(--primary-600);
+}
+
+/* Active underline indicator */
+.tab-primary::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 2px;
+  background-color: var(--primary-600);
+}
+
+.tab-primary:focus-visible,
+.tab-secondary:focus-visible {
+  outline: none;
+  box-shadow: inset 0 -2px 0 var(--primary-300);
 }

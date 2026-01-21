@@ -32,4 +32,5 @@ export interface SystemHealth {
     database: string;
     database_status: string;
     sse_push_interval_seconds: number;
+    
 }
