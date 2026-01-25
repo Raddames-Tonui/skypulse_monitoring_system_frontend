@@ -3,33 +3,32 @@ import axiosClient from "@/utils/constants/axiosClient";
 import Modal from "@/components/modal/Modal";
 import DynamicForm from "@/components/dynamic-form/DynamicForm";
 import toast from "react-hot-toast";
-import {useUsers} from "@/pages/users/data-access/useFetchData.tsx";
-import type {User} from "@/pages/users/data-access/types.ts";
+import { useUsers } from "@/pages/users/data-access/useFetchData.tsx";
+import type { Users } from "@/pages/users/data-access/types.ts";
 
 interface AddMembersModalProps {
     isOpen: boolean;
     onClose: () => void;
     groupUuid: string;
-    currentMembers?: { user_id: number }[];
+    currentMembers?: { user_id: number; id?: number }[];
 }
 
 export default function AddMembersModal({
-    isOpen,
-    onClose,
-    groupUuid,
-    currentMembers = [],
-
-}: AddMembersModalProps) {
+                                            isOpen,
+                                            onClose,
+                                            groupUuid,
+                                            currentMembers = [],
+                                        }: AddMembersModalProps) {
     const queryClient = useQueryClient();
 
     const { data, isLoading } = useUsers({ page: 1, pageSize: 50 });
 
-    const users: User[] = data?.data ?? [];
+    const users: Users[] = data?.data ?? [];
 
     const mutation = useMutation({
-        mutationFn: async (selectedIds: string[]) => {
+        mutationFn: async (selectedIds: number[]) => {
             await axiosClient.post(`/contacts/groups/${groupUuid}/members`, {
-                membersIds: selectedIds.map((id) => Number(id)),
+                membersIds: selectedIds,
             });
         },
         onSuccess: () => {
@@ -37,6 +36,9 @@ export default function AddMembersModal({
             toast.success("Members added successfully.");
             onClose();
         },
+        onError: () => {
+            toast.error("Failed to add members.");
+        }
     });
 
     const schema: any = {
@@ -78,49 +80,49 @@ export default function AddMembersModal({
             size={"lg"}
             body={
                 isLoading ? (
-                    <div>Loading users...</div>
+                    <div className="p-4 text-center">Loading users...</div>
                 ) : (
                     <DynamicForm
                         schema={schema}
                         initialData={{
                             members: currentMembers
                                 .map((m) => m.user_id ?? m.id)
-                                .filter((id) => id != null)
+                                .filter((id): id is number => id != null)
                                 .map((id) => String(id)),
                         }}
-
                         onSubmit={(values) => {
                             const membersIds = (values.members ?? [])
                                 .map((id: string) => parseInt(id, 10))
-                                .filter((id) => Number.isInteger(id));
+                                .filter((id: number) => !isNaN(id));
 
                             if (membersIds.length > 0) {
                                 mutation.mutate(membersIds);
+                            } else {
+                                toast.error("Please select at least one member.");
                             }
-                            }}
-                            
-                            showButtons={false}
+                        }}
+                        showButtons={false}
                     />
                 )
             }
             footer={
-                <>
+                <div className="flex gap-2 justify-end">
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        className="btn-secondary"
+                    >
+                        Cancel
+                    </button>
                     <button
                         type="submit"
                         form={schema.id}
                         className="btn-primary"
+                        disabled={mutation.isPending}
                     >
-                        Save
+                        {mutation.isPending ? "Saving..." : "Save"}
                     </button>
-
-                    <button
-                        type="reset"
-                        form={schema.id}
-                        className="btn-secondary"
-                    >
-                        Reset
-                    </button>
-                </>
+                </div>
             }
         />
     );

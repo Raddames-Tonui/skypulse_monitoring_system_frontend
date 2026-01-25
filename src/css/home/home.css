@@ -1,7 +1,8 @@
 @import url(../variables.css);
 
-/*--------------- Navbar ---------------- */
-.home-navbar {
+/* ---------------- Home Navbar ---------------- */
+
+.home-navbar-root {
   position: sticky;
   top: 0;
   z-index: 50;
@@ -10,7 +11,7 @@
   box-shadow: var(--shadow-sm);
 }
 
-.navbar-inner {
+.home-navbar-inner {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0.75rem 1.25rem;
@@ -20,30 +21,23 @@
   justify-content: space-between;
 }
 
-.home-navbar .brand {
+.home-navbar-brand {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
 }
 
-.navbar-logo {
+.home-navbar-logo {
   height: 36px;
   width: auto;
   object-fit: contain;
 }
 
-.brand-name {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--text-default);
-}
-
-.nav-actions {
+.home-navbar-actions {
   display: flex;
   align-items: center;
 }
 
-.nav-link {
+.home-navbar-link {
   text-decoration: none;
   font-weight: 500;
   color: var(--primary-700);
@@ -55,19 +49,14 @@
   transition: background 0.2s ease, color 0.2s ease;
 }
 
-.nav-link:hover {
+.home-navbar-link:hover {
   background: var(--primary-50);
   color: var(--primary-700);
-  border: 1px solid var(--gray-200);
 }
 
 /* Responsive */
 @media (max-width: 640px) {
-  .brand-name {
-    display: none;
-  }
-
-  .navbar-logo {
+  .home-navbar-logo {
     height: 32px;
   }
 }
@@ -77,9 +66,9 @@
 
 .container {
   width: 100%;
-  max-width: 1200px; 
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1.5rem; 
+  padding: 0 1.5rem;
   box-sizing: border-box;
 }
 

@@ -1,13 +1,17 @@
-import SingleService from '@/pages/services/SingleService'
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import { createFileRoute, redirect, type SearchSchemaInput } from "@tanstack/react-router";
+import SingleServicePage from "@/pages/services/SingleServicePage.tsx";
+import Loader from "@components/layout/Loader.tsx";
 
 type ServiceSearch = {
-  tab: 'overview' | 'incidents' | 'maintenance' | 'logs' | 'charts'
+  tab: 'overview' | 'incidents' | 'maintenance' | 'logs' | 'charts';
 }
 
 export const Route = createFileRoute('/_protected/services/$uuid')({
-  component: SingleService,
-  validateSearch: (search: Record<string, unknown>): ServiceSearch => {
+  component: SingleServicePage,
+  loader: async () => {},
+  pendingComponent: () => <Loader />,
+
+  validateSearch: (search: Record<string, unknown> & SearchSchemaInput): ServiceSearch => {
     return {
       tab: (search.tab as ServiceSearch['tab']) || 'overview',
     }
@@ -22,4 +26,4 @@ export const Route = createFileRoute('/_protected/services/$uuid')({
       })
     }
   },
-})
+});

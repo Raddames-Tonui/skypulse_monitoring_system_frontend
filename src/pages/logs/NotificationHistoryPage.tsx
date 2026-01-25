@@ -188,6 +188,7 @@ export default function NotificationHistoryPage() {
                     ) : null
                 }
                 size="lg"
+                showCloseButton={true}
             />
         </div>
     );

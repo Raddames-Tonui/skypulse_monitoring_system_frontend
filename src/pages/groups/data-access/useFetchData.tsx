@@ -10,7 +10,7 @@ import type {
 export const CONTACT_GROUP_QUERY_KEY = (uuid: string) => ["contact-group", uuid];
 
 const fetchContactGroup = async (uuid: string): Promise<ContactGroupData> => {
-    const response = await axiosClient.get<ApiSingleResponse>(`/contacts/group?uuid=${uuid}`);
+    const response = await axiosClient.get<ApiSingleResponse>(`/contacts/group/${uuid}`);
     return response.data.data;
 };
 

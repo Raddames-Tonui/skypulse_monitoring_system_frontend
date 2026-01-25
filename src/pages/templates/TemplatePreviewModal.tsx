@@ -1,21 +1,21 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import type { NotificationTemplate } from "./data-access/types";
 
 export default function TemplatePreviewModal({
-  template,
-}: {
-  template: NotificationTemplate;
+                                                 template,
+                                                 view,
+                                             }: {
+    template: NotificationTemplate;
+    view: "rendered" | "raw";
 }) {
-  const [view, setView] = useState<"rendered" | "raw">("rendered");
+    const compiledHtml = useMemo(() => {
+        let html = template.body_template || "";
 
-  const compiledHtml = useMemo(() => {
-    let html = template.body_template || "";
+        Object.entries(template.sample_data || {}).forEach(([key, value]) => {
+            html = html.replaceAll(`{{${key}}}`, String(value));
+        });
 
-    Object.entries(template.sample_data || {}).forEach(([key, value]) => {
-      html = html.replaceAll(`{{${key}}}`, String(value));
-    });
-
-    return `
+        return `
       <!DOCTYPE html>
       <html>
         <head>
@@ -43,39 +43,23 @@ export default function TemplatePreviewModal({
         </body>
       </html>
     `;
-  }, [template]);
+    }, [template]);
 
-  return (
-    <div className="template-preview-container">
+    if (view === "raw") {
+        return <pre className="template-raw-view">{template.body_template}</pre>;
+    }
 
-      <div>
-        {view === "rendered" ? (
-          <iframe
+    return (
+        <iframe
             title="Template Preview"
             srcDoc={compiledHtml}
             style={{
-              width: "100%",
-              height: "70vh",
-              border: "1px solid #ddd",
-              background: "white",
+                width: "100%",
+                height: "70vh",
+                border: "1px solid #ddd",
+                background: "white",
             }}
             sandbox=""
-          />
-        ) : (
-          <pre className="template-raw-view">
-            {template.body_template}
-          </pre>
-        )}
-      </div>
-
-      <div className="template-toolbar">
-        <button className="btn-secondary" onClick={() => setView("rendered")}>Preview</button>
-        <button className="btn-secondary" onClick={() => setView("raw")}>Raw HTML</button>
-        <button className="btn-secondary" onClick={() => navigator.clipboard.writeText(template.body_template)}>
-          Copy
-        </button>
-      </div>
-    </div>
-
-  );
+        />
+    );
 }

@@ -1,41 +1,57 @@
+export type TemplateSyntax = "mustache" ;
 
-// ----------- NOTIFICATION TEMPLATES -----------
+export type StorageMode = 'HYBRID'  | 'FILESYSTEM' | 'DATABASE';
 
-import type { ApiResponse } from "@/utils/types";
-
-export type NotificationTemplate = {
-  notification_template_id: number;
-  uuid: string;
-
-  event_type:
+export type NotificationEventType =
     | "SERVICE_DOWN"
     | "SERVICE_RECOVERED"
     | "SSL_EXPIRED"
     | "USER_CREATED"
-    | "RESET_PASSWORD";
+    | "RESET_PASSWORD"
+    | "WEEKLY_REPORTS";
 
+export interface TemplateCreator {
+  id: number | null;
+  first_name: string | null;
+  last_name: string | null;
+  email: string | null;
+}
+
+export interface TemplatePlaceholder {
+  placeholder_key: string;
+  description?: string | null;
+}
+
+export interface NotificationTemplate {
+  uuid: string;
+  notification_template_id: number;
   subject_template: string;
-  template_syntax: "mustache" | "handlebars" | "liquid";
+  body_template?: string | null;
+  pdf_template?: string | null;
+  include_pdf?: boolean;
+  body_template_key?: string | null;
+  pdf_template_key?: string | null;
+  template_syntax?: TemplateSyntax;
+  storage_mode?: StorageMode;
+  event_type: NotificationEventType;
 
-  body_template: string;
-  body_template_key: string;
+  created_by: TemplateCreator | null;
+  placeholders?: TemplatePlaceholder[];
 
-  pdf_template: string | null;
-  pdf_template_key: string | null;
-  include_pdf: boolean;
+  date_created: string;
+  date_modified: string;
+}
 
-  storage_mode: "DB" | "FILE" | "HYBRID";
+export interface NotificationTemplatesResponse {
+  data: NotificationTemplate[];
+  current_page: number;
+  last_page: number;
+  page_size: number;
+  total_count: number;
+  domain: string;
+}
 
-  sample_data: Record<string, any>;
-
-  created_by: string | null;
-
-  date_created: string;   
-  date_modified: string; 
-};
-
-
-// ----------- RESPONSE TYPE -----------
-
-export type NotificationTemplateResponse =
-  ApiResponse<NotificationTemplate>;
+export interface NotificationTemplateResponse {
+  data: NotificationTemplate;
+  message: string;
+}

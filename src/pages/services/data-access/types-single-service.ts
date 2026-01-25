@@ -1,86 +1,92 @@
-
-export interface MonitoredService {
-  uuid: string;
-  name: string;
-  url: string;
-  region: string;
-  check_interval: number;
-  retry_count: number;
-  retry_delay: number;
-  expected_status_code: number;
-  ssl_enabled: boolean;
-  last_uptime_status: string;
-  consecutive_failures: number;
-  last_checked?: string;
-  date_created: string;
-  date_modified: string;
-  is_active: boolean;
-
-  created_by: User;
-  contact_groups: ContactGroup[];
-  uptime_logs: UptimeLog[];
-  ssl_logs: SslLog[];
-  incidents: Incident[];
-  maintenance_windows: MaintenanceWindow[];
+// -------------------- API RESPONSES --------------------
+export interface ApiResponse<T> {
+  data: T;
+  message: string;
 }
 
-export interface User {
+export interface ApiPaginatedResponse<T> {
+  data: T;
+  last_page: number;
+  total_count: number;
+  domain: string;
+  current_page: number;
+  page_size: number;
+}
+
+export interface ApiError {
+  message: string;
+  status?: string;}
+
+// -------------------- INCIDENTS --------------------
+export interface Incident {
+  monitored_service_id: number;
+  incident_id: number;
+  duration_minutes: number | null;
+  date_modified: string;
+  resolved_at: string | null;
+  date_created: string;
+  monitored_service_name: string;
+  started_at: string;
+  cause: string | null;
+  uuid: string;
+  status: 'open' | 'closed' | string;
+}
+
+export type IncidentsData = Incident[];
+
+// -------------------- SERVICE OVERVIEW --------------------
+export interface CreatedBy {
   id: number;
   first_name: string;
   last_name: string;
   email: string;
 }
 
-export interface ContactGroup {
+export interface ContactGroupOverview {
   id: number;
   uuid: string;
   name: string;
-  description?: string | null;
+  description: string;
 }
 
-export interface UptimeLog {
-  id: number;
-  checked_at?: string;
-  http_status?: number;
-  status: string;
-  response_time_ms?: number;
-  region?: string | null;
-  error_message?: string | null;
-}
-
-export interface SslLog {
-  id: number;
-  domain: string;
-  subject?: string | null;
-  issuer?: string | null;
-  issued_date?: string | null;
-  expiry_date?: string | null;
-  days_remaining?: number | null;
-  public_key_algo?: string | null;
-  public_key_length?: number | null;
-  serial_number?: string | null;
-  fingerprint?: string | null;
-  signature_algorithm?: string | null;
-  san_list?: string | null;
-  chain_valid?: boolean | null;
-  last_checked?: string | null;
-}
-
-export interface Incident {
-  id: number;
+export interface ServiceOverviewData {
   uuid: string;
-  started_at?: string | null;
-  resolved_at?: string | null;
-  duration_minutes?: number | null;
-  cause?: string | null;
-  status?: string | null;
+  name: string;
+  url: string;
+  check_interval: number;
+  retry_delay: number;
+  expected_status_code: number;
+  is_active: boolean;
+  ssl_enabled: boolean;
+  date_created: string;
+  date_modified: string;
+  last_checked: string;
+  retry_count: number;
+  consecutive_failures: number;
+  created_by: CreatedBy | null;
+  contact_groups: ContactGroupOverview[];
+  last_uptime_status: 'UP' | 'DOWN' | string;
+  region: string;
 }
 
+// -------------------- MAINTENANCE WINDOWS --------------------
 export interface MaintenanceWindow {
-  id: number;
+  maintenance_window_id: number;
   uuid: string;
+  monitored_service_id: number;
+  window_name: string;
+  reason: string | null;
   start_time: string;
   end_time: string;
-  reason?: string | null;
-  created_by?: number | null;
+  date_created: string;
+  date_modified: string;
+  monitored_service_name: string;
+  created_by: CreatedBy | null;
 }
+
+export type MaintenanceWindowsData = MaintenanceWindow[];
+
+// -------------------- PAGINATED WRAPPERS --------------------
+// For incidents and maintenance-windows
+export type IncidentsPaginatedResponse = ApiPaginatedResponse<IncidentsData>;
+export type MaintenanceWindowsPaginatedResponse = ApiPaginatedResponse<MaintenanceWindowsData>;

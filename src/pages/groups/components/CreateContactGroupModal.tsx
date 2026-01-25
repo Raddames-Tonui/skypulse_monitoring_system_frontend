@@ -36,7 +36,7 @@ const CreateContactGroupModal: React.FC<CreateContactGroupModalProps> = ({
         <Modal
             isOpen={isOpen}
             title="Create Contact Group"
-            size="lg"
+            size="md"
             onClose={onClose}
             body={
                 <DynamicForm

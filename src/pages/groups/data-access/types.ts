@@ -22,6 +22,7 @@ export interface ContactGroupData {
     primary_member: string | null;
     members: ContactGroupMember[];
     contacts: ContactGroupContact[];
+    is_deleted: boolean;
 }
 
 export interface ApiSingleResponse {

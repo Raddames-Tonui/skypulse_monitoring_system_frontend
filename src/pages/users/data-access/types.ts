@@ -6,7 +6,6 @@ export type ApiError = {
     status: string;
 }
 
-
 // ----------- USER CONTACT -----------
 export interface UserContact {
     contact_type: 'EMAIL' | 'PHONE' | 'SMS' | 'TELEGRAM';

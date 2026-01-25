@@ -1,5 +1,6 @@
 import { createFileRoute, redirect, type SearchSchemaInput } from '@tanstack/react-router'
 import SingleContactGroupPage from "@/pages/groups/SingleContactGroupPage.tsx";
+import Loader from "@components/layout/Loader.tsx";
 
 type GroupSearch = {
   tab: 'members' | 'services' | 'info'
@@ -7,6 +8,9 @@ type GroupSearch = {
 
 export const Route = createFileRoute('/_protected/_admin/groups/$uuid')({
   component: SingleContactGroupPage,
+  loader: async () => {},
+  pendingComponent: () => <Loader />,
+
   validateSearch: (search: Record<string, unknown> & SearchSchemaInput): GroupSearch => {
     return {
       tab: (search.tab as GroupSearch['tab']) || 'info',

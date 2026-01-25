@@ -24,7 +24,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ links = [] }) => {
                         : location.pathname === link.to || location.pathname.startsWith(link.to);
 
                     return (
-                        <Link key={link.to} to={link.to} className={isActive ? 'btn-primary' : 'btn-secondary'}>
+                        <Link key={link.to} to={link.to} className={isActive ? 'tab-primary' : 'tab-secondary'}>
                             {link.label}
                         </Link>
                     );

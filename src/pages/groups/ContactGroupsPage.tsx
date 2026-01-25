@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { DataTable } from "@/components/table/DataTable";
@@ -6,8 +6,8 @@ import axiosClient from "@/utils/constants/axiosClient";
 import Modal from "@/components/modal/Modal";
 import DynamicForm from "@/components/dynamic-form/DynamicForm";
 import { toast } from "react-hot-toast";
-import type { SortRule, FilterRule } from "@/components/table/DataTable";
 import { createGroupSchema } from "@components/dynamic-form/utils/FormSchema.ts";
+import { Route } from "@/routes/_protected/_admin/groups";
 
 const SORT_MAP: Record<string, string> = {
   contact_group_name: "contact_group_name",
@@ -16,42 +16,38 @@ const SORT_MAP: Record<string, string> = {
   services_count: "services_count",
 };
 
-const FILTER_MAP: Record<string, string> = {
-  contact_group_name: "contact_group_name",
-  is_deleted: "is_deleted",
-};
-
-const fetchContactGroups = async (params: Record<string, string | number>) => {
+const fetchContactGroups = async (params: Record<string, any>) => {
   const { data } = await axiosClient.get("/contacts/groups", { params });
   return data;
 };
 
 export default function ContactGroupsPage() {
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
-
-  const [sortBy, setSortBy] = useState<SortRule[]>([]);
-  const [filters, setFilters] = useState<FilterRule[]>([]);
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(20);
+  const search = Route.useSearch();
+  const navigate = useNavigate({ from: Route.fullPath });
 
   const [isModalOpen, setModalOpen] = useState(false);
 
-  const queryParams: Record<string, string | number> = { page, pageSize };
-  filters.forEach((f) => {
-    if (f.value !== undefined && f.value !== null && f.value !== "") {
-      queryParams[FILTER_MAP[f.column] ?? f.column] = f.value;
-    }
-  });
-  if (sortBy.length) {
-    queryParams.sort = sortBy
-        .map((r) => `${SORT_MAP[r.column] ?? r.column}:${r.direction}`)
-        .join(",");
-  }
+  const { page, pageSize, sort, ...filtersFromUrl } = search;
+
+  const sortBy = useMemo(() => {
+    if (!sort) return [];
+    return sort.split(',').map(s => {
+      const [column, direction] = s.split(':');
+      return { column, direction: direction as 'asc' | 'desc' };
+    });
+  }, [sort]);
+
+  const filters = useMemo(() => {
+    return Object.entries(filtersFromUrl).map(([column, value]) => ({
+      column,
+      value: value as string,
+    }));
+  }, [filtersFromUrl]);
 
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ["contact-groups", queryParams],
-    queryFn: () => fetchContactGroups(queryParams),
+    queryKey: ["contact-groups", search],
+    queryFn: () => fetchContactGroups(search),
   });
 
   const createMutation = useMutation({
@@ -74,19 +70,8 @@ export default function ContactGroupsPage() {
   const columns = [
     { id: "uuid", caption: "UUID", size: 240, hide: true },
     { id: "contact_group_id", caption: "ID", size: 40 },
-    {
-      id: "contact_group_name",
-      caption: "Group Name",
-      size: 200,
-      isSortable: true,
-      isFilterable: true,
-    },
-    {
-      id: "contact_group_description",
-      caption: "Description",
-      size: 250,
-      isSortable: true,
-    },
+    { id: "contact_group_name", caption: "Group Name", size: 200, isSortable: true, isFilterable: true },
+    { id: "contact_group_description", caption: "Description", size: 250, isSortable: true },
     { id: "members_count", caption: "Members", size: 120, isSortable: true },
     { id: "services_count", caption: "Services", size: 120, isSortable: true },
     {
@@ -114,12 +99,7 @@ export default function ContactGroupsPage() {
           <div className="flex gap-2">
             <button
                 className="action-btn"
-                onClick={() =>
-                    navigate({
-                      to: "/groups/$uuid",
-                      params: { uuid: row.uuid },
-                    })
-                }
+                onClick={() => navigate({ to: "/groups/$uuid", params: { uuid: row.uuid } })}
             >
               View
             </button>
@@ -148,7 +128,7 @@ export default function ContactGroupsPage() {
       <select
           className="action-btn-select"
           value={pageSize}
-          onChange={(e) => setPageSize(Number(e.target.value))}
+          onChange={(e) => navigate({ search: (prev) => ({ ...prev, pageSize: Number(e.target.value), page: 1 }) })}
       >
         {[10, 20, 50, 100].map((v) => (
             <option key={v} value={v}>{v}</option>
@@ -173,16 +153,27 @@ export default function ContactGroupsPage() {
             onRefresh={refetch}
             initialSort={sortBy}
             initialFilter={filters}
-            onSortApply={setSortBy}
+            onSortApply={(rules) => {
+              const sortStr = rules.map(r => `${SORT_MAP[r.column] ?? r.column}:${r.direction}`).join(",");
+              navigate({ search: (prev) => ({ ...prev, sort: sortStr || undefined, page: 1 }) });
+            }}
             onFilterApply={(rules) => {
-              setFilters(rules.filter((f) => f.value !== ""));
-              setPage(1);
+              const filterParams: Record<string, any> = {};
+              rules.forEach(f => { if (f.value !== "") filterParams[f.column] = f.value; });
+
+              navigate({
+                search: (prev) => {
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                  const { contact_group_name, is_deleted, ...rest } = prev;
+                  return { ...rest, ...filterParams, page: 1 };
+                }
+              });
             }}
             pagination={{
               page,
               pageSize,
               total: data?.total_count ?? 0,
-              onPageChange: setPage,
+              onPageChange: (newPage) => navigate({ search: (prev) => ({ ...prev, page: newPage }) }),
             }}
             tableActionsRight={tableActionsRight}
         />
@@ -201,7 +192,7 @@ export default function ContactGroupsPage() {
               />
             }
             footer={
-              <>
+              <div className="flex gap-2 justify-end">
                 <button
                     type="submit"
                     form={createGroupSchema.id}
@@ -210,16 +201,14 @@ export default function ContactGroupsPage() {
                 >
                   {createMutation.isPending ? "Creating..." : "Save"}
                 </button>
-
                 <button
                     type="button"
                     className="btn-secondary"
                     onClick={() => setModalOpen(false)}
-                    disabled={createMutation.isPending}
                 >
                   Cancel
                 </button>
-              </>
+              </div>
             }
         />
       </>

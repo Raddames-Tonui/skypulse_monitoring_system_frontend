@@ -1,26 +1,26 @@
 import { Link } from "@tanstack/react-router";
 import "@/css/home/home.css";
 
-function Navbar() {
+function HomeNavbar() {
   return (
-    <header className="home-navbar">
-      <div className="navbar-inner">
-        <div className="brand">
-          <img
-            src="/skypulse_flavicon.png"
-            alt="SkyPulse Monitor"
-            className="navbar-logo"
-          />
-        </div>
+      <header className="home-navbar-root">
+        <div className="home-navbar-inner">
+          <div className="home-navbar-brand">
+            <img
+                src="/skypulse_flavicon.png"
+                alt="SkyPulse Monitor"
+                className="home-navbar-logo"
+            />
+          </div>
 
-        <nav className="nav-actions">
-          <Link to="/auth/login" className="nav-link">
-            Login
-          </Link>
-        </nav>
-      </div>
-    </header>
+          <div className="home-navbar-actions">
+            <Link to="/auth/login" className="home-navbar-link">
+              Login
+            </Link>
+          </div>
+        </div>
+      </header>
   );
 }
 
-export default Navbar;
+export default HomeNavbar;

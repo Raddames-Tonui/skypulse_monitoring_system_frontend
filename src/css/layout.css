@@ -25,6 +25,9 @@
 
 header {
     grid-area: header;
+}
+
+.header{
     background-color: var(--primary-700);
     display: flex;
 }

@@ -1,9 +1,7 @@
-import { useQueryClient, useMutation } from "@tanstack/react-query";
-import axiosClient from "@/utils/constants/axiosClient";
 import Modal from "@/components/modal/Modal";
 import DynamicForm from "@/components/dynamic-form/DynamicForm";
-import toast from "react-hot-toast";
-import {type MonitoredService, useMonitoredServices} from "@/pages/services/data-access/useFetchData.tsx";
+import { useAddGroupServices } from "@/pages/groups/data-access/useMutateData";
+import {useGetMonitoredServices} from "@/pages/services/data-access/useFetchData.tsx";
 
 interface AddServicesModalProps {
     isOpen: boolean;
@@ -13,39 +11,27 @@ interface AddServicesModalProps {
 }
 
 export default function AddServicesModal({
-    isOpen,
-    onClose,
-    groupUuid,
-    currentServices = [],
-}: AddServicesModalProps) {
-    const queryClient = useQueryClient();
+                                             isOpen,
+                                             onClose,
+                                             groupUuid,
+                                             currentServices = [],
+                                         }: AddServicesModalProps) {
 
-    const { data, isLoading } = useMonitoredServices({
+    const { data: allServicesData, isLoading } = useGetMonitoredServices({
         page: 1,
         pageSize: 1000,
     });
 
-    const services: MonitoredService[] = Array.isArray(data?.data)
-        ? (data.data as MonitoredService[] | MonitoredService[][]).flat()
+    const { mutate, isPending } = useAddGroupServices(groupUuid);
+
+    const services = Array.isArray(allServicesData?.data)
+        ? allServicesData.data.flat()
         : [];
 
-    const mutation = useMutation({
-        mutationFn: async (selectedIds: number[]) => {
-            await axiosClient.post(`/contacts/groups/${groupUuid}/services`, {
-                serviceIds: selectedIds,
-            });
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["contact-group-services", groupUuid] });
-            toast.success("Services added successfully.");
-            onClose();
-        },
-    });
-
     const schema: any = {
-        id: "add-services",
+        id: "add-services-form",
         meta: {
-            // title: "Add Services",
+            title: "Add Services",
             subtitle: "Select monitored services to add to the group",
         },
         fields: {
@@ -54,7 +40,7 @@ export default function AddServicesModal({
                 label: "Select Services",
                 renderer: "multiselect",
                 props: {
-                    data: services.map((s) => ({
+                    data: services.map((s: any) => ({
                         label: s.monitored_service_name,
                         value: String(s.monitored_service_id),
                     })),
@@ -73,6 +59,20 @@ export default function AddServicesModal({
         ],
     };
 
+    const handleFormSubmit = (values: any) => {
+        const serviceIds = (values.services ?? [])
+            .map((id: string) => parseInt(id, 10))
+            .filter((id: number) => !isNaN(id));
+
+        if (serviceIds.length > 0) {
+            mutate(serviceIds, {
+                onSuccess: () => {
+                    onClose();
+                },
+            });
+        }
+    };
+
     return (
         <Modal
             isOpen={isOpen}
@@ -81,7 +81,7 @@ export default function AddServicesModal({
             size={"lg"}
             body={
                 isLoading ? (
-                    <div>Loading services...</div>
+                    <div className="p-4 text-center">Loading available services...</div>
                 ) : (
                     <DynamicForm
                         schema={schema}
@@ -91,38 +91,30 @@ export default function AddServicesModal({
                                 .filter((id) => id != null)
                                 .map((id) => String(id)),
                         }}
-                        onSubmit={(values) => {
-                            const serviceIds = (values.services ?? [])
-                                .map((id: string) => parseInt(id, 10))
-                                .filter((id) => Number.isInteger(id));
-
-                            if (serviceIds.length > 0) {
-                                mutation.mutate(serviceIds);
-                            }
-                            }}
-                            showButtons={false}
+                        onSubmit={handleFormSubmit}
+                        showButtons={false}
                     />
                 )
             }
-
             footer={
-                <>
+                <div className="flex justify-end gap-2">
+                    <button
+                        type="button"
+                        className="btn-secondary"
+                        onClick={onClose}
+                        disabled={isPending}
+                    >
+                        Cancel
+                    </button>
                     <button
                         type="submit"
-                        form={schema.id}  
-                        className="btn-primary"
-                    >
-                        Save
-                    </button>
-
-                    <button
-                        type="reset"
                         form={schema.id}
-                        className="btn-secondary"
+                        className="btn-primary"
+                        disabled={isPending}
                     >
-                        Reset
+                        {isPending ? "Adding..." : "Add Services"}
                     </button>
-                </>
+                </div>
             }
         />
     );

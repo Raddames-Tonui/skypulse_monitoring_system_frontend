@@ -19,7 +19,7 @@ export interface ColumnProps<T, K extends keyof T = keyof T> {
   isFilterable?: boolean;
   filterType?: "text" | "dropdown";
   data_type?: string | boolean | number | Date;
-  renderCell?: (value: T[K], row: T) => React.ReactNode;
+  renderCell?: (value: T[K] | null | undefined, row: T) => React.ReactNode;
   renderColumn?: (column: ColumnProps<any, any>) => React.ReactNode;
 }
 
@@ -105,7 +105,7 @@ const DataTableContext = createContext<DataTableContextType<any> | undefined>(
 
 
 
-// DataTable Component 
+// DataTable Component
 export function DataTable<T>({
   columns,
   data,
@@ -175,6 +175,7 @@ export function DataTable<T>({
               <TableActions />
             </div>
 
+            <section className="table-section">
             <table className="table">
               <thead>
                 <TableHeader />
@@ -190,6 +191,7 @@ export function DataTable<T>({
             <div className="table-pagination">
               <Pagination />
             </div>
+            </section>
           </>
         )}
       </div>

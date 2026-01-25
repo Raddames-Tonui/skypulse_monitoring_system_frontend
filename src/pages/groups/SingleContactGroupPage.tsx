@@ -118,12 +118,14 @@ export default function SingleContactGroupPage() {
             {tab === "info" && (
                 <section className="service-section">
                     <h2>Group Overview</h2>
+
                     <div className="profile-section">
                         <h3>Details</h3>
                         <div className="profile-grid">
                             <div><label>Group Name</label><p>{group.contact_group_name}</p></div>
                             <div><label>Description</label><p>{group.contact_group_description || "—"}</p></div>
                             <div><label>Primary Member</label><p>{group.primary_member || "N/A"}</p></div>
+                            <div><label> Status</label><p> {group.is_deleted ? "Inactive" : "Active"}</p></div>
                         </div>
                     </div>
                 </section>

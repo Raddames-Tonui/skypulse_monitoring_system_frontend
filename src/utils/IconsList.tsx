@@ -796,6 +796,46 @@ export const CheckCircle: React.FC<IconBaseProps> = ({ className, style }) => (
     </svg>
 );
 
+export const SslValid: React.FC<IconBaseProps> = ({
+                                                      className,
+                                                      style,
+                                                  }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="1em"
+        height="1em"
+        viewBox="0 0 24 24"
+        className={className}
+        style={style}
+    >
+        <path
+            fill="currentColor"
+            d="M10.95 14.858L15.908 9.9l-.714-.713l-4.244 4.244l-2.138-2.139l-.714.714zM12 20.96q-3.013-.894-5.007-3.65T5 11.1V5.692l7-2.615l7 2.615V11.1q0 3.454-1.993 6.21T12 20.963"
+        />
+    </svg>
+);
+
+export const SslInvalid: React.FC<IconBaseProps> = ({
+                                                        className,
+                                                        style,
+                                                    }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="1em"
+        height="1em"
+        viewBox="0 0 24 24"
+        className={className}
+        style={style}
+    >
+        <title>privacy-tip-exclamation</title>
+        <path
+            fill="currentColor"
+            d="M11 16h2v-6h-2v6z M12 18.5q.276 0 .5-.224t.224-.5q0-.276-.224-.5t-.5-.224q-.276 0-.5.224t-.224.5q0 .276.224.5t.5.224z M12 9q.262 0 .439-.177q.176-.177.176-.438q0-.262-.177-.439T12 7.77t-.438.177t-.177.439t.177.438T12 9m0 11.962q-3.014-.895-5.007-3.651T5 11.1V5.692l7-2.615l7 2.615V11.1q0 3.454-1.993 6.21T12 20.963"
+        />
+    </svg>
+);
+
+
 export const Icons = {
     add: Add,
     alignCenter: AlignCenter,
@@ -843,6 +883,8 @@ export const Icons = {
     settings: Settings,
     services: Services,
     shield: ShieldCheck,
+    sslvalid: SslValid,
+    sslinvalid: SslInvalid,
     strikethrough: Strikethrough,
     subscript: Subscript,
     superScript: SuperScript,

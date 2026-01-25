@@ -16,7 +16,6 @@
   font-weight: 600;
   transition: background 0.2s ease;
   text-decoration: none;
-  margin-right: 0.5rem;
 }
 
 .btn-primary:hover {
@@ -46,19 +45,26 @@
 
 
 .view-button {
-  padding: 0.5rem 1rem;
-  background-color: var(--primary-700);
-  color: #fff;
-  font-weight: 600;
+  appearance: none;
+  background: transparent;
   border: none;
+  padding: 2px 4px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.1s ease;
+  position: relative;
+  color: var(--primary-500);
+  transition: color 0.2s ease;
   text-decoration: none;
 }
 
+
+
 .view-button:hover {
-  background-color: var(--primary-600);
+  color: var(--primary-600);
   transform: translateY(-1px);
+
 }
 
 .view-button:active {
@@ -89,6 +95,7 @@
   position: relative;
   color: var(--text-muted);
   transition: color 0.2s ease;
+  text-decoration: none;
 }
 
 /* Inactive tab */
