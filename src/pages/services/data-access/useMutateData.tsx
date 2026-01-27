@@ -13,6 +13,7 @@ export const useCreateService = () => {
         onSuccess: () => {
             toast.success("Service created successfully");
             queryClient.invalidateQueries({queryKey: ["monitored-services"]});
+            queryClient.invalidateQueries({queryKey: ["service-overview"]});
         },
         onError: (error: any) => {
             const message =

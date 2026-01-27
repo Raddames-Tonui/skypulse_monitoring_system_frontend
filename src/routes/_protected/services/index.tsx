@@ -6,9 +6,9 @@ const servicesSearchSchema = z.object({
   page: z.number().catch(1),
   pageSize: z.number().catch(10),
   sort: z.string().optional().catch(''),
-  monitored_service_id: z.string().optional(),
   monitored_service_name: z.string().optional(),
   ssl_enabled: z.string().optional(),
+  is_active: z.string().optional(),
   last_uptime_status: z.string().optional(),
 });
 

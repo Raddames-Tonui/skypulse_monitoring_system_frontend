@@ -7,32 +7,69 @@ import type {
     ServiceOverviewData, UptimeLogsPaginatedResponse
 } from "@/pages/services/data-access/types.ts";
 
-type QueryParams = {
+
+export interface QueryParams {
     page?: number;
     pageSize?: number;
     sortBy?: string;
     sortOrder?: "asc" | "desc";
     filter?: Record<string, string | number | boolean>;
-};
+}
+
+export interface MonitoredService {
+    uuid: string;
+    monitored_service_name: string;
+    monitored_service_url: string;
+    ssl_enabled: boolean;
+    is_active: boolean;
+    check_interval: number;
+    last_uptime_status: string;
+    date_created: string;
+    [key: string]: any;
+}
+
+export interface MonitoredServicesPaginatedResponse {
+    data: MonitoredService[];
+    total_count: number;
+}
 
 const buildQueryString = (params?: QueryParams) => {
     if (!params) return "";
     const query = new URLSearchParams();
 
     if (params.page) query.append("page", params.page.toString());
-    if (params.pageSize) query.append("page_size", params.pageSize.toString());
-    if (params.sortBy) query.append("sort_by", params.sortBy);
-    if (params.sortOrder) query.append("sort_order", params.sortOrder);
+    if (params.pageSize) query.append("pageSize", params.pageSize.toString());
+
+    if (params.sortBy) {
+        const direction = params.sortOrder ?? "asc";
+        query.append("sort", `${params.sortBy}:${direction}`);
+    }
 
     if (params.filter) {
         Object.entries(params.filter).forEach(([key, value]) => {
-            query.append(`filter[${key}]`, value.toString());
+            if (value !== undefined && value !== null && value !== "") {
+                query.append(key, value.toString());
+            }
         });
     }
 
     const queryString = query.toString();
     return queryString ? `?${queryString}` : "";
 };
+
+export const useGetMonitoredServices = (params?: QueryParams) =>
+    useQuery<MonitoredServicesPaginatedResponse, Error>({
+        queryKey: ["monitored-services", params],
+        queryFn: async () => {
+            const queryString = buildQueryString(params);
+            const response = await axiosClient.get<MonitoredServicesPaginatedResponse>(
+                `/services${queryString}`
+            );
+            return response.data;
+        },
+        staleTime: 5 * 60 * 1000,
+    });
+
 
 //  SERVICE OVERVIEW
 export const useGetServiceOverview = (uuid: string) =>
@@ -80,19 +117,7 @@ export const useGetMaintenanceWindows = (uuid: string, params?: QueryParams) =>
         staleTime: 5 * 60 * 1000,
     });
 
-//  MONITORED SERVICES
-export const useGetMonitoredServices = (params?: QueryParams) =>
-    useQuery<MonitoredServicesPaginatedResponse, ApiError>({
-        queryKey: ["monitored-services", params],
-        queryFn: async () => {
-            const queryString = buildQueryString(params);
-            const response = await axiosClient.get<MonitoredServicesPaginatedResponse>(
-                `/services${queryString}`
-            );
-            return response.data;
-        },
-        staleTime: 5 * 60 * 1000,
-    });
+
 
 // UPTIME LOGS
 export const useGetUptimeLogs = (uuid: string, params?: QueryParams) =>

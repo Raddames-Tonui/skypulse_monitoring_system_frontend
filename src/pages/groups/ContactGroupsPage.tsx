@@ -189,10 +189,11 @@ export default function ContactGroupsPage() {
                   initialData={{}}
                   showButtons={false}
                   onSubmit={(values) => createMutation.mutate(values)}
+
               />
             }
             footer={
-              <div className="flex gap-2 justify-end">
+              <div className="flex gap-3 justify-end">
                 <button
                     type="submit"
                     form={createGroupSchema.id}

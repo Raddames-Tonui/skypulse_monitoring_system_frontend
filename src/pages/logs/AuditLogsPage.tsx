@@ -242,6 +242,7 @@ export default function AuditLogsPage() {
                 onClose={() => setModalOpen(false)}
                 body={modalData ? <AuditModalBody data={modalData} /> : null}
                 size="lg"
+                showCloseButton={true}
             />
         </div>
     );

@@ -3,6 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { DataTable } from "@/components/table/DataTable";
 import type { ServiceOverviewData, ContactGroupOverview } from "@/pages/services/data-access/types";
 import UpdateServiceModal from "@/pages/services/components/UpdateServiceModal.tsx";
+import "@/css/overview.css"
 
 type Props = {
     overview: ServiceOverviewData;
@@ -33,31 +34,96 @@ export default function ServiceOverview({ overview }: Props) {
     return (
         <>
             <section className="service-section">
-                <div className="service-grid">
-                    <div><strong>Name:</strong> {overview.name}</div>
-                    <div>
-                        <strong>URL:</strong>{" "}
-                        <a href={overview.url} target="_blank" rel="noopener noreferrer">
-                            {overview.url}
-                        </a>
+
+                {/* HEADER */}
+                <div className="bc-card-header">
+                    <div className="bc-card-title">{overview.name}
+                        <a href={overview.url} target="_blank" rel="noopener noreferrer">{overview.url}</a>
                     </div>
-                    <div><strong>Status:</strong> {overview.last_uptime_status}</div>
-                    <div><strong>Interval:</strong> {overview.check_interval ?? "-"} sec</div>
-                    <div><strong>Retry Count:</strong> {overview.retry_count ?? "-"}</div>
-                    <div><strong>Retry Delay:</strong> {overview.retry_delay ?? "-"} sec</div>
-                    <div><strong>Region:</strong> {overview.region || "-"}</div>
-                    <div><strong>Region:</strong> {overview.expected_status_code || "-"}</div>
-                    <div><strong>SSL Enabled:</strong> {overview.ssl_enabled ? "Yes" : "No"}</div>
-                    <div><strong>Consecutive Failures:</strong> {overview.consecutive_failures}</div>
-                    <div><strong>Created By:</strong> {typeof overview.created_by === "object" ? `${overview.created_by.first_name} ${overview.created_by.last_name}` : "N/A"}</div>
+                    <div className="bc-card-actions">
+                        <button className="btn-primary" onClick={() => setEditModalOpen(true)}>
+                            Edit Service
+                        </button>
+                    </div>
                 </div>
 
-                <button className="action-btn mt-4" onClick={() => setEditModalOpen(true)}>
-                    Edit Service
-                </button>
+                {/* BASIC INFO */}
+                <div className="bc-section">
+                    <div className="bc-section-title">Basic Information</div>
+                    <div className="bc-fields">
+
+
+                        <div>
+                            <div className="bc-field-label">URL</div>
+                            <div className="bc-field-value">
+                                <a href={overview.url} target="_blank" rel="noopener noreferrer" className="bc-url-icon">↗</a>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div className="bc-field-label">Region</div>
+                            <div className="bc-field-value">{overview.region || "—"}</div>
+                        </div>
+
+                        <div>
+                            <div className="bc-field-label">Status</div>
+                            <div className="bc-field-value">{overview.last_uptime_status}</div>
+                        </div>
+
+                        <div>
+                            <div className="bc-field-label">Interval</div>
+                            <div className="bc-field-value">{overview.check_interval ?? "—"} sec</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bc-section">
+                    <div className="bc-section-title">Uptime And SSL Checks</div>
+                    <div className="bc-fields">
+                        <div>
+                            <div className="bc-field-label">Retry Count</div>
+                            <div className="bc-field-value">{overview.retry_count ?? "—"}</div>
+                        </div>
+
+                        <div>
+                            <div className="bc-field-label">Retry Delay</div>
+                            <div className="bc-field-value">{overview.retry_delay ?? "—"} sec</div>
+                        </div>
+
+                        <div>
+                            <div className="bc-field-label">Expected Status Code</div>
+                            <div className="bc-field-value">{overview.expected_status_code ?? "—"}</div>
+                        </div>
+
+                        <div>
+                            <div className="bc-field-label">SSL</div>
+                            <div className="bc-field-value">{overview.ssl_enabled ? "Enabled" : "Disabled"}</div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* META */}
+                <div className="bc-section">
+                    <div className="bc-section-title">Meta</div>
+                    <div className="bc-fields">
+                        <div>
+                            <div className="bc-field-label">Consecutive Failures</div>
+                            <div className="bc-field-value">{overview.consecutive_failures}</div>
+                        </div>
+
+                        <div>
+                            <div className="bc-field-label">Created By</div>
+                            <div className="bc-field-value">
+                                {typeof overview.created_by === "object"
+                                    ? `${overview.created_by.first_name} ${overview.created_by.last_name}`
+                                    : "—"}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
 
-            <section className="service-section mt-6">
+            <section className="service-section">
                 <h3>Contact Groups</h3>
                 {overview.contact_groups.length === 0 ? (
                     <p>No contact groups assigned.</p>

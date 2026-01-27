@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { useGetUserProfile } from "./data-access/useFetchData";
-import GetUserProfileModal from "./GetUserProfileModal";
 import { normalizeContacts } from "@/pages/users/data-access/normalizeContacts";
 import Loader from "@components/layout/Loader";
+import GetUserProfileModal from "@/pages/users/GetUserProfileModal.tsx";
+import {useGetUserProfile} from "@/context/data-access/useFetchData.tsx";
 
 export default function UserProfilePage() {
   const { data, isLoading, isError } = useGetUserProfile();
