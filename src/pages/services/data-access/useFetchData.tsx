@@ -42,7 +42,7 @@ export const useGetServiceOverview = (uuid: string) =>
             if (!uuid) throw new Error("Missing UUID for service overview");
 
             const response = await axiosClient.get<ApiResponse<ServiceOverviewData>>(
-                `/services/service/${uuid}/overview`
+                `/services/service/overview/${uuid}`
             );
             return response.data;
         },

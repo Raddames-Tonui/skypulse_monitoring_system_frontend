@@ -78,7 +78,7 @@
 .tab-buttons {
   display: flex;
   gap: 10px;
-  border-bottom: 1px solid var(--gray-200)
+  border-bottom: 2px solid var(--gray-200)
 }
 
 
@@ -87,7 +87,7 @@
   appearance: none;
   background: transparent;
   border: none;
-  padding: 14px 4px;
+  padding: 15px 4px;
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -104,12 +104,12 @@
 }
 
 .tab-secondary:hover {
-  color: var(--text-default);
+  color: var(--primary-700);
 }
 
 /* Active tab */
 .tab-primary {
-  color: var(--primary-600);
+  color: var(--primary-700);
 }
 
 /* Active underline indicator */
@@ -119,12 +119,12 @@
   left: 0;
   bottom: -1px;
   width: 100%;
-  height: 2px;
-  background-color: var(--primary-600);
+  height: 3px;
+  background-color: var(--primary-700);
 }
 
 .tab-primary:focus-visible,
 .tab-secondary:focus-visible {
   outline: none;
-  box-shadow: inset 0 -2px 0 var(--primary-300);
+  box-shadow: inset 0 -3px 0 var(--primary-300);
 }

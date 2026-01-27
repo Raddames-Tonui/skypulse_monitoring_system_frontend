@@ -1,11 +1,11 @@
-import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useGetServiceOverview, useGetUptimeLogs, useGetIncidents, useGetMaintenanceWindows } from "@/pages/services/data-access/useFetchData.tsx";
-import UpdateServiceModal from "./UpdateServiceModalProps";
 import ServiceHeader from "./components/ServiceHeader";
 import ServiceOverview from "./components/ServiceOverview";
 import ServiceCharts from "./components/ServiceCharts";
 import ServiceTableSection from "./components/ServiceTableSection";
+import "@/css/singleService.css"
+
 
 type ServiceTab = "overview" | "uptime" | "incidents" | "maintenance" | "charts";
 
@@ -24,8 +24,6 @@ export default function SingleServicePage() {
   const { uuid } = Route.useParams();
   const { tab } = Route.useSearch<ServiceSearch>();
   const navigate = Route.useNavigate();
-
-  const [modalOpen, setModalOpen] = useState(false);
 
   const { data: overviewResp, isError: overviewError, error: overviewErr } = useGetServiceOverview(uuid);
   const { data: uptimeData, isLoading: loadingUptime } = useGetUptimeLogs(uuid);
@@ -88,10 +86,9 @@ export default function SingleServicePage() {
             tab={tab}
             setActiveTab={setActiveTab}
             tabs={["overview", "charts", "uptime", "incidents", "maintenance"]}
-            onEdit={() => setModalOpen(true)}
         />
 
-        <UpdateServiceModal isOpen={modalOpen} onClose={() => setModalOpen(false)} initialData={overview} />
+
 
         {tab === "overview" && <ServiceOverview overview={overview} />}
         {tab === "charts" && <ServiceCharts uptimePieData={uptimePieData} responseChartData={responseChartData} />}

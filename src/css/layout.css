@@ -572,11 +572,13 @@ main {
   border-bottom: 1px solid var( --border-color);
   display: flex;
   justify-content: space-between;
-  align-items: center;   
-  height: 3rem;              
+  align-items: center;
+  height: 3rem;
   box-sizing: border-box;
-  padding: 0 1rem;          
+  padding: 0 1rem;
+    text-transform: capitalize;
 }
+
 
 .page-header h1 {
     font-size: 18px;
@@ -584,8 +586,6 @@ main {
 
 
 /* -------------------------------------------------------- */
-
-
 
 /*------------ FOOTER ---------------- */
 

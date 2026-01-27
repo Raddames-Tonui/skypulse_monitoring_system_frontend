@@ -21,9 +21,6 @@ export default function Dashboard() {
             size: 250,
         },
 
-        /* -----------------------------
-           Uptime Status
-        -------------------------------- */
         {
             id: "status",
             caption: "Uptime Status",
@@ -60,10 +57,6 @@ export default function Dashboard() {
             caption: "Response Time (ms)",
             size: 150,
         },
-
-        /* -----------------------------
-           SSL STATUS (ICON + LABEL)
-        -------------------------------- */
         {
             id: "ssl_status",
             caption: "SSL Status",

@@ -47,4 +47,5 @@ export interface DynamicFormProps {
   buttonClassName?: string;     
   style?: React.CSSProperties; 
   showButtons?: boolean;
+externalSubmit?: () => void;
 }

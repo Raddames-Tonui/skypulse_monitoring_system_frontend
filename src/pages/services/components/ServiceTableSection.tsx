@@ -7,7 +7,7 @@ type Props = {
     isLoading?: boolean;
 };
 
-export default function ServiceTableSection({ title, columns, data, isLoading }: Props) {
+export default function ServiceTableSection({  columns, data, isLoading }: Props) {
     return (
         <section className="service-section">
             <DataTable columns={columns} data={data} isLoading={isLoading} enableFilter={false} enableSort={false} />

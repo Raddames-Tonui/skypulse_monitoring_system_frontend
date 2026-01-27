@@ -7,7 +7,7 @@ type Props = {
     onEdit: () => void;
 };
 
-export default function ServiceHeader({ name, tab, setActiveTab, tabs, onEdit }: Props) {
+export default function ServiceHeader({ name, tab, setActiveTab, tabs }: Props) {
     return (
         <div className="page-header">
             <h1>{name}</h1>
@@ -22,9 +22,6 @@ export default function ServiceHeader({ name, tab, setActiveTab, tabs, onEdit }:
                     </button>
                 ))}
             </div>
-            <button className="action-btn" onClick={onEdit}>
-                Edit
-            </button>
         </div>
     );
 }

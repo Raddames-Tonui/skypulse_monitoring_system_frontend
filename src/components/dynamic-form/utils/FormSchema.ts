@@ -1,69 +1,3 @@
-// ------ LOGIN FORM SCHEMA -----------
-export const loginFormSchema: any = {
-    id: "user-login",
-    meta: {
-        title: "Welcome Back",
-        subtitle: "Sign in to continue"
-    },
-
-    fields: {
-        email: {
-            id: "email",
-            label: "Email",
-            renderer: "text",
-            inputType: "email",
-            placeholder: "you@example.com",
-            rules: {
-                required: "Email is required",
-                pattern: {
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: "Invalid email"
-                }
-            }
-        },
-
-        password: {
-            id: "password",
-            label: "Password",
-            renderer: "text",
-            inputType: "password",
-            placeholder: "••••••••",
-            rules: {
-                required: "Password is required"
-            }
-        },
-
-        rememberMe: {
-            id: "rememberMe",
-            label: "Remember me",
-            renderer: "checkbox",
-            defaultValue: false
-        }
-    },
-
-    layout: [
-        {
-            kind: "section",
-            title: "Login",
-            withDivider: true,
-            children: [
-                {
-                    kind: "stack",
-                    spacing: "md",
-                    children: [
-                        { kind: "field", fieldId: "email" },
-                        { kind: "field", fieldId: "password" },
-                        { kind: "field", fieldId: "rememberMe" }
-                    ]
-                }
-            ]
-        }
-    ]
-};
-
-
-
-
 // ------SYSTEM SETTINGS FORM SCHEMA------
 export const systemSettingsFormSchema: any = {
   id: "system-settings-form",
@@ -556,7 +490,7 @@ export const createUserSchema: any = {
 export const updateServiceSchema: any = {
   id: "update-monitored-service",
   meta: {
-    title: "Update Monitored Service",
+    // title: "Update Monitored Service",
     subtitle: "Modify details for the selected service"
   },
   fields: {

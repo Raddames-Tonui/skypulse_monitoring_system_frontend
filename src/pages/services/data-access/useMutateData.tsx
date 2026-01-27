@@ -22,6 +22,9 @@ export const useCreateService = () => {
         },
     });
 };
+
+
+
 export const useUpdateService = () => {
     const queryClient = useQueryClient();
 
@@ -32,6 +35,7 @@ export const useUpdateService = () => {
         onSuccess: (res) => {
             toast.success(res.data?.message || "Service updated successfully");
             queryClient.invalidateQueries({queryKey: ["monitored-services"]});
+            queryClient.invalidateQueries({queryKey: ["service-overview"]});
         },
         onError: (error: any) => {
             const msg =
