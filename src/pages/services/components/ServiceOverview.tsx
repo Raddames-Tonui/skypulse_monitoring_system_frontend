@@ -4,6 +4,7 @@ import { DataTable } from "@/components/table/DataTable";
 import type { ServiceOverviewData, ContactGroupOverview } from "@/pages/services/data-access/types";
 import UpdateServiceModal from "@/pages/services/components/UpdateServiceModal.tsx";
 import "@/css/overview.css"
+import {usePauseService} from "@/pages/services/data-access/useMutateData.tsx";
 
 type Props = {
     overview: ServiceOverviewData;
@@ -30,12 +31,19 @@ const getContactGroupColumns = (navigate: ReturnType<typeof useNavigate>) => [
 export default function ServiceOverview({ overview }: Props) {
     const navigate = useNavigate();
     const [isEditModalOpen, setEditModalOpen] = useState(false);
+    const { mutate: pauseService, isPending } = usePauseService();
+
+    const handlePauseToggle = () => {
+        pauseService({
+            uuid: overview.uuid,
+            pause: overview.is_active
+        });
+    };
 
     return (
         <>
             <section className="service-section">
 
-                {/* HEADER */}
                 <div className="bc-card-header">
                     <div className="bc-card-title">{overview.name}
                         <a href={overview.url} target="_blank" rel="noopener noreferrer">{overview.url}</a>
@@ -44,10 +52,16 @@ export default function ServiceOverview({ overview }: Props) {
                         <button className="btn-primary" onClick={() => setEditModalOpen(true)}>
                             Edit Service
                         </button>
+                        <button
+                            onClick={handlePauseToggle}
+                            disabled={isPending}
+                            className={overview.is_active ? "btn-pause" : "btn-unpause"}
+                        >
+                            {isPending ? "Processing..." : overview.is_active ? "Pause Service" : "Unpause Service"}
+                        </button>
                     </div>
                 </div>
 
-                {/* BASIC INFO */}
                 <div className="bc-section">
                     <div className="bc-section-title">Basic Information</div>
                     <div className="bc-fields">
@@ -102,7 +116,6 @@ export default function ServiceOverview({ overview }: Props) {
                     </div>
                 </div>
 
-                {/* META */}
                 <div className="bc-section">
                     <div className="bc-section-title">Meta</div>
                     <div className="bc-fields">

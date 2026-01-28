@@ -14,19 +14,19 @@ export const menuConfig: Record<string, MenuItem[]> = {
         {icon: "user", label: "Users", path: "/users"},
         {icon: "users", label: "Groups", path: "/groups"},
         {icon: "notepad", label: "Reports", path: "/reports/uptime-reports"},
-        {icon: "notes", label: "Audit Logs", path: "/audit-logs"},
         {icon: "messageLight", label: "Notifications", path: "/notification-history"},
-        {icon: "paperlight", label: "Templates", path: "/templates"},
+        {icon: "paperLight", label: "Templates", path: "/templates"},
+        {icon: "history", label: "Audit Logs", path: "/audit-logs"},
         {icon: "settings", label: "Settings", path: "/settings"},
     ],
     operator: [
         {icon: "dashboard", label: "Dashboard", path: "/dashboard"},
-        {icon: "notes", label: "Services", path: "/services"},
+        {icon: "services", label: "Services", path: "/services"},
         {icon: "notepad", label: "Reports", path: "/reports/uptime-reports"},
     ],
     viewer: [
         {icon: "dashboard", label: "Dashboard", path: "/dashboard"},
-        {icon: "notes", label: "Services", path: "/services"},
+        {icon: "services", label: "Services", path: "/services"},
         {icon: "notepad", label: "Reports", path: "/reports/uptime-reports"},
     ],
 };

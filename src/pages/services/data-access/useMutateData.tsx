@@ -48,3 +48,27 @@ export const useUpdateService = () => {
         },
     });
 };
+
+
+export const usePauseService = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async ({ uuid, pause }: { uuid: string; pause: boolean }) => {
+            return axiosClient.put(`/services/service/pause/${uuid}`, { pause });
+        },
+        onSuccess: (res) => {
+            toast.success(res.data?.message || "Status updated successfully");
+            queryClient.invalidateQueries({ queryKey: ["monitored-services"] });
+            queryClient.invalidateQueries({ queryKey: ["service-overview"] });
+        },
+        onError: (error: any) => {
+            const msg =
+                error?.response?.data?.message ||
+                error?.message ||
+                "Failed to update pause status";
+
+            toast.error(msg);
+        },
+    });
+};

@@ -20,7 +20,6 @@ export default function Dashboard() {
             caption: "Service Name",
             size: 250,
         },
-
         {
             id: "status",
             caption: "Uptime Status",
@@ -28,30 +27,33 @@ export default function Dashboard() {
             renderCell: (value) => {
                 const val = String(value ?? "").toUpperCase();
 
+                const color =
+                    val === "DOWN"
+                        ? "#e74c3c"
+                        : val === "MAINTENANCE"
+                            ? "#f1c40f"
+                            : val === "PAUSED"
+                                ? "#95a5a6"
+                                : "#27ae60"; // default UP
+
                 return (
                     <span
                         style={{
                             display: "inline-block",
                             padding: "2px 10px",
                             borderRadius: 5,
-                            backgroundColor:
-                                val === "DOWN"
-                                    ? "#e74c3c"
-                                    : val === "MAINTENANCE"
-                                        ? "#f1c40f"
-                                        : "#27ae60",
+                            backgroundColor: color,
                             color: "#fff",
                             fontWeight: 600,
                             textAlign: "center",
                             minWidth: 90,
                         }}
                     >
-            {val}
-          </span>
+                        {val}
+                    </span>
                 );
             },
         },
-
         {
             id: "response_time_ms",
             caption: "Response Time (ms)",
@@ -62,84 +64,76 @@ export default function Dashboard() {
             caption: "SSL Status",
             align: "left",
             size: 160,
-            renderCell: (value, row) => {
-                const status = String(value ?? "").toUpperCase();
-                const days = row.ssl_days_remaining ?? 0;
+            renderCell: (_, row) => {
+                const days = row.ssl_days_remaining;
+                let status = String(row.ssl_status ?? "UNKNOWN").toUpperCase();
+
+                // Map days_remaining to status
+                if (days === -1) status = "FAILED";
+                else if (days != null) {
+                    if (days <= 7) status = "SEVERE";
+                    else if (days <= 14) status = "CRITICAL";
+                    else if (days <= 30) status = "WARNING";
+                    else status = "OK";
+                }
 
                 const color =
-                    status === "CRITICAL" ||
-                    status === "SEVERE" ||
-                    days <= 14
-                        ? "#e74c3c"
-                        : status === "WARNING" ||
-                        (days > 14 && days <= 18)
-                            ? "#f1c40f"
-                            : "#27ae60";
+                    status === "FAILED" ? "#e74c3c" :
+                        status === "SEVERE" ? "#e74c3c" :
+                            status === "CRITICAL" ? "#e67e22" :
+                                status === "WARNING" ? "#f1c40f" :
+                                    status === "OK" ? "#27ae60" :
+                                        "#95a5a6"; // UNKNOWN
 
                 return (
-                    <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
+                    <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
                         <Icon
-                            iconName={
-                                status === "WARNING" ||
-                                status === "CRITICAL" ||
-                                status === "SEVERE" ||
-                                days <= 18
-                                    ? "sslinvalid"
-                                    : "sslvalid"
-                            }
-                            style={{
-                                color,
-                                fontWeight: 600,
-                                fontSize: "1.8rem",
-                            }}
+                            iconName={status === "OK" ? "sslValid" : "sslInvalid"}
+                            style={{ color, fontWeight: 600, fontSize: "1.8rem" }}
                         />
-                        <strong style={{color}}>{status}</strong>
+                        <strong style={{ color, marginLeft: 5 }}>{status}</strong>
                     </div>
-
                 );
             },
         },
-
         {
             id: "ssl_days_remaining",
             caption: "Days Remaining",
             align: "left",
             size: 140,
             renderCell: (_, row) => {
-                const days = row.ssl_days_remaining ?? 0;
-                const status = String(row.ssl_status ?? "").toUpperCase();
+                const days = row.ssl_days_remaining;
+                let status = String(row.ssl_status ?? "UNKNOWN").toUpperCase();
+
+                if (days === -1) status = "FAILED";
+                else if (days != null) {
+                    if (days <= 7) status = "SEVERE";
+                    else if (days <= 14) status = "CRITICAL";
+                    else if (days <= 30) status = "WARNING";
+                    else status = "OK";
+                } else status = "UNKNOWN";
 
                 const color =
-                    status === "CRITICAL" ||
-                    status === "SEVERE" ||
-                    days <= 14
-                        ? "#e74c3c"
-                        : status === "WARNING" ||
-                        (days > 14 && days <= 18)
-                            ? "#f1c40f"
-                            : "";
+                    status === "FAILED" ? "#e74c3c" :
+                        status === "SEVERE" ? "#e74c3c" :
+                            status === "CRITICAL" ? "#e67e22" :
+                                status === "WARNING" ? "#f1c40f" :
+                                    status === "OK" ? "#323232" :
+                                        "#95a5a6";
 
                 return (
-                    <span
-                        style={{
-                            fontWeight: 600,
-                        }}
-                    >
-            {days} days
-          </span>
+                    <span style={{ fontWeight: 500, color }}>
+                        {days != null && days >= 0 ? `${days} days` : "-"}
+                    </span>
                 );
             },
         },
-
         {
             id: "actions",
             caption: "Actions",
             size: 100,
             renderCell: (_, row) => (
-                <Link
-                    to="/services/$uuid"
-                    params={{uuid: row.uuid}}
-                    className="action-btn"               >
+                <Link to="/services/$uuid" params={{ uuid: row.uuid }} className="action-btn">
                     View
                 </Link>
             ),

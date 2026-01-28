@@ -1,10 +1,10 @@
+export type ServiceTab = "overview" | "charts" | "uptime" | "incidents" | "maintenance";
 
 type Props = {
     name: string;
-    tab: string;
-    setActiveTab: (tab: string) => void;
-    tabs: string[];
-    onEdit: () => void;
+    tab: ServiceTab;
+    setActiveTab: (tab: ServiceTab) => void | Promise<void>;
+    tabs: readonly ServiceTab[];
 };
 
 export default function ServiceHeader({ name, tab, setActiveTab, tabs }: Props) {

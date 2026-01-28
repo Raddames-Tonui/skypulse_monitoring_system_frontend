@@ -10,7 +10,12 @@ type Props = {
 export default function ServiceTableSection({  columns, data, isLoading }: Props) {
     return (
         <section className="service-section">
-            <DataTable columns={columns} data={data} isLoading={isLoading} enableFilter={false} enableSort={false} />
+            <DataTable columns={columns}
+                       data={data}
+                       isLoading={isLoading}
+                       enableFilter={false}
+                       enableSort={false}
+            />
         </section>
     );
 }

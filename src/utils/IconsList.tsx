@@ -103,6 +103,42 @@ export const Notes: React.FC<IconBaseProps> = ({ className }) => (
         <path d="M3 2.25V21.75H11.25V18.75H12.75V21.75H21V2.25H3ZM4.5 3.75H19.5V20.25H14.25V17.25H9.75V20.25H4.5V3.75ZM6 5.25V6.75H9V5.25H6ZM10.5 5.25V6.75H13.5V5.25H10.5ZM15 5.25V6.75H18V5.25H15ZM6 8.25V9.75H9V8.25H6ZM10.5 8.25V9.75H13.5V8.25H10.5ZM15 8.25V9.75H18V8.25H15ZM6 11.25V12.75H9V11.25H6ZM10.5 11.25V12.75H13.5V11.25H10.5ZM15 11.25V12.75H18V11.25H15ZM6 14.25V15.75H9V14.25H6ZM10.5 14.25V15.75H13.5V14.25H10.5ZM15 14.25V15.75H18V14.25H15ZM6 17.25V18.75H9V17.25H6ZM15 17.25V18.75H18V17.25H15Z" fill="white" />
     </svg>
 )
+export const HistoryEvents: React.FC<IconBaseProps> = ({ className, style }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="22"
+        height="22"
+        viewBox="0 0 1024 1024"
+        className={className}
+        style={{ color: "white", ...style }}
+    >
+        <title>history</title>
+        <path
+            fill="currentColor"
+            d="
+        M536.1 273H488c-4.4 0-8 3.6-8 8v275.3c0 2.6 1.2 5 3.3 6.5l165.3 120.7
+        c3.6 2.6 8.6 1.9 11.2-1.7l28.6-39c2.7-3.7 1.9-8.7-1.7-11.2L544.1 528.5V281
+        c0-4.4-3.6-8-8-8
+        M755.9 348.2l156.8 38.3c5 1.2 9.9-2.6 9.9-7.7l.8-161.5c0-6.7-7.7-10.5-12.9-6.3
+        L752.9 334.1a8 8 0 0 0 3 14.1
+        M943.6 663.3l-56.7-19.5a8 8 0 0 0-10.1 4.8c-1.9 5.1-3.9 10.1-6 15.1
+        c-17.8 42.1-43.3 80-75.9 112.5a353 353 0 0 1-112.5 75.9
+        a352.2 352.2 0 0 1-137.7 27.8c-47.8 0-94.1-9.3-137.7-27.8
+        a353 353 0 0 1-112.5-75.9c-32.5-32.5-58-70.4-75.9-112.5
+        A353.4 353.4 0 0 1 171 512c0-47.8 9.3-94.2 27.8-137.8
+        c17.8-42.1 43.3-80 75.9-112.5a353 353 0 0 1 112.5-75.9
+        C430.6 167.3 477 158 524.8 158s94.1 9.3 137.7 27.8
+        A353 353 0 0 1 775 261.7c10.2 10.3 19.8 21 28.6 32.3
+        l59.8-46.8C784.7 146.6 662.2 81.9 524.6 82
+        C285 82.1 92.6 276.7 95 516.4
+        C97.4 751.9 288.9 942 524.8 942
+        c185.5 0 343.5-117.6 403.7-282.3
+        c1.5-4.2-.7-8.9-4.9-10.4
+      "
+        />
+    </svg>
+);
+
 
 
 export const NoteReload: React.FC<IconBaseProps> = ({ className }) => (
@@ -590,24 +626,27 @@ export const EyeView: React.FC<IconBaseProps> = ({ className, style }) => (
 )
 
 
-
-
 export const Logout: React.FC<IconBaseProps> = ({ className, style }) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 18 24"
+        width="20"
+        height="20"
+        viewBox="0 0 32 32"
         className={className}
         style={style}
     >
         <title>logout</title>
         <path
             fill="currentColor"
-            d="M5.616 20q-.691 0-1.153-.462T4 18.384V5.616q0-.691.463-1.153T5.616 4h6.403v1H5.616q-.231 0-.424.192T5 5.616v12.769q0 .23.192.423t.423.192h6.404v1zm10.846-4.461l-.702-.72l2.319-2.319H9.192v-1h8.887l-2.32-2.32l.702-.718L20 12z"
+            d="M6 30h12a2 2 0 0 0 2-2v-3h-2v3H6V4h12v3h2V4a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v24a2 2 0 0 0 2 2"
+        />
+        <path
+            fill="currentColor"
+            d="M20.586 20.586L24.172 17H10v-2h14.172l-3.586-3.586L22 10l6 6l-6 6z"
         />
     </svg>
 );
+
 
 
 export const Warning: React.FC<IconBaseProps> = ({
@@ -815,10 +854,8 @@ export const SslValid: React.FC<IconBaseProps> = ({
     </svg>
 );
 
-export const SslInvalid: React.FC<IconBaseProps> = ({
-                                                        className,
-                                                        style,
-                                                    }) => (
+
+export const SslInvalid: React.FC<IconBaseProps> = ({ className, style }) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         width="1em"
@@ -827,13 +864,90 @@ export const SslInvalid: React.FC<IconBaseProps> = ({
         className={className}
         style={style}
     >
-        <title>privacy-tip-exclamation</title>
+        <title>danger-user</title>
         <path
             fill="currentColor"
-            d="M11 16h2v-6h-2v6z M12 18.5q.276 0 .5-.224t.224-.5q0-.276-.224-.5t-.5-.224q-.276 0-.5.224t-.224.5q0 .276.224.5t.5.224z M12 9q.262 0 .439-.177q.176-.177.176-.438q0-.262-.177-.439T12 7.77t-.438.177t-.177.439t.177.438T12 9m0 11.962q-3.014-.895-5.007-3.651T5 11.1V5.692l7-2.615l7 2.615V11.1q0 3.454-1.993 6.21T12 20.963"
+            d="
+        M12 20.96q-3.013-.894-5.007-3.65T5 11.1V5.692l7-2.615l7 2.615V11.1q0 3.454-1.993 6.21T12 20.963
+        M11.25 14h1.5v-6h-1.5v6z
+        M12 16.5q.4 0 .625-.224t.225-.5q0-.276-.225-.5t-.625-.224q-.4 0-.625.224t-.225.5q0 .276.225.5t.625.224z
+      "
         />
     </svg>
 );
+
+export const FileTypePdf: React.FC<IconBaseProps> = ({ className, style }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="1em"
+        height="1em"
+        viewBox="0 0 16 16"
+        className={className}
+        style={style}
+    >
+        <title>filetype-pdf</title>
+        <path
+            fill="currentColor"
+            fillRule="evenodd"
+            d="
+                M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2
+                A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5z
+
+                M1.6 11.85H0v3.999h.791v-1.342h.803
+                q.43 0 .732-.173q.305-.175.463-.474
+                a1.4 1.4 0 0 0 .161-.677
+                q0-.375-.158-.677
+                a1.2 1.2 0 0 0-.46-.477
+                q-.3-.18-.732-.179
+
+                m.545 1.333
+                a.8.8 0 0 1-.085.38
+                a.57.57 0 0 1-.238.241
+                a.8.8 0 0 1-.375.082H.788V12.48h.66
+                q.327 0 .512.181
+                q.185.183.185.522
+
+                m1.217-1.333v3.999h1.46
+                q.602 0 .998-.237
+                a1.45 1.45 0 0 0 .595-.689
+                q.196-.45.196-1.084
+                q0-.63-.196-1.075
+                a1.43 1.43 0 0 0-.589-.68
+                q-.396-.234-1.005-.234
+
+                zm.791.645h.563
+                q.371 0 .609.152
+                a.9.9 0 0 1 .354.454
+                q.118.302.118.753
+                a2.3 2.3 0 0 1-.068.592
+                a1.1 1.1 0 0 1-.196.422
+                a.8.8 0 0 1-.334.252
+                a1.3 1.3 0 0 1-.483.082h-.563
+
+                zm3.743 1.763v1.591h-.79V11.85h2.548v.653
+                H7.896v1.117h1.606v.638z
+            "
+        />
+    </svg>
+);
+
+export const FileExcel: React.FC<IconBaseProps> = ({ className, style }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="1em"
+        height="1em"
+        viewBox="0 0 1024 1024"
+        className={className}
+        style={style}
+    >
+        <title>file-excel</title>
+        <path
+            fill="currentColor"
+            d="M854.6 288.6L639.4 73.4c-6-6-14.1-9.4-22.6-9.4H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V311.3c0-8.5-3.4-16.7-9.4-22.7M790.2 326H602V137.8zm1.8 562H232V136h302v216a42 42 0 0 0 42 42h216zM514.1 580.1l-61.8-102.4c-2.2-3.6-6.1-5.8-10.3-5.8h-38.4c-2.3 0-4.5.6-6.4 1.9c-5.6 3.5-7.3 10.9-3.7 16.6l82.3 130.4l-83.4 132.8a12.04 12.04 0 0 0 10.2 18.4h34.5c4.2 0 8-2.2 10.2-5.7L510 664.8l62.3 101.4c2.2 3.6 6.1 5.7 10.2 5.7H620c2.3 0 4.5-.7 6.5-1.9c5.6-3.6 7.2-11 3.6-16.6l-84-130.4l85.3-132.5a12.04 12.04 0 0 0-10.1-18.5h-35.7c-4.2 0-8.1 2.2-10.3 5.8z"
+        />
+    </svg>
+);
+
 
 
 export const Icons = {
@@ -858,11 +972,14 @@ export const Icons = {
     eye: Eye,
     eyeClosed: EyeClosed,
     fileUploadLight: FileUploadLight,
+    filePdf: FileTypePdf,
+    fileExcel: FileExcel,
     h1: H1,
     h2: H2,
     h3: H3,
     h4: H4,
     hamburger: Hamburger,
+    history: HistoryEvents,
     image: Image,
     link: Link,
     list: List,
@@ -876,15 +993,15 @@ export const Icons = {
     notification: Notification,
     numberedList: NumberedList,
     open: Open,
-    paperlight: PaperLight,
+    paperLight: PaperLight,
     quote: Quote,
     razor: Razor,
     search: Search,
     settings: Settings,
     services: Services,
     shield: ShieldCheck,
-    sslvalid: SslValid,
-    sslinvalid: SslInvalid,
+    sslValid: SslValid,
+    sslInvalid: SslInvalid,
     strikethrough: Strikethrough,
     subscript: Subscript,
     superScript: SuperScript,

@@ -83,3 +83,21 @@ export const useRemoveGroupService = (groupUuid: string) => {
         },
     });
 };
+
+
+export const useToggleGroupStatus = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async ({ uuid, is_deleted }: { uuid: string; is_deleted: boolean }) => {
+            return axiosClient.put(`/contacts/group/status/${uuid}`, { is_deleted });
+        },
+        onSuccess: (res) => {
+            toast.success(res.data?.message);
+            queryClient.invalidateQueries({ queryKey: ["contact-groups"] });
+        },
+        onError: (error: any) => {
+            toast.error(error?.response?.data?.message || "Operation failed");
+        },
+    });
+};

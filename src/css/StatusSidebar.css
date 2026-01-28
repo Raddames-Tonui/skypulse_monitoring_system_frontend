@@ -63,7 +63,7 @@
 }
 
 .gray {
-  color: #7f8c8d;
+  color: var(--gray-500);
 }
 
 .red-bold {
@@ -79,8 +79,8 @@
 }
 
 .dashboard-status-subtext {
-  font-size: 0.85rem;
-  color: #95a5a6;
+  font-size: 1rem;
+  color: var(--gray-500);
   margin-top: 0.75rem;
   text-align: center;
   text-transform: none;

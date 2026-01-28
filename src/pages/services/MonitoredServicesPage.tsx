@@ -68,7 +68,7 @@ export default function MonitoredServicesPage() {
     const { data, isLoading, isError, error, refetch } = useGetMonitoredServices(queryParams);
     const services: MonitoredService[] = data?.data ?? [];
 
-    const columns: ColumnProps<MonitoredService>[] = [
+    const columns = [
         {
             id: "monitored_service_id",
             caption: "ID",
