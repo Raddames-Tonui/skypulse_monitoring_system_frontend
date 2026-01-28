@@ -26,6 +26,7 @@ const UpdateTemplateModal: React.FC<UpdateTemplateModalProps> = ({
       ...formValues,
     };
 
+    // @ts-ignore
     updateTemplate(payload, {
       onSuccess: () => {
         onClose();
@@ -46,7 +47,6 @@ const UpdateTemplateModal: React.FC<UpdateTemplateModalProps> = ({
           <div style={{ 
             padding: "0.75rem", 
             background: "#f6f7f9", 
-            borderRadius: "4px",
             marginBottom: "0.5rem"
           }}>
             <strong>Event Type:</strong> {initialData.event_type}

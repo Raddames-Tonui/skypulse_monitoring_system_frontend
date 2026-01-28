@@ -11,13 +11,13 @@ export default function TemplatePreviewModal({
     const compiledHtml = useMemo(() => {
         let html = template.body_template || "";
 
-        Object.entries(template.sample_data || {}).forEach(([key, value]) => {
+        Object.entries(template || {}).forEach(([key, value]) => {
             html = html.replaceAll(`{{${key}}}`, String(value));
         });
 
         return `
       <!DOCTYPE html>
-      <html>
+      <html lang="eng">
         <head>
           <meta charset="utf-8" />
           <style>

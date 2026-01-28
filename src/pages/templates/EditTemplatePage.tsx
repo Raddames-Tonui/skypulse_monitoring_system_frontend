@@ -52,6 +52,7 @@ export default function EditTemplatePage() {
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+    const [showPlaceholders, setShowPlaceholders] = useState(false);
 
   useEffect(() => {
     const t = templateResp?.data;
@@ -96,8 +97,7 @@ export default function EditTemplatePage() {
             margin:0 auto; 
             padding:24px; 
             box-shadow:0 2px 8px rgba(0,0,0,0.1); 
-            border-radius:8px; 
-            min-height:200px; 
+            min-height: 400px; 
           }
           .placeholder { 
             background:#fff3cd; 
@@ -106,7 +106,6 @@ export default function EditTemplatePage() {
             border-radius:2px; 
             color:#856404; 
             font-weight: bold;
-            font-family: monospace;
           }
         </style>
       </head>
@@ -150,7 +149,9 @@ export default function EditTemplatePage() {
 
   const t = templateResp.data;
 
-  return (
+
+
+    return (
       <>
 
         <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -163,7 +164,6 @@ export default function EditTemplatePage() {
           </div>
         </div>
 
-        {/* ================= TEMPLATE SETTINGS ================= */}
         <section className="template-section">
           <form
               id="edit-template-form"
@@ -226,42 +226,66 @@ export default function EditTemplatePage() {
           </form>
         </section>
 
-        {/* ================= SPLIT WORKSPACE (PAGE ONLY) ================= */}
-        <div className="bottom-section">
+
+
+        <section className="editor-section">
           <div className="body-editor">
-            <div className="editor-inner">
-              <label className="editor-label">Body (HTML)</label>
-              <button
-                  type="button"
-                  className="btn-secondary btn-sm"
-                  onClick={() => setIsEditModalOpen(true)}
-              >
-                Edit Fullscreen
-              </button>
-              <div className="placeholders-top-bar">
-                <span className="placeholder-hint">Click tag to copy:</span>
-                <div className="placeholder-grid">
-                  {t.placeholders?.map((ph) => (
-                      <div
-                          key={ph.placeholder_key}
-                          className="placeholder-item"
-                          onClick={() => {
-                            navigator.clipboard.writeText(
-                                `{{${ph.placeholder_key}}}`
-                            );
-                            toast.success(`Copied {{${ph.placeholder_key}}}`);
-                          }}
+              <div>
+                  <h3 >Body (HTML)</h3>
+                  <div className="editor-buttons">
+                      <button
+                          type="button"
+                          className="btn-secondary btn-sm"
+                          onClick={() => setIsEditModalOpen(true)}
                       >
-                        <code className="placeholder-key-chip">
-                          {`{{${ph.placeholder_key}}}`}
-                        </code>
-                        <span className="placeholder-desc">
-                    {ph.description}
-                  </span>
-                      </div>
-                  ))}
-                </div>
+                          Edit Fullscreen
+                      </button>
+                      <button
+                          type="button"
+                          className="btn-secondary btn-sm"
+                          onClick={() => setShowPlaceholders(!showPlaceholders)}
+                      >
+                          Placeholders
+                      </button>
+                  </div>
+
               </div>
+              <div>
+
+                  {showPlaceholders && (
+                      <div className="placeholders-overlay">
+                          <div className="placeholders-top-bar">
+                              <span className="placeholder-hint">Click tag to copy:</span>
+                              <div className="placeholder-grid">
+                                  {t.placeholders?.map((ph) => (
+                                      <div
+                                          key={ph.placeholder_key}
+                                          className="placeholder-item"
+                                          onClick={() => {
+                                              navigator.clipboard.writeText(`{{${ph.placeholder_key}}}`);
+                                              toast.success(`Copied {{${ph.placeholder_key}}}`);
+                                          }}
+                                      >
+                                          <code className="placeholder-key-chip">
+                                              {`{{${ph.placeholder_key}}}`}
+                                          </code>
+                                          <span className="placeholder-desc">{ph.description}</span>
+                                      </div>
+                                  ))}
+                              </div>
+                              <button
+                                  className="btn-secondary btn-sm"
+                                  style={{ marginTop: "8px" }}
+                                  onClick={() => setShowPlaceholders(false)}
+                              >
+                                  Close
+                              </button>
+                          </div>
+                      </div>
+                  )}
+
+              </div>
+            <div className="editor-inner">
 
               <textarea
                   value={bodyTemplate}
@@ -272,19 +296,17 @@ export default function EditTemplatePage() {
             </div>
           </div>
 
-          {/* RIGHT: PREVIEW */}
-          <div className="preview-panel">
-            <div className="preview-header">
-              <h3>Live Preview</h3>
-              <button
-                  type="button"
-                  className="btn-secondary btn-sm"
-                  onClick={() => setIsPreviewModalOpen(true)}
-              >
-                Full Preview
-              </button>
-            </div>
-
+          <div className="body-editor">
+              <div>
+              <div><h3>Live Preview</h3>
+                  <button
+                      type="button"
+                      className="btn-secondary btn-sm"
+                      onClick={() => setIsPreviewModalOpen(true)}
+                  >
+                      Full Preview
+                  </button>
+              </div>
             <div className="iframe-wrapper">
               <iframe
                   title="Live Preview"
@@ -293,9 +315,8 @@ export default function EditTemplatePage() {
               />
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* ================= FULLSCREEN CODE MODAL ================= */}
         <Modal
             isOpen={isEditModalOpen}
             title="Edit HTML Template (Fullscreen)"
@@ -310,9 +331,9 @@ export default function EditTemplatePage() {
               style={{
                 width: "100%",
                 height: "100%",
-                background: "#020617",
+                background: "#eae9e9",
                 color: "#e5e7eb",
-                fontFamily: "Fira Code, monospace",
+                // fontFamily: "Fira Code, monospace",
                 fontSize: "15px",
                 lineHeight: "1.7",
                 padding: "24px",
